@@ -1,0 +1,58 @@
+# ========== UNITY ==========
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+Assets/AssetStoreTools*
+
+# ========== AUTO-GENERATED FILES ==========
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# ========== OS-SPECIFIC ==========
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ========== VS & RIDER ==========
+.vscode/
+.idea/
+*.sln.DotSettings
+
+# ========== UNITY PACKAGES ==========
+*.unitypackage
+
+# ========== COLLARBONE ==========
+/Collab/
+
+# ========== PLUGINS TEMP FILES ==========
+Assets/Plugins/Editor/JetBrains*   # Rider plugin temp files
+
+# ========== DOTENV / ENV SECRETS (si usás) ==========
+.env
+.env.*
+
+# ========== ADDRESSABLES BUILD ==========
+/ServerData/
