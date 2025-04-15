@@ -40,6 +40,7 @@ Desktop.ini
 .vscode/
 .idea/
 *.sln.DotSettings
+.vs/
 
 # ========== UNITY PACKAGES ==========
 *.unitypackage

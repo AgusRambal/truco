@@ -1,18 +1,12 @@
-using System;
 using UnityEngine;
 using DG.Tweening;
-using Random = UnityEngine.Random;
+using System.Collections;
 
 public class MezclarCartas : MonoBehaviour
 {
     private Transform[] cartas;
     private Vector3[] posicionesOriginales;
     private bool estaMezclando = false;
-
-    private void Awake()
-    {
-        Application.targetFrameRate = 60;
-    }
 
     void Start()
     {
@@ -35,7 +29,7 @@ public class MezclarCartas : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator Mezclar()
+    private IEnumerator Mezclar()
     {
         estaMezclando = true;
 
