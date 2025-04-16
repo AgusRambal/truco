@@ -1,4 +1,4 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Transforms")]
     public Transform[] handPosition;
+    public Transform[] handOponentPosition;
     public Transform target;
     public Transform spawnPosition;
 
@@ -54,30 +55,56 @@ public class GameManager : MonoBehaviour
     {
         mazo = new List<CartaSO>(cartas);
 
-        for (int i = 0; i < 3; i++)
+        cartasEnMano.Clear();
+        int playerIndex = 0;
+        int opponentIndex = 0;
+
+        for (int i = 0; i < 6; i++) // 3 para cada uno, intercalado
         {
-            // Instanciar en spawnPosition con rotación en Y de 180°
+            bool isOpponentDraw = (i % 2 == 0); // arranca el oponente
+
             var instantiatedCard = Instantiate(carta, spawnPosition.position, Quaternion.Euler(0f, 180f, 0f));
             var cardSelector = instantiatedCard.GetComponent<CardSelector>();
-            cartasEnMano.Add(cardSelector);
 
-            // Elegir carta al azar
+            // Elegir carta random y asignar valores
             var randomCard = mazo[Random.Range(0, mazo.Count)];
             mazo.Remove(randomCard);
 
-            // Asignar valores
             var newCard = instantiatedCard.GetComponent<Carta>();
             newCard.palo = randomCard.palo;
             newCard.valor = randomCard.valor;
             newCard.jerarquiaTruco = randomCard.jerarquiaTruco;
             newCard.imagen.sprite = randomCard.imagen;
 
-            // Animación de movimiento y rotación en 0.5s
-            Sequence s = DOTween.Sequence();
-            s.Append(instantiatedCard.transform.DOMove(handPosition[i].position, 0.5f).SetEase(Ease.OutCubic));
-            s.Join(instantiatedCard.transform.DORotate(new Vector3(0f, 360f, 0f), 0.5f).SetEase(Ease.OutCubic));
+            if (isOpponentDraw) 
+            {
+                instantiatedCard.GetComponent<CardSelector>().isOpponent = true;
+            }
 
-            yield return s.WaitForCompletion(); // esperar a que termine antes de pasar a la siguiente
+            Sequence s = DOTween.Sequence();
+
+            if (isOpponentDraw)
+            {
+                // Cartas del oponente â†’ no rotan
+                s.Append(instantiatedCard.transform.DOMove(handOponentPosition[opponentIndex].position, 0.25f).SetEase(Ease.OutCubic));
+                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 180f, 0f), 0.5f).SetEase(Ease.OutCubic));
+
+                instantiatedCard.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 180f, 0f);
+                instantiatedCard.transform.GetChild(0).localPosition = new Vector3(0f, 0f, -0.1f);
+
+                opponentIndex++;
+            }
+            else
+            {
+                // Cartas del jugador â†’ rotan a 360
+                s.Append(instantiatedCard.transform.DOMove(handPosition[playerIndex].position, 0.25f).SetEase(Ease.OutCubic));
+                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 360f, 0f), 0.5f).SetEase(Ease.OutCubic));
+
+                cartasEnMano.Add(cardSelector);
+                playerIndex++;
+            }
+
+            yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
         }
     }
 }

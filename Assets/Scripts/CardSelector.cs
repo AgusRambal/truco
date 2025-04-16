@@ -4,6 +4,8 @@ using UnityEngine;
 public class CardSelector : MonoBehaviour
 {
     [SerializeField] private float hoverScaleAmount = 0.1f;
+    public bool isOpponent = false;
+
 
     private Vector3 originalScale;
     private bool isHovered = false;
@@ -18,7 +20,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (isHovered || hasBeenPlayed) return;
+        if (isHovered || hasBeenPlayed || isOpponent) return;
 
         isHovered = true;
         transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
@@ -34,7 +36,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (hasBeenPlayed || GameManager.Instance.target == null)
+        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent)
             return;
 
         hasBeenPlayed = true;
