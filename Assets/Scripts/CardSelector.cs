@@ -1,67 +1,67 @@
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class CardSelector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class CardSelector : MonoBehaviour
 {
-    [Header("Outline de esta carta")]
-    [SerializeField] private Image outlineImage;
+    [SerializeField] private float hoverScaleAmount = 0.1f;
 
-    [Header("Otras cartas")]
-    [SerializeField] private CardSelector otherCard1;
-    [SerializeField] private CardSelector otherCard2;
+    private Vector3 originalScale;
+    private bool isHovered = false;
+    private bool hasBeenPlayed = false;
 
-    public int cardID;
+    private static float yOffset = 0f;
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void Start()
     {
-        Highlight();
-        if (otherCard1 != null) otherCard1.Unhighlight();
-        if (otherCard2 != null) otherCard2.Unhighlight();
+        originalScale = transform.localScale;
     }
 
-    public void OnPointerExit(PointerEventData eventData) 
+    private void OnMouseEnter()
     {
-        Unhighlight();
+        if (isHovered || hasBeenPlayed) return;
+
+        isHovered = true;
+        transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
     }
 
-    private void Highlight()
+    private void OnMouseExit()
     {
-        GameManager.Instance.cardIdSelected = cardID;
-        outlineImage.DOFade(1f, 0.5f);
+        if (hasBeenPlayed) return;
+
+        isHovered = false;
+        transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
     }
 
-    private void Unhighlight()
+    private void OnMouseDown()
     {
-        // Solo desmarcamos si esta carta era la seleccionada
-        if (GameManager.Instance.cardIdSelected == cardID)
+        if (hasBeenPlayed || GameManager.Instance.target == null)
+            return;
+
+        hasBeenPlayed = true;
+        transform.DOScale(originalScale, 0.1f);
+
+        // Paso 1: levantar en Y
+        Vector3 midPos = transform.position + Vector3.up * 0.5f;
+
+        // Paso 2: ir al target con offset en Y
+        Vector3 finalPos = GameManager.Instance.target.position;
+        finalPos.y += yOffset;
+        yOffset += 0.1f;
+
+        // Rotación final con variación
+        Vector3 finalRot = GameManager.Instance.target.rotation.eulerAngles;
+        finalRot.z += Random.Range(-10f, 10f);
+
+        // Animaciones
+        transform.DOMove(midPos, 0.15f).SetEase(Ease.OutSine).OnComplete(() =>
         {
-            GameManager.Instance.cardIdSelected = -1;
-        }
-
-        outlineImage.DOFade(0f, 0.5f);
+            transform.DOMove(finalPos, 0.2f).SetEase(Ease.InOutCubic);
+            transform.DORotate(finalRot, 0.2f).SetEase(Ease.InOutCubic);
+        });
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public static void ResetYOffset()
     {
-        MoveToTarget();
+        yOffset = 0f;
     }
-
-    private void MoveToTarget()
-    {
-        Transform target = GameManager.Instance.target;
-
-        if (target != null)
-        {
-            transform.DOMove(target.position, 0.5f).SetEase(Ease.OutBack);
-            transform.DORotate(Vector3.zero, 0.5f).SetEase(Ease.OutBack);
-        }
-
-        else
-        {
-            Debug.LogWarning("No hay target asignado en GameManager.");
-        }
-    }
-
 }

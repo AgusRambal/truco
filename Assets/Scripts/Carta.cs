@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Carta : MonoBehaviour
 {
-    public Sprite imagen;
+    public SpriteRenderer imagen;
     public Palo palo;
     public int valor;
     public int jerarquiaTruco;

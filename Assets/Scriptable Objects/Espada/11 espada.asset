@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
   m_Name: 11 espada
   m_EditorClassIdentifier: 
-  imagen: {fileID: 0}
+  imagen: {fileID: 21300000, guid: e0f1fc4c49ec7dc409821b0f4307b9c8, type: 3}
   palo: 0
   valor: 11
   jerarquiaTruco: 6
