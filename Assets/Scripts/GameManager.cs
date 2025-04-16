@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +21,14 @@ public class GameManager : MonoBehaviour
     public Transform target;
     public Transform spawnPosition;
 
-    [Header("Stats")]
+    [Header("Parameters")]
+    [SerializeField] private float setTime = 0.25f;
+
+    [Header("Game stats")]
     public int round = 0;
+
+    //Hidden
+    [HideInInspector] public bool mixing = false;
 
     //Privates
     private List<CartaSO> mazo = new List<CartaSO>();
@@ -48,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
+        mixing = true;
         StartCoroutine(SpawnCardsSequence());
     }
 
@@ -86,8 +94,8 @@ public class GameManager : MonoBehaviour
             if (isOpponentDraw)
             {
                 // Cartas del oponente → no rotan
-                s.Append(instantiatedCard.transform.DOMove(handOponentPosition[opponentIndex].position, 0.25f).SetEase(Ease.OutCubic));
-                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 180f, 0f), 0.5f).SetEase(Ease.OutCubic));
+                s.Append(instantiatedCard.transform.DOMove(handOponentPosition[opponentIndex].position, setTime).SetEase(Ease.OutCubic));
+                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 180f, 0f), setTime).SetEase(Ease.OutCubic));
 
                 instantiatedCard.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 180f, 0f);
                 instantiatedCard.transform.GetChild(0).localPosition = new Vector3(0f, 0f, -0.1f);
@@ -97,8 +105,8 @@ public class GameManager : MonoBehaviour
             else
             {
                 // Cartas del jugador → rotan a 360
-                s.Append(instantiatedCard.transform.DOMove(handPosition[playerIndex].position, 0.25f).SetEase(Ease.OutCubic));
-                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 360f, 0f), 0.5f).SetEase(Ease.OutCubic));
+                s.Append(instantiatedCard.transform.DOMove(handPosition[playerIndex].position, setTime).SetEase(Ease.OutCubic));
+                s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 360f, 0f), setTime).SetEase(Ease.OutCubic));
 
                 cartasEnMano.Add(cardSelector);
                 playerIndex++;
@@ -106,5 +114,7 @@ public class GameManager : MonoBehaviour
 
             yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
         }
+
+        mixing = false;
     }
 }

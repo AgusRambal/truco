@@ -15,4 +15,4 @@ MonoBehaviour:
   imagen: {fileID: 21300000, guid: 98fbf04570878fe4cb9766eb7ab027e0, type: 3}
   palo: 0
   valor: 1
-  jerarquiaTruco: 13
+  jerarquiaTruco: 14
