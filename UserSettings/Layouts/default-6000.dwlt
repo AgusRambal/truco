@@ -219,8 +219,8 @@ MonoBehaviour:
     y: 0
     width: 1104
     height: 888
-  m_MinSize: {x: 201, y: 226}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -329,8 +329,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Game\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1515
-    y: 79
+    x: 1105
+    y: 24
     width: 563
     height: 862
   m_SerializedDataModeController:
@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 79
+    y: 24
     width: 410
     height: 1267
   m_SerializedDataModeController:
@@ -498,8 +498,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 411
-    y: 79
+    x: 1
+    y: 24
     width: 1102
     height: 862
   m_SerializedDataModeController:
@@ -1226,8 +1226,8 @@ MonoBehaviour:
   m_MipLevel: 0
   m_Zoom: -1
   m_ScrollPosition: {x: 0, y: 0}
-  m_SelectedObject: {fileID: 2800000, guid: bfa9ed28597824ba6acb0ed3cd224cb3, type: 3}
-  m_SelectedSpriteRectGUID: 9305a398a7e944f059dca3ed2e248f3a
+  m_SelectedObject: {fileID: 0}
+  m_SelectedSpriteRectGUID: 00000000000000000000000000000000
   m_LastUsedModuleTypeName: UnityEditor.U2D.Sprites.SpriteFrameModule
 --- !u!114 &17
 MonoBehaviour:
@@ -1322,8 +1322,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 411
-    y: 967
+    x: 1
+    y: 912
     width: 1667
     height: 379
   m_SerializedDataModeController:
@@ -1367,7 +1367,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 9ccb0000
     m_LastClickedID: 52124
-    m_ExpandedIDs: 000000008ab10000f8b10000
+    m_ExpandedIDs: 00000000c2b10000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1396,7 +1396,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008ab10000
+    m_ExpandedIDs: 00000000c2b10000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1550,8 +1550,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 2080
-    y: 79
+    x: 2081
+    y: 24
     width: 479
     height: 1267
   m_SerializedDataModeController:

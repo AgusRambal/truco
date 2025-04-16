@@ -1,19 +1,24 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [Header("Scriptable obejcts")]
+    public List<CartaSO> cartas = new List<CartaSO>();
+
+    [Header("References")]
+    public GameObject carta;
     public Transform target;
 
-    public List<Sprite> allCards = new List<Sprite>();
-    public List<Image> playerHand = new List<Image>();
+    //Hidden
+    [HideInInspector] public int cardIdSelected = -1;
 
-    public int cardIdSelected = -1;
+    //Privates
+    private List<CartaSO> mazo = new List<CartaSO>();
+
 
     private void Awake()
     {
@@ -29,15 +34,23 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Set();
+        mazo = new List<CartaSO>(cartas);
     }
 
-    //Button
-    public void Set()
-    {
-        foreach (var card in playerHand)
+    public void SpawnCards()
+    { 
+        for (int i = 0; i < 3; i++) 
         {
-            card.sprite = allCards[Random.Range(0, allCards.Count)];
+            var InstantiatedCard = Instantiate(carta, target);
+
+            var randomCard = mazo[Random.Range(0, mazo.Count)];
+            mazo.Remove(randomCard);
+
+            var newCard = InstantiatedCard.GetComponent<Carta>();
+            newCard.palo = randomCard.palo;
+            newCard.valor = randomCard.valor;
+            newCard.jerarquiaTruco = randomCard.jerarquiaTruco;
+            newCard.imagen = randomCard.imagen;
         }
     }
 }
