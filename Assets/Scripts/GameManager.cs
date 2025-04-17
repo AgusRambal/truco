@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private IAOponente iaOponente;
     [SerializeField] private UIManager uiManager;
 
-
     [Header("Transforms")]
     public Transform[] handPosition;
     public Transform[] handOponentPosition;
@@ -48,12 +47,12 @@ public class GameManager : MonoBehaviour
     //Hidden
     [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
 
-
     //Privates
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
     private int puntosEnJuego = 1;
     private float zOffsetCentroMesa = 0f;
+    private int trucoState = 0;
 
     private void Awake()
     {
@@ -74,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
+        uiManager.SetBotonesInteractables(false);
         estadoRonda = EstadoRonda.Repartiendo;
         StartCoroutine(SpawnCardsSequence());
     }
@@ -137,6 +137,8 @@ public class GameManager : MonoBehaviour
         }
 
         estadoRonda = EstadoRonda.Jugando;
+        turnoActual = TurnoActual.Jugador;
+        uiManager.SetBotonesInteractables(true);
     }
 
     public void CartaJugada(CardSelector carta)
@@ -157,6 +159,7 @@ public class GameManager : MonoBehaviour
     public void CantarTruco()   
     {
         puntosEnJuego += 1;
+        trucoState++;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
 
         Debug.Log("Se cantó Truco. Esperando respuesta...");
@@ -167,7 +170,6 @@ public class GameManager : MonoBehaviour
     {
         puntosJugador += puntosEnJuego;
     }
-
 
     public void MeVoy(bool esJugador)
     {
@@ -186,16 +188,18 @@ public class GameManager : MonoBehaviour
 
     public void FinalizarRonda()
     {
-        puntosOponente += puntosEnJuego;
+        //puntosOponente += puntosEnJuego;
         puntosEnJuego = 1;
+        trucoState = 0;
         estadoRonda = EstadoRonda.Repartiendo;
         ResetZOffset();
-
+        uiManager.ResetTruco();
         DevolverCartas();
     }
 
     private void DevolverCartas()
     {
+        uiManager.SetBotonesInteractables(false);
         StartCoroutine(DevolverCartasSequence());
     }
 
@@ -244,5 +248,10 @@ public class GameManager : MonoBehaviour
     public void ResetZOffset()
     {
         zOffsetCentroMesa = 0f;
+    }
+
+    public void ChangeTruco()
+    {
+        uiManager.ChangeTrucoState(trucoState);
     }
 }

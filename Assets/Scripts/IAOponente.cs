@@ -5,6 +5,10 @@ using DG.Tweening;
 
 public class IAOponente : MonoBehaviour
 {
+    [Header("Parameters")]
+    [SerializeField] private float responseTime = 0.5f;
+    [SerializeField] private float trucoResponseTime = 1f;
+
     public void JugarCarta()
     {
         StartCoroutine(JugarCartaCoroutine());
@@ -12,7 +16,7 @@ public class IAOponente : MonoBehaviour
 
     private IEnumerator JugarCartaCoroutine()
     {
-        yield return new WaitForSeconds(1f); // Simula tiempo de respuesta
+        yield return new WaitForSeconds(responseTime); // Simula tiempo de respuesta
 
         var disponibles = new List<CardSelector>();
         foreach (var carta in GameManager.Instance.allCards)
@@ -34,7 +38,7 @@ public class IAOponente : MonoBehaviour
         Vector3 midPos = elegida.transform.position + Vector3.up * 0.5f;
 
         Vector3 finalPos = GameManager.Instance.target.position;
-        finalPos.z += GameManager.Instance.GetZOffset(); // ✅
+        finalPos.z += GameManager.Instance.GetZOffset();
 
         Vector3 finalRot = GameManager.Instance.target.rotation.eulerAngles;
         finalRot.z += Random.Range(-10f, 10f);
@@ -50,7 +54,26 @@ public class IAOponente : MonoBehaviour
 
         yield return s.WaitForCompletion();
 
-        GameManager.Instance.CartaJugada(elegida);
+        //Verificar si fue la última carta del oponente
+        bool ultimaCarta = true;
+        foreach (var carta in GameManager.Instance.allCards)
+        {
+            if (carta.isOpponent && !carta.hasBeenPlayed)
+            {
+                ultimaCarta = false;
+                break;
+            }
+        }
+
+        if (ultimaCarta)
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameManager.Instance.FinalizarRonda();
+        }
+        else
+        {
+            GameManager.Instance.CartaJugada(elegida);
+        }
     }
 
     public void ResponderTruco()
@@ -60,7 +83,7 @@ public class IAOponente : MonoBehaviour
 
     private IEnumerator ResponderTrucoCoroutine()
     {
-        yield return new WaitForSeconds(1f); // Dramita
+        yield return new WaitForSeconds(trucoResponseTime); // Dramita
 
         bool acepta = Random.value > 0.4f; // 60% chance de aceptar
 
@@ -68,6 +91,7 @@ public class IAOponente : MonoBehaviour
         {
             Debug.Log("Oponente: ¡Quiero!");
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.ChangeTruco();
         }
         else
         {

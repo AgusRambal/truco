@@ -6,10 +6,11 @@ public class CardSelector : MonoBehaviour
     [SerializeField] private float hoverScaleAmount = 0.1f;
     public bool isOpponent = false;
 
-
     private Vector3 originalScale;
     private bool isHovered = false;
     public bool hasBeenPlayed = false;
+
+    private Tween hoverTween;
 
     private void Start()
     {
@@ -21,7 +22,7 @@ public class CardSelector : MonoBehaviour
         if (isHovered || hasBeenPlayed || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo) return;
 
         isHovered = true;
-        transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
+        hoverTween = transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
     }
 
     private void OnMouseExit()
@@ -29,38 +30,42 @@ public class CardSelector : MonoBehaviour
         if (hasBeenPlayed) return;
 
         isHovered = false;
+        if (hoverTween != null && hoverTween.IsActive()) hoverTween.Kill();
         transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
     }
 
     private void OnMouseDown()
     {
-        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent ||
+        if (hasBeenPlayed ||
+            GameManager.Instance.target == null ||
+            isOpponent ||
             GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo ||
-            GameManager.Instance.turnoActual != TurnoActual.Jugador) return;
-
+            GameManager.Instance.turnoActual != TurnoActual.Jugador)
+            return;
 
         hasBeenPlayed = true;
-        transform.DOScale(originalScale, 0.1f);
+        isHovered = false;
 
-        // Paso 1: levantar en Y
+        // 🔥 Cancelar hover si estaba activo
+        if (hoverTween != null && hoverTween.IsActive()) hoverTween.Kill();
+
+        // 🔄 Animación jugada
         Vector3 midPos = transform.position + Vector3.up * 0.5f;
-
-        // Paso 2: ir al target con offset en Y
         Vector3 finalPos = GameManager.Instance.target.position;
-        finalPos.z += GameManager.Instance.GetZOffset(); // ✅
+        finalPos.z += GameManager.Instance.GetZOffset();
 
-        // Rotación final con variación
         Vector3 finalRot = GameManager.Instance.target.rotation.eulerAngles;
         finalRot.z += Random.Range(-10f, 10f);
 
-        // Animaciones
-        transform.DOMove(midPos, 0.15f).SetEase(Ease.OutSine).OnComplete(() =>
+        Sequence s = DOTween.Sequence();
+        s.Append(transform.DOScale(originalScale, 0.1f)); // asegurar escala correcta
+        s.Append(transform.DOMove(midPos, 0.15f).SetEase(Ease.OutSine));
+        s.Append(transform.DOMove(finalPos, 0.2f).SetEase(Ease.InOutCubic));
+        s.Join(transform.DORotate(finalRot, 0.2f).SetEase(Ease.InOutCubic));
+
+        s.OnComplete(() =>
         {
-            transform.DOMove(finalPos, 0.2f).SetEase(Ease.InOutCubic);
-            transform.DORotate(finalRot, 0.2f).SetEase(Ease.InOutCubic);
+            GameManager.Instance.CartaJugada(this);
         });
-
-        GameManager.Instance.CartaJugada(this);
-
     }
 }
