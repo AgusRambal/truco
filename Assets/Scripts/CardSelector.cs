@@ -4,17 +4,22 @@ using UnityEngine;
 public class CardSelector : MonoBehaviour
 {
     [SerializeField] private float hoverScaleAmount = 0.1f;
+    [SerializeField] private float tiltAmount = 10f;
+    [SerializeField] private float tiltSpeed = 5f;
     public bool isOpponent = false;
 
     private Vector3 originalScale;
+    private Quaternion originalRotation;
     private bool isHovered = false;
     public bool hasBeenPlayed = false;
 
     private Tween hoverTween;
+    private Tween tiltTween;
 
     private void Start()
     {
         originalScale = transform.localScale;
+        originalRotation = transform.rotation;
     }
 
     private void OnMouseEnter()
@@ -27,12 +32,21 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (hasBeenPlayed) return;
+        if (hasBeenPlayed || isOpponent) return;
 
         isHovered = false;
+
         if (hoverTween != null && hoverTween.IsActive()) hoverTween.Kill();
+        if (tiltTween != null && tiltTween.IsActive()) tiltTween.Kill();
+
         transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
+
+        // Restaurar rotación solo para jugador
+        Vector3 resetRot = new Vector3(-10f, 360f, 0f);
+        transform.DORotate(resetRot, 0.3f).SetEase(Ease.OutCubic);
     }
+
+
 
     private void OnMouseDown()
     {
@@ -46,10 +60,9 @@ public class CardSelector : MonoBehaviour
         hasBeenPlayed = true;
         isHovered = false;
 
-        // 🔥 Cancelar hover si estaba activo
         if (hoverTween != null && hoverTween.IsActive()) hoverTween.Kill();
+        if (tiltTween != null && tiltTween.IsActive()) tiltTween.Kill();
 
-        // 🔄 Animación jugada
         Vector3 midPos = transform.position + Vector3.up * 0.5f;
         Vector3 finalPos = GameManager.Instance.target.position;
         finalPos.z += GameManager.Instance.GetZOffset();
@@ -58,7 +71,7 @@ public class CardSelector : MonoBehaviour
         finalRot.z += Random.Range(-10f, 10f);
 
         Sequence s = DOTween.Sequence();
-        s.Append(transform.DOScale(originalScale, 0.1f)); // asegurar escala correcta
+        s.Append(transform.DOScale(originalScale, 0.1f));
         s.Append(transform.DOMove(midPos, 0.15f).SetEase(Ease.OutSine));
         s.Append(transform.DOMove(finalPos, 0.2f).SetEase(Ease.InOutCubic));
         s.Join(transform.DORotate(finalRot, 0.2f).SetEase(Ease.InOutCubic));
@@ -67,5 +80,22 @@ public class CardSelector : MonoBehaviour
         {
             GameManager.Instance.CartaJugada(this);
         });
+    }
+
+    private void Update()
+    {
+        if (!isHovered || hasBeenPlayed || isOpponent) return;
+
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 worldPos = Camera.main.WorldToScreenPoint(transform.position);
+        Vector2 offset = (Vector2)(mousePos - worldPos);
+
+        float xTilt = Mathf.Clamp(offset.y / 100f, -1f, 1f) * tiltAmount;
+        float yTilt = Mathf.Clamp(-offset.x / 100f, -1f, 1f) * tiltAmount;
+
+        Quaternion targetRotation = Quaternion.Euler(xTilt, yTilt, transform.rotation.eulerAngles.z);
+
+        if (tiltTween != null && tiltTween.IsActive()) tiltTween.Kill();
+        tiltTween = transform.DORotateQuaternion(targetRotation, 1f / tiltSpeed).SetEase(Ease.OutCubic);
     }
 }
