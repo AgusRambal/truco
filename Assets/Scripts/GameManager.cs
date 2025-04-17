@@ -1,9 +1,14 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
-using UnityEngine.UI;
+
+public enum EstadoRonda 
+{ 
+    Repartiendo, 
+    Jugando, 
+    EsperandoRespuesta, 
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -23,16 +28,20 @@ public class GameManager : MonoBehaviour
 
     [Header("Parameters")]
     [SerializeField] private float setTime = 0.25f;
+    [SerializeField] private float resetTime = 0.25f;
 
     [Header("Game stats")]
+    public EstadoRonda estadoRonda = EstadoRonda.Jugando;
     public int round = 0;
+    public int puntosOponente = 0;
+    public int puntosJugador = 0;
 
-    //Hidden
-    [HideInInspector] public bool mixing = false;
 
     //Privates
-    private List<CartaSO> mazo = new List<CartaSO>();
-    private List<CardSelector> cartasEnMano = new List<CardSelector>();
+    public List<CartaSO> mazo = new List<CartaSO>();
+    public List<CardSelector> cartasEnMano = new List<CardSelector>();
+    public List<CardSelector> allCards = new List<CardSelector>();
+    private int puntosEnJuego = 1;
 
     private void Awake()
     {
@@ -54,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
-        mixing = true;
+        estadoRonda = EstadoRonda.Repartiendo;
         StartCoroutine(SpawnCardsSequence());
     }
 
@@ -111,9 +120,83 @@ public class GameManager : MonoBehaviour
                 playerIndex++;
             }
 
+            allCards.Add(cardSelector);
+
             yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
         }
 
-        mixing = false;
+        estadoRonda = EstadoRonda.Jugando;
+    }
+
+    public void CantarTruco()
+    {
+        puntosEnJuego += 1;
+        estadoRonda = EstadoRonda.EsperandoRespuesta;
+
+        Debug.Log("Se cantó Truco. Esperando respuesta...");
+    }
+
+    public void MeVoy(bool esJugador)
+    {
+        if (esJugador)
+            puntosOponente += puntosEnJuego;
+        else
+            puntosJugador += puntosEnJuego;
+
+        FinalizarRonda();
+    }
+
+    public void CantarEnvido()
+    {
+        Debug.Log("Envido no implementado todavía");
+    }
+
+    private void FinalizarRonda()
+    {
+        puntosOponente += puntosEnJuego;
+        puntosEnJuego = 1;
+        estadoRonda = EstadoRonda.Repartiendo;
+
+        DevolverCartas();
+    }
+
+    private void DevolverCartas()
+    {
+        StartCoroutine(DevolverCartasSequence());
+    }
+
+    private IEnumerator DevolverCartasSequence()
+    {
+        foreach (var c in allCards)
+        {
+            Transform cartaTransform = c.transform;
+            Sequence s = DOTween.Sequence();
+
+            if (!c.isOpponent)
+            {
+                cartaTransform.GetChild(0).localRotation = Quaternion.Euler(0f, 180f, 0f);
+                cartaTransform.GetChild(0).localPosition = new Vector3(0f, 0f, -0.1f);
+            }
+
+            Vector3 targetRot = new Vector3(-5.732f, 180f, 0f);
+
+            s.Append(cartaTransform.DOMove(spawnPosition.position, resetTime).SetEase(Ease.InOutCubic));
+            s.Join(cartaTransform.DORotate(targetRot, resetTime).SetEase(Ease.InOutCubic));
+
+            yield return s.WaitForCompletion();
+        }
+
+        // Destruir todas las cartas después del loop
+        foreach (var c in allCards)
+        {
+            Destroy(c.gameObject);
+        }
+
+        cartasEnMano.Clear();
+        allCards.Clear();
+
+        // Arrancar siguiente ronda
+        yield return new WaitForSeconds(0.5f);
+        SpawnCards();
     }
 }

@@ -20,7 +20,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (isHovered || hasBeenPlayed || isOpponent || GameManager.Instance.mixing) return;
+        if (isHovered || hasBeenPlayed || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo) return;
 
         isHovered = true;
         transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
@@ -36,7 +36,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent || GameManager.Instance.mixing) return;
+        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo) return;
 
         hasBeenPlayed = true;
         transform.DOScale(originalScale, 0.1f);
