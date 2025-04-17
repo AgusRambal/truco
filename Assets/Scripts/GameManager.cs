@@ -10,6 +10,12 @@ public enum EstadoRonda
     EsperandoRespuesta, 
 }
 
+public enum TurnoActual
+{
+    Jugador,
+    Oponente
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -19,6 +25,9 @@ public class GameManager : MonoBehaviour
 
     [Header("References")]
     public GameObject carta;
+    [SerializeField] private IAOponente iaOponente;
+    [SerializeField] private UIManager uiManager;
+
 
     [Header("Transforms")]
     public Transform[] handPosition;
@@ -32,16 +41,19 @@ public class GameManager : MonoBehaviour
 
     [Header("Game stats")]
     public EstadoRonda estadoRonda = EstadoRonda.Jugando;
-    public int round = 0;
+    public TurnoActual turnoActual = TurnoActual.Jugador;
     public int puntosOponente = 0;
     public int puntosJugador = 0;
 
+    //Hidden
+    [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
+
 
     //Privates
-    public List<CartaSO> mazo = new List<CartaSO>();
-    public List<CardSelector> cartasEnMano = new List<CardSelector>();
-    public List<CardSelector> allCards = new List<CardSelector>();
+    private List<CartaSO> mazo = new List<CartaSO>();
+    private List<CardSelector> cartasEnMano = new List<CardSelector>();
     private int puntosEnJuego = 1;
+    private float zOffsetCentroMesa = 0f;
 
     private void Awake()
     {
@@ -56,7 +68,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        round++;
         mazo = new List<CartaSO>(cartas);
         SpawnCards();
     }
@@ -128,13 +139,35 @@ public class GameManager : MonoBehaviour
         estadoRonda = EstadoRonda.Jugando;
     }
 
-    public void CantarTruco()
+    public void CartaJugada(CardSelector carta)
+    {
+        if (!carta.isOpponent)
+        {
+            turnoActual = TurnoActual.Oponente;
+            uiManager.SetBotonesInteractables(false); 
+            iaOponente.JugarCarta();
+        }
+        else
+        {
+            turnoActual = TurnoActual.Jugador;
+            uiManager.SetBotonesInteractables(true);
+        }
+    }
+
+    public void CantarTruco()   
     {
         puntosEnJuego += 1;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
 
         Debug.Log("Se cantó Truco. Esperando respuesta...");
+        iaOponente.ResponderTruco();
     }
+
+    public void SumarPuntosJugador()
+    {
+        puntosJugador += puntosEnJuego;
+    }
+
 
     public void MeVoy(bool esJugador)
     {
@@ -151,11 +184,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("Envido no implementado todavía");
     }
 
-    private void FinalizarRonda()
+    public void FinalizarRonda()
     {
         puntosOponente += puntosEnJuego;
         puntosEnJuego = 1;
         estadoRonda = EstadoRonda.Repartiendo;
+        ResetZOffset();
 
         DevolverCartas();
     }
@@ -198,5 +232,17 @@ public class GameManager : MonoBehaviour
         // Arrancar siguiente ronda
         yield return new WaitForSeconds(0.5f);
         SpawnCards();
+    }
+
+    public float GetZOffset()
+    {
+        float offset = zOffsetCentroMesa;
+        zOffsetCentroMesa -= 0.05f; // o más si querés más separación
+        return offset;
+    }
+
+    public void ResetZOffset()
+    {
+        zOffsetCentroMesa = 0f;
     }
 }

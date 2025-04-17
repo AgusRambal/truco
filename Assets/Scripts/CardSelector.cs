@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 
 public class CardSelector : MonoBehaviour
@@ -9,9 +9,7 @@ public class CardSelector : MonoBehaviour
 
     private Vector3 originalScale;
     private bool isHovered = false;
-    private bool hasBeenPlayed = false;
-
-    private static float yOffset = 0f;
+    public bool hasBeenPlayed = false;
 
     private void Start()
     {
@@ -36,7 +34,10 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo) return;
+        if (hasBeenPlayed || GameManager.Instance.target == null || isOpponent ||
+            GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo ||
+            GameManager.Instance.turnoActual != TurnoActual.Jugador) return;
+
 
         hasBeenPlayed = true;
         transform.DOScale(originalScale, 0.1f);
@@ -46,10 +47,9 @@ public class CardSelector : MonoBehaviour
 
         // Paso 2: ir al target con offset en Y
         Vector3 finalPos = GameManager.Instance.target.position;
-        finalPos.y += yOffset;
-        yOffset += 0.1f;
+        finalPos.z += GameManager.Instance.GetZOffset(); // ✅
 
-        // Rotaci�n final con variaci�n
+        // Rotación final con variación
         Vector3 finalRot = GameManager.Instance.target.rotation.eulerAngles;
         finalRot.z += Random.Range(-10f, 10f);
 
@@ -59,10 +59,8 @@ public class CardSelector : MonoBehaviour
             transform.DOMove(finalPos, 0.2f).SetEase(Ease.InOutCubic);
             transform.DORotate(finalRot, 0.2f).SetEase(Ease.InOutCubic);
         });
-    }
 
-    public static void ResetYOffset()
-    {
-        yOffset = 0f;
+        GameManager.Instance.CartaJugada(this);
+
     }
 }

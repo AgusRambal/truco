@@ -265,7 +265,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
@@ -290,13 +290,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 732447877}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CantarEnvido
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -413,7 +413,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
@@ -438,13 +438,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 732447877}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CantarEnvido
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1143,6 +1143,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &596016129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 596016131}
+  - component: {fileID: 596016130}
+  m_Layer: 0
+  m_Name: IA Oponente
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &596016130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596016129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35944d4bdd148854cb77fdecb5feda51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &596016131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596016129}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 906.08813, y: 994.5586, z: -13.823471}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &732447876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1258,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10dfb8306fdf1ae4e9c5164a3fca9b4c, type: 2}
   - {fileID: 11400000, guid: 3778e7bfe4f650942a3af3bfa5dfdca3, type: 2}
   carta: {fileID: 3983918347134098098, guid: 67f75065ff1549e45b82cfee911db592, type: 3}
+  iaOponente: {fileID: 596016130}
+  uiManager: {fileID: 207373598}
   handPosition:
   - {fileID: 579170957}
   - {fileID: 566146268}
@@ -1227,11 +1273,9 @@ MonoBehaviour:
   setTime: 0.25
   resetTime: 0.2
   estadoRonda: 0
-  round: 0
+  turnoActual: 0
   puntosOponente: 0
   puntosJugador: 0
-  mazo: []
-  cartasEnMano: []
   allCards: []
 --- !u!4 &732447878
 Transform:
@@ -1296,6 +1340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverScaleAmount: 0.1
   isOpponent: 0
+  hasBeenPlayed: 0
 --- !u!4 &766948905
 Transform:
   m_ObjectHideFlags: 0
@@ -1503,7 +1548,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
@@ -1850,7 +1895,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
@@ -1875,13 +1920,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 732447877}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CantarTruco
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2846,7 +2891,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
@@ -2871,13 +2916,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 732447877}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: CantarEnvido
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3326,6 +3371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverScaleAmount: 0.1
   isOpponent: 0
+  hasBeenPlayed: 0
 --- !u!4 &6992239279341520982
 Transform:
   m_ObjectHideFlags: 0
@@ -3427,6 +3473,7 @@ SceneRoots:
   - {fileID: 1658243965}
   - {fileID: 732447878}
   - {fileID: 207373599}
+  - {fileID: 596016131}
   - {fileID: 229566168}
   - {fileID: 579170957}
   - {fileID: 566146268}

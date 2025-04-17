@@ -8,10 +8,10 @@ public class UIManager : MonoBehaviour
     public Button meVoy;
     public Button envido;
 
-    private void Start()
+    public void SetBotonesInteractables(bool estado)
     {
-        //truco.onClick.AddListener(() => GameManager.Instance.CantarTruco());
-        //meVoy.onClick.AddListener(() => GameManager.Instance.MeVoy(true)); // true = se va el jugador
-        //envido.onClick.AddListener(() => GameManager.Instance.CantarEnvido());
+        truco.interactable = estado;
+        meVoy.interactable = estado;
+        envido.interactable = estado;
     }
 }
