@@ -24,9 +24,9 @@ public class GameManager : MonoBehaviour
     public List<CartaSO> cartas = new List<CartaSO>();
 
     [Header("References")]
+    public UIManager uiManager;
     public GameObject carta;
     [SerializeField] private IAOponente iaOponente;
-    [SerializeField] private UIManager uiManager;
 
     [Header("Transforms")]
     public Transform[] handPosition;
@@ -46,13 +46,13 @@ public class GameManager : MonoBehaviour
 
     //Hidden
     [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
+    [HideInInspector] public int trucoState = 0;
+    [HideInInspector] public int puntosEnJuego = 1;
 
     //Privates
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
-    private int puntosEnJuego = 1;
     private float zOffsetCentroMesa = 0f;
-    private int trucoState = 0;
 
     private void Awake()
     {
@@ -158,13 +158,32 @@ public class GameManager : MonoBehaviour
 
     public void CantarTruco()   
     {
-        puntosEnJuego += 1;
         trucoState++;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
 
         Debug.Log("Se cantó Truco. Esperando respuesta...");
+        uiManager.OcultarOpcionesTruco();
         iaOponente.ResponderTruco();
     }
+
+    public void RespuestaJugadorTruco(bool quiero)
+    {
+        uiManager.OcultarOpcionesTruco();
+
+        if (quiero)
+        {
+            trucoState++;
+            puntosEnJuego++;
+            estadoRonda = EstadoRonda.Jugando;
+            ChangeTruco();
+        }
+        else
+        {
+            puntosOponente += puntosEnJuego;
+            FinalizarRonda();
+        }
+    }
+
 
     public void SumarPuntosJugador()
     {
@@ -189,12 +208,12 @@ public class GameManager : MonoBehaviour
     public void FinalizarRonda()
     {
         //puntosOponente += puntosEnJuego;
-        puntosEnJuego = 1;
-        trucoState = 0;
-        estadoRonda = EstadoRonda.Repartiendo;
         ResetZOffset();
         uiManager.ResetTruco();
         DevolverCartas();
+        puntosEnJuego = 1;
+        trucoState = 0;
+        estadoRonda = EstadoRonda.Repartiendo;
     }
 
     private void DevolverCartas()

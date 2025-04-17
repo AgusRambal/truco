@@ -83,21 +83,48 @@ public class IAOponente : MonoBehaviour
 
     private IEnumerator ResponderTrucoCoroutine()
     {
-        yield return new WaitForSeconds(trucoResponseTime); // Dramita
+        yield return new WaitForSeconds(trucoResponseTime); // Pausa dramática
 
-        bool acepta = Random.value > 0.4f; // 60% chance de aceptar
+        int estadoActual = GameManager.Instance.trucoState;
 
-        if (acepta)
+        bool quiereSubir = false;
+
+        // Solo puede subir si no estamos ya en el último estado
+        if (estadoActual < 2)
         {
-            Debug.Log("Oponente: ¡Quiero!");
-            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
-            GameManager.Instance.ChangeTruco();
+            // 40% chance de subir (ajustalo como quieras)
+            quiereSubir = Random.value < 0.4f;
         }
+
+        if (quiereSubir)
+        {
+            Debug.Log("Oponente: ¡RETRUCO o VALE CUATRO!");
+            GameManager.Instance.trucoState++;
+            GameManager.Instance.puntosEnJuego += 1;
+            GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
+            GameManager.Instance.ChangeTruco();
+
+            GameManager.Instance.uiManager.MostrarOpcionesTruco();
+        }
+
         else
         {
-            Debug.Log("Oponente: ¡No quiero!");
-            GameManager.Instance.SumarPuntosJugador();
-            GameManager.Instance.FinalizarRonda();
+            bool acepta = Random.value > 0.4f; // 60% chance de aceptar si no subió
+
+            if (acepta)
+            {
+                Debug.Log("Oponente: ¡Quiero!");
+                GameManager.Instance.puntosEnJuego += 1;
+                GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+                GameManager.Instance.ChangeTruco();
+            }
+            else
+            {
+                Debug.Log("Oponente: ¡No quiero!");
+                GameManager.Instance.SumarPuntosJugador();
+                GameManager.Instance.FinalizarRonda();
+            }
         }
     }
+
 }

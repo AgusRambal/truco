@@ -4,13 +4,23 @@ using DG.Tweening;
 
 public class UIButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private Vector3 originalPosition;
     [SerializeField] private float moveAmount = 10f;
     [SerializeField] private float moveTime = 0.2f;
+    [SerializeField] private bool isResponse = false;
+
+    private Vector3 originalPosition;
 
     private void Start()
     {
-        originalPosition = transform.localPosition;
+        if (isResponse)
+        {
+            originalPosition = transform.localPosition + new Vector3(810,0,0);
+        }
+
+        else 
+        { 
+            originalPosition = transform.localPosition;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
