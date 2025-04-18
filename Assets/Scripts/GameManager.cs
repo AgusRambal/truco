@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     private List<Carta> cartasOponenteJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
     private bool rondaSeDefiniraEnProxima = false;
+    private bool turnoJugadorEmpieza = true;
 
     public int manosGanadasJugador = 0;
     public int manosGanadasOponente = 0;
@@ -89,16 +90,19 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnCardsSequence()
     {
         mazo = new List<CartaSO>(cartas);
+
         cartasEnMano.Clear();
         int playerIndex = 0;
         int opponentIndex = 0;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) // 3 para cada uno, intercalado
         {
-            bool isOpponentDraw = (i % 2 == 0);
+            bool isOpponentDraw = (i % 2 == 0); // arranca el oponente
 
             var instantiatedCard = Instantiate(carta, spawnPosition.position, Quaternion.Euler(0f, 180f, 0f));
             var cardSelector = instantiatedCard.GetComponent<CardSelector>();
+
+            // Elegir carta random y asignar valores
             var randomCard = mazo[Random.Range(0, mazo.Count)];
             mazo.Remove(randomCard);
 
@@ -135,16 +139,36 @@ public class GameManager : MonoBehaviour
             }
 
             allCards.Add(cardSelector);
-            yield return s.WaitForCompletion();
+
+            yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
         }
 
         estadoRonda = EstadoRonda.Jugando;
-        turnoActual = TurnoActual.Jugador;
-        uiManager.SetBotonesInteractables(true);
+
+        // Dejamos preparado el turno, pero lo activamos después de un delay pequeño
+        StartCoroutine(ActivarTurnoInicial());
+    }
+
+    private IEnumerator ActivarTurnoInicial()
+    {
+        yield return new WaitForSeconds(0.5f); // aseguramos que la UI ya está lista
+
+        turnoActual = turnoJugadorEmpieza ? TurnoActual.Jugador : TurnoActual.Oponente;
+
+        if (turnoActual == TurnoActual.Oponente)
+        {
+            iaOponente.JugarCarta();
+        }
+        else
+        {
+            uiManager.SetBotonesInteractables(true);
+        }
     }
 
     public void CartaJugada(CardSelector carta)
     {
+        if (carta == null || carta.gameObject == null) return;
+
         var cartaData = carta.GetComponent<Carta>();
         seJugoCartaDesdeUltimoCanto = true;
 
@@ -248,16 +272,23 @@ public class GameManager : MonoBehaviour
     {
         cartasJugadorJugadas.Clear();
         cartasOponenteJugadas.Clear();
-        uiManager.ResetTruco();
         manosGanadasJugador = 0;
         manosGanadasOponente = 0;
-        seJugoCartaDesdeUltimoCanto = true;
-        ultimoCantoFueDelJugador = false;
-        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+        ultimaManoFueEmpate = false;
+        rondaSeDefiniraEnProxima = false;
+
         ResetZOffset();
+        uiManager.ResetTruco();
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+
         DevolverCartas();
+
         puntosEnJuego = 1;
         trucoState = 0;
+
+        //  Alternar quién empieza la próxima ronda
+        turnoJugadorEmpieza = !turnoJugadorEmpieza;
+
         estadoRonda = EstadoRonda.Repartiendo;
     }
 

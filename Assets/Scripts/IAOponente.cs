@@ -49,12 +49,11 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        // Lógica de canto Truco (con bluff)
+        // 🔥 Lógica de canto Truco (con restricciones)
         bool puedeCantar = GameManager.Instance.estadoRonda == EstadoRonda.Jugando;
         int trucoState = GameManager.Instance.trucoState;
         bool tieneCartasMalas = disponibles.All(c => c.GetComponent<Carta>().jerarquiaTruco < 7);
         bool tieneCartasFuertes = disponibles.Any(c => c.GetComponent<Carta>().jerarquiaTruco >= 12);
-
         float chance = Random.value;
 
         if (puedeCantar && GameManager.Instance.seJugoCartaDesdeUltimoCanto)
@@ -66,6 +65,8 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
+                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.ultimoCantoFueDelJugador = false;
                 yield break;
             }
             else if (trucoState == 1 && chance < 0.3f)
@@ -75,6 +76,8 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
+                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.ultimoCantoFueDelJugador = false;
                 yield break;
             }
             else if (trucoState == 2 && chance < 0.35f)
@@ -84,19 +87,17 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
+                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.ultimoCantoFueDelJugador = false;
                 yield break;
             }
         }
 
-        // 🧠 Elegir carta con intención
-        var cartasOrdenadas = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).ToList();
-        EstiloJugada estiloJugada = DecidirEstiloJugada(disponibles);
-
+        //  Elegir carta con intención
         CardSelector elegida = null;
 
         if (GameManager.Instance.ultimaManoFueEmpate)
         {
-            // Obligado a jugar la carta más fuerte
             elegida = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).First();
         }
         else
@@ -137,7 +138,6 @@ public class IAOponente : MonoBehaviour
 
         yield return s.WaitForCompletion();
 
-        // SIEMPRE llamar a CartaJugada para que evalúe
         GameManager.Instance.CartaJugada(elegida);
     }
 
