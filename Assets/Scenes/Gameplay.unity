@@ -2015,7 +2015,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minResponseTime: 0.5
   maxResponseTime: 2
-  trucoResponseTime: 1
+  minTrucoResponseTime: 0.25
+  maxTrucoResponseTime: 1
   estilo: 0
 --- !u!4 &596016131
 Transform:

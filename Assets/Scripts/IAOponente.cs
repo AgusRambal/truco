@@ -37,12 +37,15 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
-        var disponibles = new List<CardSelector>();
-        foreach (var carta in GameManager.Instance.allCards)
+        if (GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
         {
-            if (carta.isOpponent && !carta.hasBeenPlayed)
-                disponibles.Add(carta);
+            Debug.Log("IA: se canceló la jugada porque ya no estamos jugando.");
+            yield break;
         }
+
+        var disponibles = GameManager.Instance.allCards
+        .Where(c => c != null && c.isOpponent && !c.hasBeenPlayed && c.gameObject != null)
+        .ToList();
 
         if (disponibles.Count == 0)
         {
