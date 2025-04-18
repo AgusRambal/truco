@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class UIButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] private float moveAmount = 10f;
     [SerializeField] private float moveTime = 0.2f;
@@ -21,6 +21,20 @@ public class UIButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         { 
             originalPosition = transform.localPosition;
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (isResponse)
+        {
+            enabled = false;
+            Invoke("RestartButton", 1f);
+        }
+    }
+
+    private void RestartButton()
+    {
+        enabled = true;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

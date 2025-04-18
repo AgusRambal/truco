@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
         }
         else if (state == 2)
         {
-            truco.GetComponentInChildren<TMP_Text>().text = $"QUIERO VALE 4";
+            truco.GetComponentInChildren<TMP_Text>().text = $"VALE CUATRO";
             trucoFinalState = true;
         }
     }
