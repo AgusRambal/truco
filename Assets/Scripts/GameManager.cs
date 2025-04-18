@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         mazo = new List<CartaSO>(cartas);
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         SpawnCards();
     }
 
@@ -228,7 +229,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void FinalizarRonda()
     {
         cartasJugadorJugadas.Clear();
@@ -237,6 +237,7 @@ public class GameManager : MonoBehaviour
         manosGanadasOponente = 0;
         seJugoCartaDesdeUltimoCanto = true;
         ultimoCantoFueDelJugador = false;
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         ResetZOffset();
         uiManager.ResetTruco();
         DevolverCartas();

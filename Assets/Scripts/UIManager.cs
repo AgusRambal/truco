@@ -10,6 +10,10 @@ public class UIManager : MonoBehaviour
     public Button meVoy;
     public Button envido;
 
+    [Header("Texts")]
+    public TMP_Text playerPointsText;
+    public TMP_Text opponentPointsText;
+
     [Header("Respuesta Truco")]
     public Button botonQuiero;
     public Button botonNoQuiero;
@@ -51,7 +55,7 @@ public class UIManager : MonoBehaviour
 
     public void ResetTruco()
     {
-        truco.GetComponentInChildren<TMPro.TMP_Text>().text = $"TRUCO";
+        truco.GetComponentInChildren<TMP_Text>().text = $"TRUCO";
         trucoFinalState = false;
     }
 
@@ -68,5 +72,11 @@ public class UIManager : MonoBehaviour
     {
         botonQuiero.transform.DOLocalMove(quieroOriginalPos, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
         botonNoQuiero.transform.DOLocalMove(noQuieroOriginalPos, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
+    }
+
+    public void SetPointsInScreen(int playerPoints, int oponentPoints)
+    {
+        playerPointsText.text = playerPoints.ToString();
+        opponentPointsText.text = oponentPoints.ToString();
     }
 }
