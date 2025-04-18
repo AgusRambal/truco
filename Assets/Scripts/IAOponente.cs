@@ -103,8 +103,9 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.puntosEnJuego += 1;
             GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
             GameManager.Instance.ChangeTruco();
-
             GameManager.Instance.uiManager.MostrarOpcionesTruco();
+            GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
+            GameManager.Instance.ultimoCantoFueDelJugador = false;
         }
 
         else

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EstadoRonda 
-{ 
-    Repartiendo, 
-    Jugando, 
-    EsperandoRespuesta, 
+public enum EstadoRonda
+{
+    Repartiendo,
+    Jugando,
+    EsperandoRespuesta,
 }
 
 public enum TurnoActual
@@ -44,15 +44,19 @@ public class GameManager : MonoBehaviour
     public int puntosOponente = 0;
     public int puntosJugador = 0;
 
-    //Hidden
     [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
     [HideInInspector] public int trucoState = 0;
     [HideInInspector] public int puntosEnJuego = 1;
+    [HideInInspector] public bool seJugoCartaDesdeUltimoCanto = true;
+    [HideInInspector] public bool ultimoCantoFueDelJugador = false;
 
-    //Privates
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
+    private List<Carta> cartasJugadorJugadas = new List<Carta>();
+    private List<Carta> cartasOponenteJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
+    private int manosGanadasJugador = 0;
+    private int manosGanadasOponente = 0;
 
     private void Awake()
     {
@@ -61,7 +65,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 
@@ -81,19 +84,16 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnCardsSequence()
     {
         mazo = new List<CartaSO>(cartas);
-
         cartasEnMano.Clear();
         int playerIndex = 0;
         int opponentIndex = 0;
 
-        for (int i = 0; i < 6; i++) // 3 para cada uno, intercalado
+        for (int i = 0; i < 6; i++)
         {
-            bool isOpponentDraw = (i % 2 == 0); // arranca el oponente
+            bool isOpponentDraw = (i % 2 == 0);
 
             var instantiatedCard = Instantiate(carta, spawnPosition.position, Quaternion.Euler(0f, 180f, 0f));
             var cardSelector = instantiatedCard.GetComponent<CardSelector>();
-
-            // Elegir carta random y asignar valores
             var randomCard = mazo[Random.Range(0, mazo.Count)];
             mazo.Remove(randomCard);
 
@@ -103,16 +103,15 @@ public class GameManager : MonoBehaviour
             newCard.jerarquiaTruco = randomCard.jerarquiaTruco;
             newCard.imagen.sprite = randomCard.imagen;
 
-            if (isOpponentDraw) 
+            if (isOpponentDraw)
             {
-                instantiatedCard.GetComponent<CardSelector>().isOpponent = true;
+                cardSelector.isOpponent = true;
             }
 
             Sequence s = DOTween.Sequence();
 
             if (isOpponentDraw)
             {
-                // Cartas del oponente → no rotan
                 s.Append(instantiatedCard.transform.DOMove(handOponentPosition[opponentIndex].position, setTime).SetEase(Ease.OutCubic));
                 s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 180f, 0f), setTime).SetEase(Ease.OutCubic));
 
@@ -123,7 +122,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                // Cartas del jugador → rotan a 360
                 s.Append(instantiatedCard.transform.DOMove(handPosition[playerIndex].position, setTime).SetEase(Ease.OutCubic));
                 s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 360f, 0f), setTime).SetEase(Ease.OutCubic));
 
@@ -132,8 +130,7 @@ public class GameManager : MonoBehaviour
             }
 
             allCards.Add(cardSelector);
-
-            yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
+            yield return s.WaitForCompletion();
         }
 
         estadoRonda = EstadoRonda.Jugando;
@@ -143,71 +140,103 @@ public class GameManager : MonoBehaviour
 
     public void CartaJugada(CardSelector carta)
     {
-        if (!carta.isOpponent)
+        var cartaData = carta.GetComponent<Carta>();
+        seJugoCartaDesdeUltimoCanto = true;
+
+        if (carta.isOpponent)
         {
-            turnoActual = TurnoActual.Oponente;
-            uiManager.SetBotonesInteractables(false); 
-            iaOponente.JugarCarta();
-        }
-        else
-        {
+            cartasOponenteJugadas.Add(cartaData);
             turnoActual = TurnoActual.Jugador;
             uiManager.SetBotonesInteractables(true);
         }
-    }
 
-    public void CantarTruco()   
-    {
-        trucoState++;
-        estadoRonda = EstadoRonda.EsperandoRespuesta;
-
-        Debug.Log("Se cantó Truco. Esperando respuesta...");
-        uiManager.OcultarOpcionesTruco();
-        iaOponente.ResponderTruco();
-    }
-
-    public void RespuestaJugadorTruco(bool quiero)
-    {
-        uiManager.OcultarOpcionesTruco();
-
-        if (quiero)
+        else
         {
-            trucoState++;
-            puntosEnJuego++;
-            estadoRonda = EstadoRonda.Jugando;
-            ChangeTruco();
+            cartasJugadorJugadas.Add(cartaData);
+            turnoActual = TurnoActual.Oponente;
+            uiManager.SetBotonesInteractables(false);
+            iaOponente.JugarCarta();
+        }
+
+        if (cartasJugadorJugadas.Count > 0 && cartasJugadorJugadas.Count == cartasOponenteJugadas.Count)
+        {
+            EvaluarMano(cartasJugadorJugadas[^1], cartasOponenteJugadas[^1]);
+        }
+    }
+
+    private void EvaluarMano(Carta jug, Carta opo)
+    {
+        if (jug.jerarquiaTruco > opo.jerarquiaTruco)
+        {
+            manosGanadasJugador++;
+            Debug.Log("Jugador ganó la mano");
+        }
+        else if (opo.jerarquiaTruco > jug.jerarquiaTruco)
+        {
+            manosGanadasOponente++;
+            Debug.Log("Oponente ganó la mano");
         }
         else
         {
+            //Aca hay que hacer la jugada empate
+            Debug.Log("Empate en la mano");
+        }
+
+        VerificarFinDeRonda();
+    }
+
+    private void VerificarFinDeRonda()
+    {
+        if (manosGanadasJugador == 2)
+        {
+            puntosJugador += puntosEnJuego;
+            FinalizarRonda();
+            return;
+        }
+
+        if (manosGanadasOponente == 2)
+        {
             puntosOponente += puntosEnJuego;
+            FinalizarRonda();
+            return;
+        }
+
+        if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
+        {
+            if (manosGanadasJugador > manosGanadasOponente)
+            {
+                puntosJugador += puntosEnJuego;
+            }
+            else if (manosGanadasOponente > manosGanadasJugador)
+            {
+                puntosOponente += puntosEnJuego;
+            }
+            else
+            {
+                var primeraJugador = cartasJugadorJugadas[0];
+                var primeraOponente = cartasOponenteJugadas[0];
+
+                if (primeraJugador.jerarquiaTruco > primeraOponente.jerarquiaTruco)
+                    puntosJugador += puntosEnJuego;
+                else if (primeraOponente.jerarquiaTruco > primeraJugador.jerarquiaTruco)
+                    puntosOponente += puntosEnJuego;
+                else
+                    puntosJugador += puntosEnJuego; // empate absoluto → gana el que es mano (jugador)
+            }
+
             FinalizarRonda();
         }
     }
 
 
-    public void SumarPuntosJugador()
-    {
-        puntosJugador += puntosEnJuego;
-    }
-
-    public void MeVoy(bool esJugador)
-    {
-        if (esJugador)
-            puntosOponente += puntosEnJuego;
-        else
-            puntosJugador += puntosEnJuego;
-
-        FinalizarRonda();
-    }
-
-    public void CantarEnvido()
-    {
-        Debug.Log("Envido no implementado todavía");
-    }
-
     public void FinalizarRonda()
     {
-        //puntosOponente += puntosEnJuego;
+        cartasJugadorJugadas.Clear();
+        cartasOponenteJugadas.Clear();
+        manosGanadasJugador = 0;
+        manosGanadasOponente = 0;
+        seJugoCartaDesdeUltimoCanto = true;
+        ultimoCantoFueDelJugador = false;
         ResetZOffset();
         uiManager.ResetTruco();
         DevolverCartas();
@@ -243,7 +272,6 @@ public class GameManager : MonoBehaviour
             yield return s.WaitForCompletion();
         }
 
-        // Destruir todas las cartas después del loop
         foreach (var c in allCards)
         {
             Destroy(c.gameObject);
@@ -252,7 +280,6 @@ public class GameManager : MonoBehaviour
         cartasEnMano.Clear();
         allCards.Clear();
 
-        // Arrancar siguiente ronda
         yield return new WaitForSeconds(0.5f);
         SpawnCards();
     }
@@ -260,7 +287,7 @@ public class GameManager : MonoBehaviour
     public float GetZOffset()
     {
         float offset = zOffsetCentroMesa;
-        zOffsetCentroMesa -= 0.05f; // o más si querés más separación
+        zOffsetCentroMesa -= 0.05f;
         return offset;
     }
 
@@ -272,5 +299,61 @@ public class GameManager : MonoBehaviour
     public void ChangeTruco()
     {
         uiManager.ChangeTrucoState(trucoState);
+    }
+
+    public void CantarTruco()
+    {
+        if (!seJugoCartaDesdeUltimoCanto && ultimoCantoFueDelJugador)
+        {
+            Debug.Log("No podés volver a cantar sin que se juegue una carta.");
+            return;
+        }
+
+        trucoState++;
+        estadoRonda = EstadoRonda.EsperandoRespuesta;
+        Debug.Log("Se cantó Truco. Esperando respuesta...");
+        uiManager.OcultarOpcionesTruco();
+        iaOponente.ResponderTruco();
+
+        seJugoCartaDesdeUltimoCanto = false;
+        ultimoCantoFueDelJugador = true;
+    }
+
+    public void RespuestaJugadorTruco(bool quiero)
+    {
+        uiManager.OcultarOpcionesTruco();
+
+        if (quiero)
+        {
+            trucoState++;
+            puntosEnJuego++;
+            estadoRonda = EstadoRonda.Jugando;
+            ChangeTruco();
+        }
+        else
+        {
+            puntosOponente += puntosEnJuego;
+            FinalizarRonda();
+        }
+    }
+
+    public void SumarPuntosJugador()
+    {
+        puntosJugador += puntosEnJuego;
+    }
+
+    public void MeVoy(bool esJugador)
+    {
+        if (esJugador)
+            puntosOponente += puntosEnJuego;
+        else
+            puntosJugador += puntosEnJuego;
+
+        FinalizarRonda();
+    }
+
+    public void CantarEnvido()
+    {
+        Debug.Log("Envido no implementado todavía");
     }
 }
