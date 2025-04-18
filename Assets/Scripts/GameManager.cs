@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
     [HideInInspector] public int trucoState = 0;
-    [HideInInspector] public int puntosEnJuego = 1;
+     public int puntosEnJuego = 1;
     [HideInInspector] public bool seJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool ultimoCantoFueDelJugador = false;
 
@@ -55,8 +55,8 @@ public class GameManager : MonoBehaviour
     private List<Carta> cartasJugadorJugadas = new List<Carta>();
     private List<Carta> cartasOponenteJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
-    private int manosGanadasJugador = 0;
-    private int manosGanadasOponente = 0;
+    public int manosGanadasJugador = 0;
+    public int manosGanadasOponente = 0;
 
     private void Awake()
     {
@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour
         VerificarFinDeRonda();
     }
 
-    private void VerificarFinDeRonda()
+    public void VerificarFinDeRonda()
     {
         if (manosGanadasJugador == 2)
         {
@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
+        else if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
         {
             if (manosGanadasJugador > manosGanadasOponente)
             {
@@ -214,32 +214,25 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                var primeraJugador = cartasJugadorJugadas[0];
-                var primeraOponente = cartasOponenteJugadas[0];
-
-                if (primeraJugador.jerarquiaTruco > primeraOponente.jerarquiaTruco)
-                    puntosJugador += puntosEnJuego;
-                else if (primeraOponente.jerarquiaTruco > primeraJugador.jerarquiaTruco)
-                    puntosOponente += puntosEnJuego;
-                else
-                    puntosJugador += puntosEnJuego; // empate absoluto → gana el que es mano (jugador)
+                Debug.Log("EMPATE EN EL TRUCO");
             }
 
             FinalizarRonda();
         }
+
     }
 
     public void FinalizarRonda()
     {
         cartasJugadorJugadas.Clear();
         cartasOponenteJugadas.Clear();
+        uiManager.ResetTruco();
         manosGanadasJugador = 0;
         manosGanadasOponente = 0;
         seJugoCartaDesdeUltimoCanto = true;
         ultimoCantoFueDelJugador = false;
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         ResetZOffset();
-        uiManager.ResetTruco();
         DevolverCartas();
         puntosEnJuego = 1;
         trucoState = 0;
@@ -336,11 +329,17 @@ public class GameManager : MonoBehaviour
             puntosOponente += puntosEnJuego;
             FinalizarRonda();
         }
+
+        if (turnoActual == TurnoActual.Oponente)
+        {
+            iaOponente.JugarCarta();
+        }
     }
 
     public void SumarPuntosJugador()
     {
         puntosJugador += puntosEnJuego;
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
     }
 
     public void MeVoy(bool esJugador)

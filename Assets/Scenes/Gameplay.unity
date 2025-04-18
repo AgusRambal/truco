@@ -1983,6 +1983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   responseTime: 0.5
   trucoResponseTime: 1
+  estilo: 0
 --- !u!4 &596016131
 Transform:
   m_ObjectHideFlags: 0
@@ -2318,6 +2319,8 @@ MonoBehaviour:
   puntosEnJuego: 1
   seJugoCartaDesdeUltimoCanto: 1
   ultimoCantoFueDelJugador: 0
+  manosGanadasJugador: 0
+  manosGanadasOponente: 0
 --- !u!4 &732447878
 Transform:
   m_ObjectHideFlags: 0
@@ -4526,7 +4529,7 @@ Transform:
   m_GameObject: {fileID: 1671096867}
   serializedVersion: 2
   m_LocalRotation: {x: -0.04999862, y: 0, z: -0, w: -0.9987493}
-  m_LocalPosition: {x: 6.926, y: -0.21, z: -1.05}
+  m_LocalPosition: {x: 6.926, y: 0.27, z: -1.05}
   m_LocalScale: {x: 0.30173004, y: 0.30173, z: 0.30173022}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4860,7 +4863,7 @@ Transform:
   m_GameObject: {fileID: 2048317963}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.769, y: -0.385, z: -1.02}
+  m_LocalPosition: {x: 6.769, y: 0.09500003, z: -1.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
