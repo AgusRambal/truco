@@ -14,9 +14,10 @@ public enum EstiloIA
 public class IAOponente : MonoBehaviour
 {
     [Header("Parameters")]
-    [SerializeField] private float minResponseTime = 1f;
+    [SerializeField] private float minResponseTime = 0.5f;
     [SerializeField] private float maxResponseTime = 3f;
-    [SerializeField] private float trucoResponseTime = 1f;
+    [SerializeField] private float minTrucoResponseTime = 0.25f;
+    [SerializeField] private float maxTrucoResponseTime = 1f;
     [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
 
     private enum EstiloJugada
@@ -49,7 +50,7 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        // 🔥 Lógica de canto Truco (con restricciones)
+        // Lógica de canto Truco (con restricciones)
         bool puedeCantar = GameManager.Instance.estadoRonda == EstadoRonda.Jugando;
         int trucoState = GameManager.Instance.trucoState;
         bool tieneCartasMalas = disponibles.All(c => c.GetComponent<Carta>().jerarquiaTruco < 7);
@@ -171,7 +172,8 @@ public class IAOponente : MonoBehaviour
 
     private IEnumerator ResponderTrucoCoroutine()
     {
-        yield return new WaitForSeconds(trucoResponseTime);
+        float delay = Random.Range(minTrucoResponseTime, maxTrucoResponseTime);
+        yield return new WaitForSeconds(delay);
 
         int estadoActual = GameManager.Instance.trucoState;
         bool quiereSubir = false;
