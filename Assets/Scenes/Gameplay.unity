@@ -1180,7 +1180,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 208.76917, y: -179.54822}
+  m_AnchoredPosition: {x: 208.76917, y: -195.54834}
   m_SizeDelta: {x: 176.68, y: 164.4267}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &322106590
@@ -1981,7 +1981,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35944d4bdd148854cb77fdecb5feda51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  responseTime: 0.5
+  minResponseTime: 1
+  maxResponseTime: 3
   trucoResponseTime: 1
   estilo: 0
 --- !u!4 &596016131
@@ -2310,6 +2311,7 @@ MonoBehaviour:
   spawnPosition: {fileID: 1671096869}
   setTime: 0.25
   resetTime: 0.2
+  devolverCartasWaitTime: 0.5
   estadoRonda: 0
   turnoActual: 0
   puntosOponente: 0
@@ -2319,6 +2321,7 @@ MonoBehaviour:
   puntosEnJuego: 1
   seJugoCartaDesdeUltimoCanto: 1
   ultimoCantoFueDelJugador: 0
+  ultimaManoFueEmpate: 0
   manosGanadasJugador: 0
   manosGanadasOponente: 0
 --- !u!4 &732447878
@@ -2859,7 +2862,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 691.23065, y: 494}
+  m_AnchoredPosition: {x: 691.23065, y: 504.4}
   m_SizeDelta: {x: 308.6808, y: 60.4406}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909157750
@@ -3589,7 +3592,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 208.76917, y: -8.9999695}
+  m_AnchoredPosition: {x: 208.76917, y: -25}
   m_SizeDelta: {x: 176.6714, y: 176.6714}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1220695956

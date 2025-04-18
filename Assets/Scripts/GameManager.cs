@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float setTime = 0.25f;
     [SerializeField] private float resetTime = 0.25f;
+    [SerializeField] private float devolverCartasWaitTime = 0.1f;
 
     [Header("Game stats")]
     public EstadoRonda estadoRonda = EstadoRonda.Jugando;
@@ -49,12 +50,15 @@ public class GameManager : MonoBehaviour
      public int puntosEnJuego = 1;
     [HideInInspector] public bool seJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool ultimoCantoFueDelJugador = false;
+    [HideInInspector] public bool ultimaManoFueEmpate = false;
 
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
     private List<Carta> cartasJugadorJugadas = new List<Carta>();
     private List<Carta> cartasOponenteJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
+    private bool rondaSeDefiniraEnProxima = false;
+
     public int manosGanadasJugador = 0;
     public int manosGanadasOponente = 0;
 
@@ -170,17 +174,21 @@ public class GameManager : MonoBehaviour
         if (jug.jerarquiaTruco > opo.jerarquiaTruco)
         {
             manosGanadasJugador++;
-            Debug.Log("Jugador ganó la mano");
+            ultimaManoFueEmpate = false;
         }
         else if (opo.jerarquiaTruco > jug.jerarquiaTruco)
         {
             manosGanadasOponente++;
-            Debug.Log("Oponente ganó la mano");
+            ultimaManoFueEmpate = false;
         }
         else
         {
-            //Aca hay que hacer la jugada empate
             Debug.Log("Empate en la mano");
+            ultimaManoFueEmpate = true;
+
+            // Si es la PRIMERA mano, la ronda se definirá en la siguiente
+            if (cartasJugadorJugadas.Count == 1)
+                rondaSeDefiniraEnProxima = true;
         }
 
         VerificarFinDeRonda();
@@ -188,6 +196,23 @@ public class GameManager : MonoBehaviour
 
     public void VerificarFinDeRonda()
     {
+        // Caso especial: la ronda se definía en la subronda 2 (por empate en subronda 1)
+        if (rondaSeDefiniraEnProxima && cartasJugadorJugadas.Count == 2 && cartasOponenteJugadas.Count == 2)
+        {
+            if (manosGanadasJugador > manosGanadasOponente)
+                puntosJugador += puntosEnJuego;
+            else if (manosGanadasOponente > manosGanadasJugador)
+                puntosOponente += puntosEnJuego;
+            else
+            {
+                Debug.Log("Empate incluso en mano definitoria — gana el jugador por ser mano");
+                puntosJugador += puntosEnJuego;
+            }
+
+            FinalizarRonda();
+            return;
+        }
+
         if (manosGanadasJugador == 2)
         {
             puntosJugador += puntosEnJuego;
@@ -202,25 +227,22 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        else if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
+        if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
         {
             if (manosGanadasJugador > manosGanadasOponente)
-            {
                 puntosJugador += puntosEnJuego;
-            }
             else if (manosGanadasOponente > manosGanadasJugador)
-            {
                 puntosOponente += puntosEnJuego;
-            }
             else
             {
-                Debug.Log("EMPATE EN EL TRUCO");
+                Debug.Log("Empate triple — gana el jugador por ser mano");
+                puntosJugador += puntosEnJuego;
             }
 
             FinalizarRonda();
         }
-
     }
+
 
     public void FinalizarRonda()
     {
@@ -247,6 +269,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator DevolverCartasSequence()
     {
+        yield return new WaitForSeconds(devolverCartasWaitTime);
+
         foreach (var c in allCards)
         {
             Transform cartaTransform = c.transform;

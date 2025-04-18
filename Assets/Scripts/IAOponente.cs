@@ -14,7 +14,8 @@ public enum EstiloIA
 public class IAOponente : MonoBehaviour
 {
     [Header("Parameters")]
-    [SerializeField] private float responseTime = 0.5f;
+    [SerializeField] private float minResponseTime = 1f;
+    [SerializeField] private float maxResponseTime = 3f;
     [SerializeField] private float trucoResponseTime = 1f;
     [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
 
@@ -32,7 +33,7 @@ public class IAOponente : MonoBehaviour
 
     private IEnumerator JugarCartaCoroutine()
     {
-        float delay = Random.Range(1f, 4f);
+        float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
         var disponibles = new List<CardSelector>();
@@ -48,7 +49,7 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        // 🔥 Lógica de canto Truco (con bluff)
+        // Lógica de canto Truco (con bluff)
         bool puedeCantar = GameManager.Instance.estadoRonda == EstadoRonda.Jugando;
         int trucoState = GameManager.Instance.trucoState;
         bool tieneCartasMalas = disponibles.All(c => c.GetComponent<Carta>().jerarquiaTruco < 7);
@@ -93,17 +94,28 @@ public class IAOponente : MonoBehaviour
 
         CardSelector elegida = null;
 
-        switch (estiloJugada)
+        if (GameManager.Instance.ultimaManoFueEmpate)
         {
-            case EstiloJugada.Fuerte:
-                elegida = cartasOrdenadas[0];
-                break;
-            case EstiloJugada.Débil:
-                elegida = cartasOrdenadas[^1];
-                break;
-            case EstiloJugada.Amague:
-                elegida = cartasOrdenadas[Mathf.Clamp(Random.Range(1, cartasOrdenadas.Count - 1), 0, cartasOrdenadas.Count - 1)];
-                break;
+            // Obligado a jugar la carta más fuerte
+            elegida = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).First();
+        }
+        else
+        {
+            var cartasOrdenadasIA = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).ToList();
+            EstiloJugada estilo = DecidirEstiloJugada(disponibles);
+
+            switch (estilo)
+            {
+                case EstiloJugada.Fuerte:
+                    elegida = cartasOrdenadasIA[0];
+                    break;
+                case EstiloJugada.Débil:
+                    elegida = cartasOrdenadasIA[^1];
+                    break;
+                case EstiloJugada.Amague:
+                    elegida = cartasOrdenadasIA[Mathf.Clamp(Random.Range(1, cartasOrdenadasIA.Count - 1), 0, cartasOrdenadasIA.Count - 1)];
+                    break;
+            }
         }
 
         elegida.hasBeenPlayed = true;
@@ -125,16 +137,7 @@ public class IAOponente : MonoBehaviour
 
         yield return s.WaitForCompletion();
 
-        bool ultimaCarta = true;
-        foreach (var carta in GameManager.Instance.allCards)
-        {
-            if (carta.isOpponent && !carta.hasBeenPlayed)
-            {
-                ultimaCarta = false;
-                break;
-            }
-        }
-
+        // SIEMPRE llamar a CartaJugada para que evalúe
         GameManager.Instance.CartaJugada(elegida);
     }
 
