@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Machine Gun Kelly
+  m_text: Venusmiun
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}
   m_sharedMaterial: {fileID: 8671075430454118965, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.85
+  m_fontSize: 36
   m_fontSizeBase: 24.64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3926,8 +3926,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.6776, y: 0.0010463}
-  m_SizeDelta: {x: 237.3996, y: 157.14}
+  m_AnchoredPosition: {x: 0, y: -2.7235}
+  m_SizeDelta: {x: 253.8552, y: 173.4805}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1545557225
 MonoBehaviour:
@@ -3949,9 +3949,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2833978854244032865, guid: 0be707fa4d5db8c4ca9c09b29dcb6b83, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 88214a3a666014e50aa619bf5a0c5aee, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
