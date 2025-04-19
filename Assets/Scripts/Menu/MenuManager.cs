@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -12,12 +13,21 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float shakeStrength = 2f;
     [SerializeField] private float shakeInterval = 2f;
 
+    [Header("Referencias")]
+    [SerializeField] private RectTransform popupOpciones;
+    [SerializeField] private float animationDuration = 0.4f;
+
     private void Start()
     {
         foreach (var carta in cartasMenu)
         {
             StartCoroutine(ShakeCartaLoop(carta));
         }
+    }
+
+    public void Jugar()
+    {
+        SceneManager.LoadScene("Player vs IA"); // Cambiá "GameScene" por el nombre exacto de tu escena de juego
     }
 
     private IEnumerator<WaitForSeconds> ShakeCartaLoop(Transform carta)
@@ -39,8 +49,30 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    public void AbrirOpciones()
+    {
+        popupOpciones.gameObject.SetActive(true);
+        popupOpciones.localScale = Vector3.zero;
+
+        popupOpciones.DOScale(Vector3.one, animationDuration)
+            .SetEase(Ease.OutBack); // zoom rebote
+    }
+
+    public void CerrarOpciones()
+    {
+        popupOpciones.DOScale(Vector3.zero, animationDuration)
+            .SetEase(Ease.InBack) // contrae con rebote inverso
+            .OnComplete(() =>
+            {
+                popupOpciones.gameObject.SetActive(false);
+            });
+    }
+
     public void QuitGame()
-    { 
+    {
         Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }

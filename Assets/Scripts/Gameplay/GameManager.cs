@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         mazo = new List<CartaSO>(cartas);
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
-        SpawnCards();
+        Invoke("SpawnCards", .5f);
     }
 
     public void SpawnCards()
