@@ -455,7 +455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 70892215}
   m_Layer: 0
-  m_Name: Card (1)
+  m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -874,7 +874,7 @@ Transform:
   m_GameObject: {fileID: 159309773}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -927,7 +927,7 @@ Transform:
   m_GameObject: {fileID: 207373597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 906.08813, y: 994.5586, z: -13.823471}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -958,7 +958,7 @@ Transform:
   m_GameObject: {fileID: 229566167}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -999,10 +999,10 @@ RectTransform:
   - {fileID: 1843690653}
   m_Father: {fileID: 782750650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 691.23065, y: -505.2}
-  m_SizeDelta: {x: 308.6808, y: 60.4406}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -274.4, y: 36.6}
+  m_SizeDelta: {x: 308.6808, y: 60.440613}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &237066342
 MonoBehaviour:
@@ -1551,7 +1551,7 @@ Transform:
   m_GameObject: {fileID: 384934434}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1616,7 +1616,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 16288
+  far clip plane: 100
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -2027,7 +2027,7 @@ Transform:
   m_GameObject: {fileID: 596016129}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 906.08813, y: 994.5586, z: -13.823471}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2366,7 +2366,7 @@ Transform:
   m_GameObject: {fileID: 732447876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 906.08813, y: 994.5586, z: -13.823471}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2893,10 +2893,10 @@ RectTransform:
   - {fileID: 322106589}
   m_Father: {fileID: 782750650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 691.23065, y: 504.4}
-  m_SizeDelta: {x: 308.6808, y: 60.4406}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -263.6, y: -35.6}
+  m_SizeDelta: {x: 308.6808, y: 60.440613}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909157750
 MonoBehaviour:
@@ -2993,7 +2993,7 @@ Transform:
   m_GameObject: {fileID: 973261796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3314,7 +3314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1073974111}
   m_Layer: 0
-  m_Name: Card (2)
+  m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3529,7 +3529,7 @@ Transform:
   m_GameObject: {fileID: 1156510773}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4653,7 +4653,7 @@ Transform:
   m_GameObject: {fileID: 1658243964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5453606, y: 2.3257759, z: -7.1285067}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
