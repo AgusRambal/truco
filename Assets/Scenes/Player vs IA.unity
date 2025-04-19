@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Venusmiun
+  m_text: Machine Gun Kelly
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}
   m_sharedMaterial: {fileID: 8671075430454118965, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 29.85
   m_fontSizeBase: 24.64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1212,8 +1212,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 208.76917, y: -208.2}
-  m_SizeDelta: {x: 176.68, y: 164.4267}
+  m_AnchoredPosition: {x: 81.231995, y: -208.2}
+  m_SizeDelta: {x: 325.3344, y: 164.4267}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &322106590
 MonoBehaviour:
@@ -1269,7 +1269,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1300,7 +1300,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 1.1702269, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3949,7 +3949,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 88214a3a666014e50aa619bf5a0c5aee, type: 3}
+  m_Sprite: {fileID: -2833978854244032865, guid: 0be707fa4d5db8c4ca9c09b29dcb6b83, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4891,8 +4891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 208.76917, y: 184.7331}
-  m_SizeDelta: {x: 176.68, y: 164.3861}
+  m_AnchoredPosition: {x: 80, y: 184.7331}
+  m_SizeDelta: {x: 343.2329, y: 164.3861}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1843690654
 MonoBehaviour:
@@ -4948,7 +4948,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0

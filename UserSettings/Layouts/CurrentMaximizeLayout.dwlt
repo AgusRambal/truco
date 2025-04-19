@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 36294
+  controlID: 2020
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -98,7 +98,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -195,9 +195,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ce12ffff
-      m_LastClickedID: -60722
-      m_ExpandedIDs: c61fffff1cbcffffeed0ffff0cfbffffdedb0000160e0100c80e0100280f0100
+      m_SelectedIDs: 5cb30000
+      m_LastClickedID: 0
+      m_ExpandedIDs: 7cdeffffaae4ffff0cfbffff52b00000d8b600000eb70000a8b70000eab70000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 36295
+  controlID: 2021
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 36296
+  controlID: 2022
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -895,9 +895,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 324.74026, y: 1200.0558, z: -2.3265352}
+    m_Target: {x: 2411.8835, y: 1484.0178, z: -3.9073741}
     speed: 2
-    m_Value: {x: 324.74026, y: 1200.0558, z: -2.3265352}
+    m_Value: {x: 2411.8835, y: 1484.0178, z: -3.9073741}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -947,9 +947,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 326.9337
+    m_Target: 485.01233
     speed: 2
-    m_Value: 326.9337
+    m_Value: 485.01233
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1227,7 +1227,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Layer Lab/GUI Pro-CasualGame/ResourcesData/Sprite/Components/IconMisc
+    - Assets/Scenes
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1237,16 +1237,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Layer Lab/GUI Pro-CasualGame/ResourcesData/Sprite/Components/IconMisc
+  - Assets/Scenes
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\gohan\Documents\GitHub\truco
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 261}
-    m_SelectedIDs: fedc0000
-    m_LastClickedID: 56574
-    m_ExpandedIDs: 0000000044b4000046b4000048b400004ab400004cb400004eb4000050b4000052b40000cab40000d8b4000012b50000
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: dab30000
+    m_LastClickedID: 46042
+    m_ExpandedIDs: 0000000046b3000048b300004ab300004cb300004eb3000050b3000052b3000054b3000058b30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1275,7 +1275,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000044b4000046b4000048b400004ab400004cb400004eb4000050b4000052b40000cab40000d8b4000012b50000
+    m_ExpandedIDs: 0000000046b3000048b300004ab300004cb300004eb3000050b3000052b3000054b3000056b3000058b30000e4b30000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1301,8 +1301,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ce12ffff
-    m_LastClickedInstanceID: -60722
+    m_SelectedInstanceIDs: 5cb30000
+    m_LastClickedInstanceID: 45916
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300007c9900000a551700f0850000d8c60000a6610200327300003c8b000032f70000f200010022ea0000fec8000000c900006c490600e48d030064bf120052630500
     m_RenameOverlay:
@@ -1329,7 +1329,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 1244}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 96
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 241
@@ -1407,7 +1407,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -63258
+  m_LastSelectedObjectID: -60722
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
