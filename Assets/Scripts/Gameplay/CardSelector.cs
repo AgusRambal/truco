@@ -21,7 +21,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (isHovered || hasBeenPlayed || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo) return;
+        if (isHovered || hasBeenPlayed || isOpponent || GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo || GameManager.Instance.isPaused) return;
 
         isHovered = true;
         hoverTween = transform.DOScale(originalScale + Vector3.one * hoverScaleAmount, 0.2f).SetEase(Ease.OutBack);
@@ -29,7 +29,7 @@ public class CardSelector : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (hasBeenPlayed || isOpponent) return;
+        if (hasBeenPlayed || isOpponent || GameManager.Instance.isPaused) return;
 
         isHovered = false;
 
@@ -52,7 +52,7 @@ public class CardSelector : MonoBehaviour
             GameManager.Instance.target == null ||
             isOpponent ||
             GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo ||
-            GameManager.Instance.turnoActual != TurnoActual.Jugador)
+            GameManager.Instance.turnoActual != TurnoActual.Jugador || GameManager.Instance.isPaused)
             return;
 
         hasBeenPlayed = true;

@@ -128,7 +128,7 @@ public class MenuManager : MonoBehaviour
 
     public void CerrarOpciones()
     {
-        popupOpciones.DOScale(Vector3.zero, animationDuration)
+        popupOpciones.DOScale(Vector3.zero, animationDuration - 0.2f)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {

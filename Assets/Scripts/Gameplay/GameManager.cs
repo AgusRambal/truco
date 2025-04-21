@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int TrucoState = 0;
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
+    [HideInInspector] public bool isPaused = false;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();

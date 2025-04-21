@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     [Header("Obejcts")]
     [SerializeField] private Image resultBG;
     [SerializeField] private List<GameObject> resultObjects = new List<GameObject>();
+    [SerializeField] private RectTransform popupOpciones;
+    [SerializeField] private Button opciones;
+    [SerializeField] private float animationDuration = 0.4f;
 
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
@@ -43,7 +46,6 @@ public class UIManager : MonoBehaviour
 
     private Vector3 quieroOriginalPos;
     private Vector3 noQuieroOriginalPos;
-    private bool trucoFinalState = false;
 
     private void Start()
     {
@@ -53,9 +55,6 @@ public class UIManager : MonoBehaviour
 
     public void ActualizarBotonesSegunEstado()
     {
-        meVoy.interactable = false;
-        envido.interactable = false;
-
         bool puedeCantarTruco = false;
 
         //  Caso 1: turno normal del jugador
@@ -94,7 +93,6 @@ public class UIManager : MonoBehaviour
     public void ResetTruco()
     {
         truco.GetComponentInChildren<TMP_Text>().text = $"TRUCO";
-        trucoFinalState = false;
     }
 
     public void MostrarOpcionesTruco()
@@ -189,5 +187,28 @@ public class UIManager : MonoBehaviour
             resultText.text = $"PERDISTE..";
             creditos.text = $"NO OBTUVISTE CREDITOS";
         }
+    }
+
+    public void AbrirOpciones()
+    {
+        GameManager.Instance.isPaused = true;
+        opciones.interactable = false;
+        popupOpciones.gameObject.SetActive(true);
+        popupOpciones.localScale = Vector3.zero;
+
+        popupOpciones.DOScale(Vector3.one, animationDuration)
+            .SetEase(Ease.OutBack);
+    }
+
+    public void CerrarOpciones()
+    {
+        GameManager.Instance.isPaused = false;
+        opciones.interactable = true;
+        popupOpciones.DOScale(Vector3.zero, animationDuration - 0.2f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                popupOpciones.gameObject.SetActive(false);
+            });
     }
 }
