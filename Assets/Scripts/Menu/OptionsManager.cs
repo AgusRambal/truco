@@ -5,14 +5,12 @@ using TMPro;
 public class OptionsManager : MonoBehaviour
 {
     [Header("Referencias")]
-    public TMP_Dropdown dropdownResolucion;
-    public Toggle togglePantallaCompleta;
-    public TMP_Dropdown dropdownGraficos;
-    public Button botonAplicar;
+    [SerializeField] private TMP_Dropdown dropdownResolucion;
+    [SerializeField] private Toggle togglePantallaCompleta;
+    [SerializeField] private TMP_Dropdown dropdownGraficos;
+    [SerializeField] private Button botonAplicar;
 
     private Resolution[] resoluciones;
-
-    // 🔒 Variables temporales
     private int resolucionSeleccionadaIndex;
     private bool pantallaCompletaSeleccionada;
     private int calidadGraficaSeleccionada;

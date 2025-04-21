@@ -7,19 +7,16 @@ public class CardSelector : MonoBehaviour
     [SerializeField] private float tiltAmount = 10f;
     [SerializeField] private float tiltSpeed = 5f;
     public bool isOpponent = false;
-
-    private Vector3 originalScale;
-    private Quaternion originalRotation;
-    private bool isHovered = false;
     public bool hasBeenPlayed = false;
 
+    private Vector3 originalScale;
+    private bool isHovered = false;
     private Tween hoverTween;
     private Tween tiltTween;
 
     private void Start()
     {
         originalScale = transform.localScale;
-        originalRotation = transform.rotation;
     }
 
     private void OnMouseEnter()
@@ -48,8 +45,6 @@ public class CardSelector : MonoBehaviour
         Vector3 resetRot = new Vector3(-10f, 360f, 0f);
         transform.DORotate(resetRot, 0.3f).SetEase(Ease.OutCubic);
     }
-
-
 
     private void OnMouseDown()
     {

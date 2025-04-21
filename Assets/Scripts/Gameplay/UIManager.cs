@@ -6,19 +6,19 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [Header("Buttons")]
-    public Button truco;
-    public Button meVoy;
-    public Button envido;
+    [SerializeField] private Button truco;
+    [SerializeField] private Button meVoy;
+    [SerializeField] private Button envido;
 
     [Header("Texts")]
-    public TMP_Text playerPointsText;
-    public TMP_Text opponentPointsText;
+    [SerializeField] private TMP_Text playerPointsText;
+    [SerializeField] private TMP_Text opponentPointsText;
 
     [Header("Respuesta Truco")]
-    public Button botonQuiero;
-    public Button botonNoQuiero;
-    public float distanciaAnimacionRespuesta = 100f;
-    public float tiempoAnimacionRespuesta = 0.3f;
+    [SerializeField] private Button botonQuiero;
+    [SerializeField] private Button botonNoQuiero;
+    [SerializeField] private float distanciaAnimacionRespuesta = 100f;
+    [SerializeField] private float tiempoAnimacionRespuesta = 0.3f;
 
     private Vector3 quieroOriginalPos;
     private Vector3 noQuieroOriginalPos;

@@ -47,10 +47,10 @@ public class GameManager : MonoBehaviour
 
     [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
     [HideInInspector] public int trucoState = 0;
-     public int puntosEnJuego = 1;
     [HideInInspector] public bool seJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool ultimoCantoFueDelJugador = false;
     [HideInInspector] public bool ultimaManoFueEmpate = false;
+     public int puntosEnJuego = 1;
 
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
