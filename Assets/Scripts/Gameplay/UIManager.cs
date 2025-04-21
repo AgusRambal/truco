@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -51,15 +51,33 @@ public class UIManager : MonoBehaviour
         noQuieroOriginalPos = botonNoQuiero.transform.localPosition;
     }
 
-    public void SetBotonesInteractables(bool estado)
+    public void ActualizarBotonesSegunEstado()
     {
-        truco.interactable = estado;
-        meVoy.interactable = estado;
-        envido.interactable = estado;
+        meVoy.interactable = false;
+        envido.interactable = false;
 
-        if (trucoFinalState && GameManager.Instance.estadoRonda != EstadoRonda.EsperandoRespuesta)
-            truco.interactable = false;
+        bool puedeCantarTruco = false;
+
+        //  Caso 1: turno normal del jugador
+        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando)
+        {
+            puedeCantarTruco =
+                GameManager.Instance.TrucoState < 3 &&
+                GameManager.Instance.turnoActual == TurnoActual.Jugador &&
+                GameManager.Instance.CantidadCartasJugadorJugadas < 3;
+        }
+
+        //  Caso 2: estoy respondiendo un canto (Truco o Retruco)
+        else if (GameManager.Instance.estadoRonda == EstadoRonda.EsperandoRespuesta &&
+                 GameManager.Instance.UltimoCantoFueDelJugador == false &&
+                 GameManager.Instance.TrucoState < 3)
+        {
+            puedeCantarTruco = true; // puedo subir el canto
+        }
+
+        truco.interactable = puedeCantarTruco;
     }
+
 
     public void ChangeTrucoState(int state)
     {
@@ -70,7 +88,6 @@ public class UIManager : MonoBehaviour
         else if (state == 2)
         {
             truco.GetComponentInChildren<TMP_Text>().text = $"VALE CUATRO";
-            trucoFinalState = true;
         }
     }
 

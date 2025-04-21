@@ -45,7 +45,7 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        var disponibles = GameManager.Instance.allCards
+        var disponibles = GameManager.Instance.AllCards
         .Where(c => c != null && c.isOpponent && !c.hasBeenPlayed && c.gameObject != null)
         .ToList();
 
@@ -57,47 +57,47 @@ public class IAOponente : MonoBehaviour
 
         // Lógica de canto Truco (con restricciones)
         bool puedeCantar = GameManager.Instance.estadoRonda == EstadoRonda.Jugando;
-        int trucoState = GameManager.Instance.trucoState;
+        int trucoState = GameManager.Instance.TrucoState;
         bool tieneCartasMalas = disponibles.All(c => c.GetComponent<Carta>().jerarquiaTruco < 7);
         bool tieneCartasFuertes = disponibles.Any(c => c.GetComponent<Carta>().jerarquiaTruco >= 12);
         float chance = Random.value;
 
-        if (puedeCantar && GameManager.Instance.seJugoCartaDesdeUltimoCanto)
+        if (puedeCantar && GameManager.Instance.SeJugoCartaDesdeUltimoCanto)
         {
             if (trucoState == 0 && ((tieneCartasFuertes && chance < 0.25f) || (tieneCartasMalas && chance < 0.15f)))
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Truco);
-                GameManager.Instance.trucoState++;
+                GameManager.Instance.TrucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
-                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
-                GameManager.Instance.ultimoCantoFueDelJugador = false;
+                GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.UltimoCantoFueDelJugador = false;
                 yield break;
             }
             else if (trucoState == 1 && chance < 0.3f)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
-                GameManager.Instance.trucoState++;
+                GameManager.Instance.TrucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
-                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
-                GameManager.Instance.ultimoCantoFueDelJugador = false;
+                GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.UltimoCantoFueDelJugador = false;
                 yield break;
             }
             else if (trucoState == 2 && chance < 0.35f)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
-                GameManager.Instance.trucoState++;
+                GameManager.Instance.TrucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
                 GameManager.Instance.ChangeTruco();
                 GameManager.Instance.uiManager.MostrarOpcionesTruco();
-                GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
-                GameManager.Instance.ultimoCantoFueDelJugador = false;
+                GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
+                GameManager.Instance.UltimoCantoFueDelJugador = false;
                 yield break;
             }
         }
@@ -105,7 +105,7 @@ public class IAOponente : MonoBehaviour
         //  Elegir carta con intención
         CardSelector elegida = null;
 
-        if (GameManager.Instance.ultimaManoFueEmpate)
+        if (GameManager.Instance.UltimaManoFueEmpate)
         {
             elegida = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).First();
         }
@@ -152,7 +152,7 @@ public class IAOponente : MonoBehaviour
 
     private EstiloJugada DecidirEstiloJugada(List<CardSelector> disponibles)
     {
-        int jugadas = GameManager.Instance.allCards.Count(c => c.isOpponent && c.hasBeenPlayed);
+        int jugadas = GameManager.Instance.AllCards.Count(c => c.isOpponent && c.hasBeenPlayed);
 
         switch (estilo)
         {
@@ -183,7 +183,7 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minTrucoResponseTime, maxTrucoResponseTime);
         yield return new WaitForSeconds(delay);
 
-        int estadoActual = GameManager.Instance.trucoState;
+        int estadoActual = GameManager.Instance.TrucoState;
         bool quiereSubir = false;
 
         if (estadoActual < 2)
@@ -193,19 +193,19 @@ public class IAOponente : MonoBehaviour
 
         if (quiereSubir)
         {
-            if (GameManager.Instance.trucoState == 1)
+            if (GameManager.Instance.TrucoState == 1)
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
-            else if (GameManager.Instance.trucoState == 2)
+            else if (GameManager.Instance.TrucoState == 2)
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
 
             Debug.Log("Oponente: ¡RETRUCO o VALE CUATRO!");
-            GameManager.Instance.trucoState++;
+            GameManager.Instance.TrucoState++;
             GameManager.Instance.puntosEnJuego += 1;
             GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
             GameManager.Instance.ChangeTruco();
             GameManager.Instance.uiManager.MostrarOpcionesTruco();
-            GameManager.Instance.seJugoCartaDesdeUltimoCanto = false;
-            GameManager.Instance.ultimoCantoFueDelJugador = false;
+            GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
+            GameManager.Instance.UltimoCantoFueDelJugador = false;
         }
         else
         {

@@ -46,25 +46,31 @@ public class GameManager : MonoBehaviour
     public TurnoActual turnoActual = TurnoActual.Jugador;
     public int puntosOponente = 0;
     public int puntosJugador = 0;
+    public int puntosEnJuego = 1;
 
-    [HideInInspector] public List<CardSelector> allCards = new List<CardSelector>();
-    [HideInInspector] public int trucoState = 0;
-    [HideInInspector] public bool seJugoCartaDesdeUltimoCanto = true;
-    [HideInInspector] public bool ultimoCantoFueDelJugador = false;
-    [HideInInspector] public bool ultimaManoFueEmpate = false;
-     public int puntosEnJuego = 1;
+    //Hidden
+    [HideInInspector] public int TrucoState = 0;
+    [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
+    [HideInInspector] public bool UltimoCantoFueDelJugador = false;
 
+    //Privates
+    private List<CardSelector> allCards = new List<CardSelector>();
+    private bool ultimaManoFueEmpate = false;
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
-    private List<Carta> cartasJugadorJugadas = new List<Carta>();
     private List<Carta> cartasOponenteJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
     private bool rondaSeDefiniraEnProxima = false;
     private bool turnoJugadorEmpieza = true;
     private int pointsToEnd;
+    private int manosGanadasJugador = 0;
+    private int manosGanadasOponente = 0;
+    private List<Carta> cartasJugadorJugadas = new List<Carta>();
 
-    public int manosGanadasJugador = 0;
-    public int manosGanadasOponente = 0;
+    //Propiedades
+    public int CantidadCartasJugadorJugadas => cartasJugadorJugadas.Count;
+    public List<CardSelector> AllCards => allCards;
+    public bool UltimaManoFueEmpate => ultimaManoFueEmpate;
 
     private void Awake()
     {
@@ -87,7 +93,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
-        uiManager.SetBotonesInteractables(false);
+        uiManager.ActualizarBotonesSegunEstado();
         estadoRonda = EstadoRonda.Repartiendo;
         StartCoroutine(SpawnCardsSequence());
     }
@@ -166,7 +172,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            uiManager.SetBotonesInteractables(true);
+            uiManager.ActualizarBotonesSegunEstado();
         }
     }
 
@@ -175,7 +181,7 @@ public class GameManager : MonoBehaviour
         if (carta == null || carta.gameObject == null) return;
 
         var cartaData = carta.GetComponent<Carta>();
-        seJugoCartaDesdeUltimoCanto = true;
+        SeJugoCartaDesdeUltimoCanto = true;
 
         if (carta.isOpponent)
         {
@@ -197,12 +203,12 @@ public class GameManager : MonoBehaviour
             if (turnoActual == TurnoActual.Oponente)
             {
                 turnoActual = TurnoActual.Jugador;
-                uiManager.SetBotonesInteractables(true);
+                uiManager.ActualizarBotonesSegunEstado();
             }
             else
             {
                 turnoActual = TurnoActual.Oponente;
-                uiManager.SetBotonesInteractables(false);
+                uiManager.ActualizarBotonesSegunEstado();
                 iaOponente.JugarCarta();
             }
         }
@@ -284,12 +290,12 @@ public class GameManager : MonoBehaviour
         {
             if (turnoActual == TurnoActual.Oponente)
             {
-                uiManager.SetBotonesInteractables(false);
+                uiManager.ActualizarBotonesSegunEstado();
                 iaOponente.JugarCarta();
             }
             else
             {
-                uiManager.SetBotonesInteractables(true);
+                uiManager.ActualizarBotonesSegunEstado();
             }
         }
     }
@@ -338,17 +344,22 @@ public class GameManager : MonoBehaviour
         DevolverCartas();
 
         puntosEnJuego = 1;
-        trucoState = 0;
+        TrucoState = 0;
 
-        //  Alternar quién empieza la próxima ronda
+        //Resetear lógica de canto
+        SeJugoCartaDesdeUltimoCanto = true;
+        UltimoCantoFueDelJugador = false;
+
+        //Alternar quién empieza
         turnoJugadorEmpieza = !turnoJugadorEmpieza;
 
         estadoRonda = EstadoRonda.Repartiendo;
     }
 
+
     private void DevolverCartas()
     {
-        uiManager.SetBotonesInteractables(false);
+        uiManager.ActualizarBotonesSegunEstado();
         StartCoroutine(DevolverCartasSequence());
     }
 
@@ -405,32 +416,32 @@ public class GameManager : MonoBehaviour
 
     public void ChangeTruco()
     {
-        uiManager.ChangeTrucoState(trucoState);
+        uiManager.ChangeTrucoState(TrucoState);
     }
 
     public void CantarTruco()
     {
-        if (!seJugoCartaDesdeUltimoCanto && ultimoCantoFueDelJugador)
+        if (!SeJugoCartaDesdeUltimoCanto && UltimoCantoFueDelJugador)
         {
             Debug.Log("No podés volver a cantar sin que se juegue una carta.");
             return;
         }
 
-        if (trucoState == 0)
+        if (TrucoState == 0)
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Truco);
-        else if (trucoState == 1)
+        else if (TrucoState == 1)
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Retruco);
-        else if (trucoState == 2)
+        else if (TrucoState == 2)
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.ValeCuatro);
 
-        trucoState++;
+        TrucoState++;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
         Debug.Log("Se cantó Truco. Esperando respuesta...");
         uiManager.OcultarOpcionesTruco();
         iaOponente.ResponderTruco();
 
-        seJugoCartaDesdeUltimoCanto = false;
-        ultimoCantoFueDelJugador = true;
+        SeJugoCartaDesdeUltimoCanto = false;
+        UltimoCantoFueDelJugador = true;
     }
 
     public void RespuestaJugadorTruco(bool quiero)
@@ -440,7 +451,7 @@ public class GameManager : MonoBehaviour
         if (quiero)
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
-            trucoState++;
+            TrucoState++;
             puntosEnJuego++;
             estadoRonda = EstadoRonda.Jugando;
             ChangeTruco();
