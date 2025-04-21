@@ -20,7 +20,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Obejcts")]
     [SerializeField] private Image resultBG;
+    [SerializeField] private Image resultBG2;
     [SerializeField] private List<GameObject> resultObjects = new List<GameObject>();
+    [SerializeField] private RectTransform popupOpcionesParent;
     [SerializeField] private RectTransform popupOpciones;
     [SerializeField] private Button opciones;
     [SerializeField] private float animationDuration = 0.4f;
@@ -192,8 +194,11 @@ public class UIManager : MonoBehaviour
     public void AbrirOpciones()
     {
         GameManager.Instance.isPaused = true;
+
+        resultBG2.DOFade(160f / 255f, 0.3f).SetEase(Ease.InOutCubic);
+
         opciones.interactable = false;
-        popupOpciones.gameObject.SetActive(true);
+        popupOpcionesParent.gameObject.SetActive(true);
         popupOpciones.localScale = Vector3.zero;
 
         popupOpciones.DOScale(Vector3.one, animationDuration)
@@ -203,12 +208,15 @@ public class UIManager : MonoBehaviour
     public void CerrarOpciones()
     {
         GameManager.Instance.isPaused = false;
+
+        resultBG2.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
+
         opciones.interactable = true;
         popupOpciones.DOScale(Vector3.zero, animationDuration - 0.2f)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                popupOpciones.gameObject.SetActive(false);
+                popupOpcionesParent.gameObject.SetActive(false);
             });
     }
 }

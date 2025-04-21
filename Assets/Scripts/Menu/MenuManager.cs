@@ -42,6 +42,8 @@ public class MenuManager : MonoBehaviour
             StartCoroutine(ShakeCartaLoop(carta));
         }
 
+        AudioManager.Instance.PlayRandomMenuTrack();
+
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
         creditosTexto.text = $"{creditos}";
     }
