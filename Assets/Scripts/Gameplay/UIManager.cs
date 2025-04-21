@@ -1,8 +1,9 @@
 using DG.Tweening;
-using NUnit.Framework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,7 +15,12 @@ public class UIManager : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TMP_Text playerPointsText;
     [SerializeField] private TMP_Text opponentPointsText;
-    
+    [SerializeField] private TMP_Text resultText;
+
+    [Header("Obejcts")]
+    [SerializeField] private Image resultBG;
+    [SerializeField] private List<GameObject> resultObjects = new List<GameObject>();
+
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
     [SerializeField] private Button botonNoQuiero;
@@ -123,5 +129,45 @@ public class UIManager : MonoBehaviour
                     .SetEase(Ease.InBack)
                     .SetDelay(0.8f);
             });
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    public void ReiniciarPartida()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void MostrarResultadoFinal(bool ganoJugador)
+    {
+        Color c = resultBG.color;
+        c.a = 0f;
+        resultBG.color = c;
+
+        resultBG.DOFade(160f / 255f, 0.5f).SetEase(Ease.InOutCubic);
+
+        foreach (var obj in resultObjects)
+        {
+            obj.transform.localScale = Vector3.zero;
+
+            float delay = Random.Range(0f, 0.2f);
+
+            obj.transform.DOScale(Vector3.one, 0.4f)
+                .SetEase(Ease.OutBack)
+                .SetDelay(delay);
+        }
+
+        if (ganoJugador)
+        {
+            resultText.text = $"GANASTE!!";
+        }
+
+        else
+        {
+            resultText.text = $"PERDISTE..";
+        }
     }
 }

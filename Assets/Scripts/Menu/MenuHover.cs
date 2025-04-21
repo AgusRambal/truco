@@ -11,7 +11,7 @@ public class MenuHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private void Start()
     {
-        originalScale = transform.localScale;
+        originalScale = Vector3.one;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

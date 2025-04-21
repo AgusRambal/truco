@@ -8,6 +8,7 @@ public enum EstadoRonda
     Repartiendo,
     Jugando,
     EsperandoRespuesta,
+    Finalizado
 }
 
 public enum TurnoActual
@@ -238,46 +239,41 @@ public class GameManager : MonoBehaviour
         if (rondaSeDefiniraEnProxima && cartasJugadorJugadas.Count == 2 && cartasOponenteJugadas.Count == 2)
         {
             if (manosGanadasJugador > manosGanadasOponente)
-                puntosJugador += puntosEnJuego;
+                SumarPuntos(true);
             else if (manosGanadasOponente > manosGanadasJugador)
-                puntosOponente += puntosEnJuego;
+                SumarPuntos(false);
             else
             {
                 Debug.Log("Empate incluso en mano definitoria — gana el jugador por ser mano");
-                puntosJugador += puntosEnJuego;
+                SumarPuntos(true);
             }
 
-            FinalizarRonda();
             return;
         }
 
         if (manosGanadasJugador == 2)
         {
-            puntosJugador += puntosEnJuego;
-            FinalizarRonda();
+            SumarPuntos(true);
             return;
         }
 
         if (manosGanadasOponente == 2)
         {
-            puntosOponente += puntosEnJuego;
-            FinalizarRonda();
+            SumarPuntos(false);
             return;
         }
 
         if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
         {
             if (manosGanadasJugador > manosGanadasOponente)
-                puntosJugador += puntosEnJuego;
+                SumarPuntos(true);
             else if (manosGanadasOponente > manosGanadasJugador)
-                puntosOponente += puntosEnJuego;
+                SumarPuntos(false);
             else
             {
                 Debug.Log("Empate triple — gana el jugador por ser mano");
-                puntosJugador += puntosEnJuego;
+                SumarPuntos(true);
             }
-
-            FinalizarRonda();
         }
 
         if (estadoRonda == EstadoRonda.Jugando)
@@ -294,6 +290,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void FinalCheck()
+    {
+        if (puntosJugador >= 30 || puntosOponente >= 30)
+        {
+            estadoRonda = EstadoRonda.Finalizado;
+            StopAllCoroutines();
+            DevolverCartas();
+            bool ganoJugador = puntosJugador >= 30;
+            uiManager.MostrarResultadoFinal(ganoJugador);
+            return;
+        }
+    }
 
     public void FinalizarRonda()
     {
@@ -357,7 +365,11 @@ public class GameManager : MonoBehaviour
         allCards.Clear();
 
         yield return new WaitForSeconds(0.5f);
-        SpawnCards();
+
+        if (estadoRonda != EstadoRonda.Finalizado)
+        { 
+            SpawnCards(); 
+        }
     }
 
     public float GetZOffset()
@@ -417,8 +429,7 @@ public class GameManager : MonoBehaviour
         else
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
-            puntosOponente += puntosEnJuego;
-            FinalizarRonda();
+            SumarPuntos(false);
         }
 
         if (turnoActual == TurnoActual.Oponente)
@@ -427,21 +438,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SumarPuntosJugador()
+    public void SumarPuntos(bool isPlayer)
     {
-        puntosJugador += puntosEnJuego;
+        if (isPlayer) puntosJugador += puntosEnJuego;
+        else puntosOponente += puntosEnJuego;
+
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+        FinalizarRonda();
+        FinalCheck();
     }
 
     public void MeVoy(bool esJugador)
     {
         if (esJugador)
-            puntosOponente += puntosEnJuego;
+            SumarPuntos(false);
         else
-            puntosJugador += puntosEnJuego;
+            SumarPuntos(true);
 
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
-        FinalizarRonda();
     }
 
     public void CantarEnvido()

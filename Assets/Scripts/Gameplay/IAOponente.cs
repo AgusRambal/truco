@@ -223,8 +223,7 @@ public class IAOponente : MonoBehaviour
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
                 Debug.Log("Oponente: ¡No quiero!");
-                GameManager.Instance.SumarPuntosJugador();
-                GameManager.Instance.FinalizarRonda();
+                GameManager.Instance.SumarPuntos(true);
             }
         }
     }
