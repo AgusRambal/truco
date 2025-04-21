@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text playerPointsText;
     [SerializeField] private TMP_Text opponentPointsText;
     [SerializeField] private TMP_Text resultText;
+    [SerializeField] private TMP_Text creditos;
 
     [Header("Obejcts")]
     [SerializeField] private Image resultBG;
@@ -141,7 +142,7 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void MostrarResultadoFinal(bool ganoJugador)
+    public void MostrarResultadoFinal(bool ganoJugador, int ganancia)
     {
         Color c = resultBG.color;
         c.a = 0f;
@@ -163,11 +164,13 @@ public class UIManager : MonoBehaviour
         if (ganoJugador)
         {
             resultText.text = $"GANASTE!!";
+            creditos.text = $"OBTUVISTE {ganancia} CREDITOS";
         }
 
         else
         {
             resultText.text = $"PERDISTE..";
+            creditos.text = $"NO OBTUVISTE CREDITOS";
         }
     }
 }

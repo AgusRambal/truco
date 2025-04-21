@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Utils;
 
 public enum EstadoRonda
 {
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
     private float zOffsetCentroMesa = 0f;
     private bool rondaSeDefiniraEnProxima = false;
     private bool turnoJugadorEmpieza = true;
+    private int pointsToEnd;
 
     public int manosGanadasJugador = 0;
     public int manosGanadasOponente = 0;
@@ -71,7 +73,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
+        pointsToEnd = ParametrosDePartida.puntosParaGanar;
     }
 
     private void Start()
@@ -292,13 +296,28 @@ public class GameManager : MonoBehaviour
 
     private void FinalCheck()
     {
-        if (puntosJugador >= 30 || puntosOponente >= 30)
+        if (puntosJugador >= pointsToEnd || puntosOponente >= pointsToEnd)
         {
             estadoRonda = EstadoRonda.Finalizado;
             StopAllCoroutines();
             DevolverCartas();
-            bool ganoJugador = puntosJugador >= 30;
-            uiManager.MostrarResultadoFinal(ganoJugador);
+            bool ganoJugador = puntosJugador >= pointsToEnd;
+            int ganancia = 0;
+
+            if (ganoJugador)
+            {
+                ganancia = Random.Range(1, 31); //Por ahora valor random
+                int creditosActuales = PlayerPrefs.GetInt("Creditos", 0);
+                int total = creditosActuales + ganancia;
+
+                PlayerPrefs.SetInt("Creditos", total);
+                PlayerPrefs.Save();
+
+                Debug.Log($"Ganaste {ganancia} créditos. Total acumulado: {total}");
+            }
+
+            uiManager.MostrarResultadoFinal(ganoJugador, ganancia); 
+            
             return;
         }
     }
