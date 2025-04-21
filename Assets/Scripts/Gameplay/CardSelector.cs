@@ -41,6 +41,9 @@ public class CardSelector : MonoBehaviour
 
         transform.DOScale(originalScale, 0.2f).SetEase(Ease.OutBack);
 
+        if (GameManager.Instance.estadoRonda == EstadoRonda.Repartiendo)
+            return;
+
         // Restaurar rotación solo para jugador
         Vector3 resetRot = new Vector3(-10f, 360f, 0f);
         transform.DORotate(resetRot, 0.3f).SetEase(Ease.OutCubic);
