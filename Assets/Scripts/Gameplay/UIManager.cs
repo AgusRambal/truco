@@ -1,4 +1,5 @@
 using DG.Tweening;
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,12 +14,25 @@ public class UIManager : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TMP_Text playerPointsText;
     [SerializeField] private TMP_Text opponentPointsText;
-
+    
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
     [SerializeField] private Button botonNoQuiero;
     [SerializeField] private float distanciaAnimacionRespuesta = 100f;
     [SerializeField] private float tiempoAnimacionRespuesta = 0.3f;
+
+    public enum TrucoMensajeTipo
+    {
+        Truco,
+        Retruco,
+        ValeCuatro,
+        Quiero,
+        NoQuiero,
+        MeVoy
+    }
+
+    [SerializeField] private GameObject trucoMessagePlayer;
+    [SerializeField] private GameObject trucoMessageOponente;
 
     private Vector3 quieroOriginalPos;
     private Vector3 noQuieroOriginalPos;
@@ -78,5 +92,36 @@ public class UIManager : MonoBehaviour
     {
         playerPointsText.text = playerPoints.ToString();
         opponentPointsText.text = oponentPoints.ToString();
+    }
+
+    public void MostrarTrucoMensaje(bool esJugador, TrucoMensajeTipo tipo)
+    {
+        GameObject target = esJugador ? trucoMessagePlayer : trucoMessageOponente;
+        TMP_Text texto = target.GetComponentInChildren<TMP_Text>();
+
+        texto.text = tipo switch
+        {
+            TrucoMensajeTipo.Truco => "TRUCO",
+            TrucoMensajeTipo.Retruco => "RETRUCO",
+            TrucoMensajeTipo.ValeCuatro => "QUIERO VALE CUATRO",
+            TrucoMensajeTipo.Quiero => "QUIERO",
+            TrucoMensajeTipo.NoQuiero => "NO QUIERO",
+            TrucoMensajeTipo.MeVoy => "ME VOY",
+            _ => ""
+        };
+
+        target.transform.localScale = Vector3.zero;
+        target.SetActive(true);
+
+        target.transform
+            .DOScale(Vector3.one, 0.3f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                target.transform
+                    .DOScale(Vector3.zero, 0.3f)
+                    .SetEase(Ease.InBack)
+                    .SetDelay(0.8f);
+            });
     }
 }

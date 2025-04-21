@@ -13,6 +13,8 @@ public enum EstiloIA
 
 public class IAOponente : MonoBehaviour
 {
+    public UIManager uiManager;
+
     [Header("Parameters")]
     [SerializeField] private float minResponseTime = 0.5f;
     [SerializeField] private float maxResponseTime = 3f;
@@ -64,6 +66,7 @@ public class IAOponente : MonoBehaviour
         {
             if (trucoState == 0 && ((tieneCartasFuertes && chance < 0.25f) || (tieneCartasMalas && chance < 0.15f)))
             {
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Truco);
                 GameManager.Instance.trucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
@@ -75,6 +78,7 @@ public class IAOponente : MonoBehaviour
             }
             else if (trucoState == 1 && chance < 0.3f)
             {
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
                 GameManager.Instance.trucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
@@ -86,6 +90,7 @@ public class IAOponente : MonoBehaviour
             }
             else if (trucoState == 2 && chance < 0.35f)
             {
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
                 GameManager.Instance.trucoState++;
                 GameManager.Instance.puntosEnJuego++;
                 GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
@@ -188,6 +193,11 @@ public class IAOponente : MonoBehaviour
 
         if (quiereSubir)
         {
+            if (GameManager.Instance.trucoState == 1)
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
+            else if (GameManager.Instance.trucoState == 2)
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
+
             Debug.Log("Oponente: ¡RETRUCO o VALE CUATRO!");
             GameManager.Instance.trucoState++;
             GameManager.Instance.puntosEnJuego += 1;
@@ -203,6 +213,7 @@ public class IAOponente : MonoBehaviour
 
             if (acepta)
             {
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
                 Debug.Log("Oponente: ¡Quiero!");
                 GameManager.Instance.puntosEnJuego += 1;
                 GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
@@ -210,6 +221,7 @@ public class IAOponente : MonoBehaviour
             }
             else
             {
+                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
                 Debug.Log("Oponente: ¡No quiero!");
                 GameManager.Instance.SumarPuntosJugador();
                 GameManager.Instance.FinalizarRonda();

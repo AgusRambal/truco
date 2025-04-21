@@ -175,21 +175,31 @@ public class GameManager : MonoBehaviour
         if (carta.isOpponent)
         {
             cartasOponenteJugadas.Add(cartaData);
-            turnoActual = TurnoActual.Jugador;
-            uiManager.SetBotonesInteractables(true);
         }
-
         else
         {
             cartasJugadorJugadas.Add(cartaData);
-            turnoActual = TurnoActual.Oponente;
-            uiManager.SetBotonesInteractables(false);
-            iaOponente.JugarCarta();
         }
 
+        // Si ya jugaron ambos → evaluar mano
         if (cartasJugadorJugadas.Count > 0 && cartasJugadorJugadas.Count == cartasOponenteJugadas.Count)
         {
             EvaluarMano(cartasJugadorJugadas[^1], cartasOponenteJugadas[^1]);
+        }
+        else
+        {
+            // Todavía no se completó la subronda → activar próximo turno
+            if (turnoActual == TurnoActual.Oponente)
+            {
+                turnoActual = TurnoActual.Jugador;
+                uiManager.SetBotonesInteractables(true);
+            }
+            else
+            {
+                turnoActual = TurnoActual.Oponente;
+                uiManager.SetBotonesInteractables(false);
+                iaOponente.JugarCarta();
+            }
         }
     }
 
@@ -199,11 +209,13 @@ public class GameManager : MonoBehaviour
         {
             manosGanadasJugador++;
             ultimaManoFueEmpate = false;
+            turnoActual = TurnoActual.Jugador;
         }
         else if (opo.jerarquiaTruco > jug.jerarquiaTruco)
         {
             manosGanadasOponente++;
             ultimaManoFueEmpate = false;
+            turnoActual = TurnoActual.Oponente;
         }
         else
         {
@@ -213,6 +225,8 @@ public class GameManager : MonoBehaviour
             // Si es la PRIMERA mano, la ronda se definirá en la siguiente
             if (cartasJugadorJugadas.Count == 1)
                 rondaSeDefiniraEnProxima = true;
+
+            // En caso de empate: no cambiar turnoActual
         }
 
         VerificarFinDeRonda();
@@ -264,6 +278,19 @@ public class GameManager : MonoBehaviour
             }
 
             FinalizarRonda();
+        }
+
+        if (estadoRonda == EstadoRonda.Jugando)
+        {
+            if (turnoActual == TurnoActual.Oponente)
+            {
+                uiManager.SetBotonesInteractables(false);
+                iaOponente.JugarCarta();
+            }
+            else
+            {
+                uiManager.SetBotonesInteractables(true);
+            }
         }
     }
 
@@ -358,6 +385,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if (trucoState == 0)
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Truco);
+        else if (trucoState == 1)
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Retruco);
+        else if (trucoState == 2)
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.ValeCuatro);
+
         trucoState++;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
         Debug.Log("Se cantó Truco. Esperando respuesta...");
@@ -374,6 +408,7 @@ public class GameManager : MonoBehaviour
 
         if (quiero)
         {
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
             trucoState++;
             puntosEnJuego++;
             estadoRonda = EstadoRonda.Jugando;
@@ -381,6 +416,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
             puntosOponente += puntosEnJuego;
             FinalizarRonda();
         }
@@ -404,6 +440,7 @@ public class GameManager : MonoBehaviour
         else
             puntosJugador += puntosEnJuego;
 
+        uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
         FinalizarRonda();
     }
 
