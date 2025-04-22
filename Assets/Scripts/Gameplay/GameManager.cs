@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Utils;
 
@@ -60,6 +61,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool EnvidoCantado = false;
     [HideInInspector] public bool EnvidoFueDelJugador = false;
     [HideInInspector] public bool EnvidoRespondido = false;
+    [HideInInspector] public bool ganoJugador = false;
+    [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -80,6 +83,13 @@ public class GameManager : MonoBehaviour
     public int CantidadCartasOponenteJugadas => cartasOponenteJugadas.Count;
     public List<CardSelector> AllCards => allCards;
     public bool UltimaManoFueEmpate => ultimaManoFueEmpate;
+
+    public enum TipoEnvido
+    {
+        Envido,
+        RealEnvido,
+        FaltaEnvido
+    }
 
     private void Awake()
     {
@@ -155,10 +165,10 @@ public class GameManager : MonoBehaviour
                 s.Append(instantiatedCard.transform.DOMove(handPosition[playerIndex].position, setTime).SetEase(Ease.OutCubic));
                 s.Join(instantiatedCard.transform.DORotate(new Vector3(-10f, 360f, 0f), setTime).SetEase(Ease.OutCubic));
 
-                cartasEnMano.Add(cardSelector);
                 playerIndex++;
             }
 
+            cartasEnMano.Add(cardSelector);
             allCards.Add(cardSelector);
 
             yield return s.WaitForCompletion(); // Esperar a que termine antes de repartir la siguiente
@@ -502,47 +512,194 @@ public class GameManager : MonoBehaviour
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
     }
 
-    public void CantarEnvido()
+    public void CantarEnvido(TipoEnvido tipo)
     {
         if (EnvidoCantado || estadoRonda != EstadoRonda.Jugando)
             return;
 
+        if (tipo == TipoEnvido.FaltaEnvido && turnoActual != TurnoActual.Jugador)
+            return; // Solo el jugador puede cantar Falta Envido
+
+        EnvidoCantado = true;
+        TipoDeEnvidoActual = tipo;
+
         if (turnoActual == TurnoActual.Jugador && cartasJugadorJugadas.Count == 0)
         {
-            EnvidoCantado = true;
             EnvidoFueDelJugador = true;
-            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Envido);
+
+            uiManager.MostrarTrucoMensaje(true, tipo switch
+            {
+                TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
+                TipoEnvido.RealEnvido => UIManager.TrucoMensajeTipo.RealEnvido,
+                TipoEnvido.FaltaEnvido => UIManager.TrucoMensajeTipo.FaltaEnvido,
+                _ => UIManager.TrucoMensajeTipo.Envido
+            });
+
             StartCoroutine(iaOponente.ResponderEnvidoCoroutine());
         }
         else if (turnoActual == TurnoActual.Oponente && cartasOponenteJugadas.Count == 0)
         {
-            EnvidoCantado = true;
             EnvidoFueDelJugador = false;
-            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Envido);
+
+            uiManager.MostrarTrucoMensaje(false, tipo switch
+            {
+                TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
+                TipoEnvido.RealEnvido => UIManager.TrucoMensajeTipo.RealEnvido,
+                _ => UIManager.TrucoMensajeTipo.Envido
+            });
+
             uiManager.MostrarOpcionesEnvido();
         }
+    }
+
+    public void CantarEnvidoNormal()
+    {
+        CantarEnvido(TipoEnvido.Envido);
+    }
+
+    public void CantarRealEnvido()
+    {
+        CantarEnvido(TipoEnvido.RealEnvido);
+    }
+
+    public void CantarFaltaEnvido()
+    {
+        CantarEnvido(TipoEnvido.FaltaEnvido);
+    }
+
+    public int CalcularPuntosEnvido(bool esJugador)
+    {
+        var cartas = cartasEnMano
+            .Where(c => c != null && c.GetComponent<Carta>() != null && c.isOpponent == !esJugador)
+            .Select(c => c.GetComponent<Carta>())
+            .ToList();
+
+        if (cartas.Count == 0)
+        {
+            Debug.LogWarning($"No hay cartas en mano del {(esJugador ? "jugador" : "oponente")} para calcular Envido.");
+            return 0;
+        }
+
+        // Valor de Envido: 10, 11, 12 valen 0
+        int ValorEnvido(Carta c)
+        {
+            return (c.valor >= 10 && c.valor <= 12) ? 0 : c.valor;
+        }
+
+        // DEBUG: mostrar cartas y sus valores
+        Debug.Log($"=== Cartas del {(esJugador ? "jugador" : "oponente")} ===");
+        foreach (var c in cartas)
+        {
+            Debug.Log($"Carta: {c.valor} de {c.palo} → Envido: {ValorEnvido(c)}"); 
+        }
+
+        // Agrupar por palo
+        var porPalo = cartas.GroupBy(c => c.palo)
+                            .Where(g => g.Count() >= 2)
+                            .ToList();
+
+        if (porPalo.Count > 0)
+        {
+            int mejorPuntaje = 0;
+
+            foreach (var grupo in porPalo)
+            {
+                var cartasDelPalo = grupo.ToList();
+                if (cartasDelPalo.Count < 2) continue;
+
+                var top2 = cartasDelPalo.OrderByDescending(c => ValorEnvido(c)).Take(2).ToList();
+                int suma = ValorEnvido(top2[0]) + ValorEnvido(top2[1]) + 20;
+
+                Debug.Log($"→ Palo {grupo.Key}: {ValorEnvido(top2[0])} + {ValorEnvido(top2[1])} + 20 = {suma}");
+                mejorPuntaje = Mathf.Max(mejorPuntaje, suma);
+            }
+
+            Debug.Log($"✔️ Resultado final de Envido: {mejorPuntaje}");
+            return mejorPuntaje;
+        }
+
+        // Si no hay cartas del mismo palo, usar la de mayor valor
+        int maxSinPalo = cartas.Max(c => ValorEnvido(c));
+        Debug.Log($"❌ No hay palo repetido. Mayor carta: {maxSinPalo}");
+        return maxSinPalo;
+    }
+
+    public void ShowEnvidoResults(int valor1, int valor2)
+    {
+        uiManager.ShowEnvidoPoints(valor1, valor2);
     }
 
     public void ResponderEnvido(bool quiero)
     {
         EnvidoRespondido = true;
         uiManager.OcultarOpcionesEnvido();
+            int envidoJugador = CalcularPuntosEnvido(true);
+            int envidoOponente = CalcularPuntosEnvido(false);
 
         if (quiero)
         {
-            // Puntaje real aún no implementado
-            puntosJugador += 2;
+            ShowEnvidoResults(envidoJugador, envidoOponente);
+
+            bool ganoJugador = envidoJugador > envidoOponente ||
+                               (envidoJugador == envidoOponente && EnvidoFueDelJugador);
+
+            this.ganoJugador = ganoJugador;
+
+            switch (TipoDeEnvidoActual)
+            {
+                case TipoEnvido.Envido:
+                    if (ganoJugador)
+                    {
+                        puntosJugador += 2;
+                        Debug.Log("Resultado Envido: Gana el jugador (+2 puntos)");
+                    }
+                    else
+                    {
+                        puntosOponente += 2;
+                        Debug.Log("Resultado Envido: Gana el oponente (+2 puntos)");
+                    }
+                    break;
+
+                case TipoEnvido.RealEnvido:
+                    if (ganoJugador)
+                    {
+                        puntosJugador += 3;
+                        Debug.Log("Resultado Real Envido: Gana el jugador (+3 puntos)");
+                    }
+                    else
+                    {
+                        puntosOponente += 3;
+                        Debug.Log("Resultado Real Envido: Gana el oponente (+3 puntos)");
+                    }
+                    break;
+            }
+
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
         }
         else
         {
-            puntosOponente += 1;
+            if (EnvidoFueDelJugador)
+            {
+                puntosJugador += 1;
+                Debug.Log("Resultado: No quiso. +1 punto para el jugador");
+            }
+            else
+            {
+                puntosOponente += 1;
+                Debug.Log("Resultado: No quiso. +1 punto para el oponente");
+            }
+
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
+            uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
 
-        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+        if (turnoActual == TurnoActual.Oponente)
+        {
+            estadoRonda = EstadoRonda.Jugando;
+            uiManager.ActualizarBotonesSegunEstado();
+            iaOponente.JugarCarta();
+        }
     }
-
 
     private AudioClip GetRandomDrop(List<AudioClip> list)
     {

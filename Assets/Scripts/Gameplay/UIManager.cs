@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using static UnityEngine.GraphicsBuffer;
+using UnityEditor.Experimental.GraphView;
 
 public class UIManager : MonoBehaviour
 {
@@ -34,6 +36,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button botonNoQuieroEnvido;
     [SerializeField] private float distanciaAnimacionRespuesta = 100f;
     [SerializeField] private float tiempoAnimacionRespuesta = 0.3f;
+
+    [Header("Envido")]
+    [SerializeField] private GameObject envidoPoints;
+    [SerializeField] private GameObject envidoPoints2;
 
     [Header("Audio")]
     [SerializeField] private AudioClip notification;
@@ -247,4 +253,56 @@ public class UIManager : MonoBehaviour
                 popupOpcionesParent.gameObject.SetActive(false);
             });
     }
+
+    public void ShowEnvidoPoints(int valor1, int valor2)
+    {
+        var text1 = envidoPoints.GetComponentInChildren<TMP_Text>();
+        var text2 = envidoPoints2.GetComponentInChildren<TMP_Text>();
+
+        if (GameManager.Instance.ganoJugador)
+        {
+            text1.color = Color.green;
+            text2.color = Color.red;
+        }
+
+        else
+        {
+            text1.color = Color.red;
+            text2.color = Color.green;
+        }
+
+        text1.text = $"{valor1}";
+        text2.text = $"{valor2}";
+
+        // Animación 1
+        envidoPoints.transform.localScale = Vector3.zero;
+        envidoPoints.SetActive(true);
+
+        envidoPoints.transform.DOScale(0.3f * Vector3.one, 0.3f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                envidoPoints.transform.DOScale(Vector3.zero, 0.3f)
+                    .SetEase(Ease.InBack)
+                    .SetDelay(2f);
+            });
+
+        // Animación 2
+        envidoPoints2.transform.localScale = Vector3.zero;
+        envidoPoints2.SetActive(true);
+
+        envidoPoints2.transform.DOScale(0.3f * Vector3.one, 0.3f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                envidoPoints2.transform.DOScale(Vector3.zero, 0.3f)
+                    .SetEase(Ease.InBack)
+                    .SetDelay(2f)
+                    .OnComplete(() =>
+                    {
+                        SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+                    });
+            });
+    }
+
 }

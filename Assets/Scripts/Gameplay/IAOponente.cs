@@ -21,7 +21,7 @@ public class IAOponente : MonoBehaviour
     [SerializeField] private float minTrucoResponseTime = 0.25f;
     [SerializeField] private float maxTrucoResponseTime = 1f;
     [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
-
+    
     private enum EstiloJugada
     {
         Fuerte,
@@ -41,27 +41,27 @@ public class IAOponente : MonoBehaviour
 
         if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0)
         {
-            bool quiereCantarEnvido = false;
-
-            switch (estilo)
+            float chanceBase = estilo switch
             {
-                case EstiloIA.Canchero:
-                    quiereCantarEnvido = Random.value < 0.5f;
-                    break;
-                case EstiloIA.Conservador:
-                    quiereCantarEnvido = Random.value < 0.2f;
-                    break;
-                case EstiloIA.Caotico:
-                    quiereCantarEnvido = Random.value < 0.8f;
-                    break;
+                EstiloIA.Canchero => 0.5f,
+                EstiloIA.Conservador => 0.2f,
+                EstiloIA.Caotico => 0.8f,
+                _ => 0.3f
+            };
+
+            float r = Random.value;
+            if (r < chanceBase / 2f)
+            {
+                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido);
+                yield break;
             }
-
-            if (quiereCantarEnvido)
+            else if (r < chanceBase)
             {
-                GameManager.Instance.CantarEnvido();
+                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.Envido);
                 yield break;
             }
         }
+
 
         if (GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
         {
@@ -257,20 +257,74 @@ public class IAOponente : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
         bool quiere = Random.value > 0.5f;
 
+        int envidoJugador = GameManager.Instance.CalcularPuntosEnvido(true);
+        int envidoOponente = GameManager.Instance.CalcularPuntosEnvido(false);
+
         if (quiere)
         {
-            GameManager.Instance.puntosOponente += 2;
-            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
-            Debug.Log("IA: Quiero el Envido");
+            GameManager.Instance.ShowEnvidoResults(envidoJugador, envidoOponente);
+
+            bool ganaOponente = envidoOponente > envidoJugador ||
+                    (envidoOponente == envidoJugador && !GameManager.Instance.EnvidoFueDelJugador);
+
+            GameManager.Instance.ganoJugador = !ganaOponente;
+
+            switch (GameManager.Instance.TipoDeEnvidoActual)
+            {
+                case GameManager.TipoEnvido.Envido:
+                    if (ganaOponente)
+                    {
+                        GameManager.Instance.puntosOponente += 2;
+                        Debug.Log("Resultado Envido: Gana el oponente (+2 puntos)");
+                    }
+                    else
+                    {
+                        GameManager.Instance.puntosJugador += 2;
+                        Debug.Log("Resultado Envido: Gana el jugador (+2 puntos)");
+                    }
+                    break;
+
+                case GameManager.TipoEnvido.RealEnvido:
+                    if (ganaOponente)
+                    {
+                        GameManager.Instance.puntosOponente += 3;
+                        Debug.Log("Resultado Real Envido: Gana el oponente (+3 puntos)");
+                    }
+                    else
+                    {
+                        GameManager.Instance.puntosJugador += 3;
+                        Debug.Log("Resultado Real Envido: Gana el jugador (+3 puntos)");
+                    }
+                    break;
+            }
+
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
         }
         else
         {
-            GameManager.Instance.puntosJugador += 1;
-            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
-            Debug.Log("IA: No quiero el Envido");
+            // Si no acepta, 1 punto para quien cantó
+            if (GameManager.Instance.EnvidoFueDelJugador)
+            {
+                GameManager.Instance.puntosJugador += 1;
+                Debug.Log("IA no quiso: +1 punto para el jugador");
+            }
+            else
+            {
+                GameManager.Instance.puntosOponente += 1;
+                Debug.Log("IA no quiso: +1 punto para el oponente");
+            }
+
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+            uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+        }
+
+        if (GameManager.Instance.turnoActual == TurnoActual.Oponente)
+        {
+            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+            JugarCarta();
         }
 
         GameManager.Instance.EnvidoRespondido = true;
-        GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
     }
 }
