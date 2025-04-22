@@ -530,7 +530,7 @@ public class GameManager : MonoBehaviour
     public void CantarEnvido(TipoEnvido tipo)
     {
         if (EnvidoCantado || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
-            return; return;
+            return;
 
         if (tipo == TipoEnvido.FaltaEnvido && turnoActual != TurnoActual.Jugador)
             return; // Solo el jugador puede cantar Falta Envido
