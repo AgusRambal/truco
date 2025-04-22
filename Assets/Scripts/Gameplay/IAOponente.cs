@@ -335,7 +335,6 @@ public class IAOponente : MonoBehaviour
         GameManager.Instance.EnvidoRespondido = true;
     }
 
-
     public IEnumerator ResponderEnvidoExtendido()
     {
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
@@ -353,5 +352,4 @@ public class IAOponente : MonoBehaviour
         // Si no sube más → simplemente responde
         StartCoroutine(ResponderEnvidoCoroutine());
     }
-
 }
