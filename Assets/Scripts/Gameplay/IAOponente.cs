@@ -39,6 +39,30 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
+        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0)
+        {
+            bool quiereCantarEnvido = false;
+
+            switch (estilo)
+            {
+                case EstiloIA.Canchero:
+                    quiereCantarEnvido = Random.value < 0.5f;
+                    break;
+                case EstiloIA.Conservador:
+                    quiereCantarEnvido = Random.value < 0.2f;
+                    break;
+                case EstiloIA.Caotico:
+                    quiereCantarEnvido = Random.value < 0.8f;
+                    break;
+            }
+
+            if (quiereCantarEnvido)
+            {
+                GameManager.Instance.CantarEnvido();
+                yield break;
+            }
+        }
+
         if (GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
         {
             Debug.Log("IA: se canceló la jugada porque ya no estamos jugando.");
@@ -226,5 +250,27 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.SumarPuntos(true);
             }
         }
+    }
+
+    public IEnumerator ResponderEnvidoCoroutine()
+    {
+        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+        bool quiere = Random.value > 0.5f;
+
+        if (quiere)
+        {
+            GameManager.Instance.puntosOponente += 2;
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+            Debug.Log("IA: Quiero el Envido");
+        }
+        else
+        {
+            GameManager.Instance.puntosJugador += 1;
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
+            Debug.Log("IA: No quiero el Envido");
+        }
+
+        GameManager.Instance.EnvidoRespondido = true;
+        GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
     }
 }

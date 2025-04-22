@@ -57,6 +57,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
     [HideInInspector] public bool isPaused = false;
+    [HideInInspector] public bool EnvidoCantado = false;
+    [HideInInspector] public bool EnvidoFueDelJugador = false;
+    [HideInInspector] public bool EnvidoRespondido = false;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -64,16 +67,17 @@ public class GameManager : MonoBehaviour
     private List<CartaSO> mazo = new List<CartaSO>();
     private List<CardSelector> cartasEnMano = new List<CardSelector>();
     private List<Carta> cartasOponenteJugadas = new List<Carta>();
+    private List<Carta> cartasJugadorJugadas = new List<Carta>();
     private float zOffsetCentroMesa = 0f;
     private bool rondaSeDefiniraEnProxima = false;
     private bool turnoJugadorEmpieza = true;
     private int pointsToEnd;
     private int manosGanadasJugador = 0;
     private int manosGanadasOponente = 0;
-    private List<Carta> cartasJugadorJugadas = new List<Carta>();
 
     //Propiedades
     public int CantidadCartasJugadorJugadas => cartasJugadorJugadas.Count;
+    public int CantidadCartasOponenteJugadas => cartasOponenteJugadas.Count;
     public List<CardSelector> AllCards => allCards;
     public bool UltimaManoFueEmpate => ultimaManoFueEmpate;
 
@@ -344,6 +348,7 @@ public class GameManager : MonoBehaviour
         manosGanadasOponente = 0;
         ultimaManoFueEmpate = false;
         rondaSeDefiniraEnProxima = false;
+        EnvidoCantado = false;
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -499,8 +504,45 @@ public class GameManager : MonoBehaviour
 
     public void CantarEnvido()
     {
-        Debug.Log("Envido no implementado todavía");
+        if (EnvidoCantado || estadoRonda != EstadoRonda.Jugando)
+            return;
+
+        if (turnoActual == TurnoActual.Jugador && cartasJugadorJugadas.Count == 0)
+        {
+            EnvidoCantado = true;
+            EnvidoFueDelJugador = true;
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Envido);
+            StartCoroutine(iaOponente.ResponderEnvidoCoroutine());
+        }
+        else if (turnoActual == TurnoActual.Oponente && cartasOponenteJugadas.Count == 0)
+        {
+            EnvidoCantado = true;
+            EnvidoFueDelJugador = false;
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Envido);
+            uiManager.MostrarOpcionesEnvido();
+        }
     }
+
+    public void ResponderEnvido(bool quiero)
+    {
+        EnvidoRespondido = true;
+        uiManager.OcultarOpcionesEnvido();
+
+        if (quiero)
+        {
+            // Puntaje real aún no implementado
+            puntosJugador += 2;
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
+        }
+        else
+        {
+            puntosOponente += 1;
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
+        }
+
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+    }
+
 
     private AudioClip GetRandomDrop(List<AudioClip> list)
     {

@@ -30,6 +30,8 @@ public class UIManager : MonoBehaviour
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
     [SerializeField] private Button botonNoQuiero;
+    [SerializeField] private Button botonQuieroEnvido;
+    [SerializeField] private Button botonNoQuieroEnvido;
     [SerializeField] private float distanciaAnimacionRespuesta = 100f;
     [SerializeField] private float tiempoAnimacionRespuesta = 0.3f;
 
@@ -43,7 +45,10 @@ public class UIManager : MonoBehaviour
         ValeCuatro,
         Quiero,
         NoQuiero,
-        MeVoy
+        MeVoy,
+        Envido,
+        RealEnvido,
+        FaltaEnvido
     }
 
     [SerializeField] private GameObject trucoMessagePlayer;
@@ -115,6 +120,21 @@ public class UIManager : MonoBehaviour
         botonNoQuiero.transform.DOLocalMove(noQuieroOriginalPos, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
     }
 
+    public void MostrarOpcionesEnvido()
+    {
+        botonQuieroEnvido.transform.localPosition = quieroOriginalPos;
+        botonNoQuieroEnvido.transform.localPosition = noQuieroOriginalPos;
+
+        botonQuieroEnvido.transform.DOLocalMoveX(quieroOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
+        botonNoQuieroEnvido.transform.DOLocalMoveX(noQuieroOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
+    }
+
+    public void OcultarOpcionesEnvido()
+    {
+        botonQuieroEnvido.transform.DOLocalMove(quieroOriginalPos, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
+        botonNoQuieroEnvido.transform.DOLocalMove(noQuieroOriginalPos, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
+    }
+
     public void SetPointsInScreen(int playerPoints, int oponentPoints)
     {
         playerPointsText.text = playerPoints.ToString();
@@ -136,6 +156,9 @@ public class UIManager : MonoBehaviour
             TrucoMensajeTipo.Quiero => "QUIERO",
             TrucoMensajeTipo.NoQuiero => "NO QUIERO",
             TrucoMensajeTipo.MeVoy => "ME VOY",
+            TrucoMensajeTipo.Envido => "ENVIDO",
+            TrucoMensajeTipo.RealEnvido => "REAL ENVIDO",
+            TrucoMensajeTipo.FaltaEnvido => "FALTA ENVIDO",
             _ => ""
         };
 
