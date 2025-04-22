@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool EnvidoCantado = false;
     [HideInInspector] public bool EnvidoFueDelJugador = false;
     [HideInInspector] public bool EnvidoRespondido = false;
-    [HideInInspector] public bool ganoJugador = false;
+     public bool ganoJugador = false;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
 
     //Privates
@@ -514,8 +514,8 @@ public class GameManager : MonoBehaviour
 
     public void CantarEnvido(TipoEnvido tipo)
     {
-        if (EnvidoCantado || estadoRonda != EstadoRonda.Jugando)
-            return;
+        if (EnvidoCantado || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
+            return; return;
 
         if (tipo == TipoEnvido.FaltaEnvido && turnoActual != TurnoActual.Jugador)
             return; // Solo el jugador puede cantar Falta Envido
@@ -638,12 +638,12 @@ public class GameManager : MonoBehaviour
 
         if (quiero)
         {
-            ShowEnvidoResults(envidoJugador, envidoOponente);
-
             bool ganoJugador = envidoJugador > envidoOponente ||
                                (envidoJugador == envidoOponente && EnvidoFueDelJugador);
 
             this.ganoJugador = ganoJugador;
+
+            ShowEnvidoResults(envidoJugador, envidoOponente);
 
             switch (TipoDeEnvidoActual)
             {

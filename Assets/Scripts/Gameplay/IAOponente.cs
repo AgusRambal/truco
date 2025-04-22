@@ -39,7 +39,7 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
-        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0)
+        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)        
         {
             float chanceBase = estilo switch
             {
@@ -262,12 +262,12 @@ public class IAOponente : MonoBehaviour
 
         if (quiere)
         {
-            GameManager.Instance.ShowEnvidoResults(envidoJugador, envidoOponente);
-
             bool ganaOponente = envidoOponente > envidoJugador ||
                     (envidoOponente == envidoJugador && !GameManager.Instance.EnvidoFueDelJugador);
 
             GameManager.Instance.ganoJugador = !ganaOponente;
+
+            GameManager.Instance.ShowEnvidoResults(envidoJugador, envidoOponente);
 
             switch (GameManager.Instance.TipoDeEnvidoActual)
             {

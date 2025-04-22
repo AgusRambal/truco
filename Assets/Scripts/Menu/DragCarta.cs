@@ -4,12 +4,6 @@ using DG.Tweening;
 
 public class DragCartaUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    private bool estaArrastrando = false;
-    private Vector3 posicionInicial;
-    private Tween shakeTween;
-
-    private RectTransform rectTransform;
-    private Canvas canvas;
 
     [Header("Shake Settings")]
     public float shakeDuration = 1.5f;
@@ -17,7 +11,13 @@ public class DragCartaUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public float shakeDelayMin = 1f;
     public float shakeDelayMax = 3f;
 
+    private bool estaArrastrando = false;
+    private Vector3 posicionInicial;
+    private Tween shakeTween;
+    private RectTransform rectTransform;
+    private Canvas canvas;
     private Tween myTween;
+    private Vector2 offset;
 
     void Awake()
     {
@@ -58,6 +58,15 @@ public class DragCartaUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
         if (shakeTween != null && shakeTween.IsActive()) shakeTween.Kill();
 
+        // Calcular offset con respecto al mouse
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rectTransform.parent as RectTransform,
+            eventData.position,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
+            out Vector2 localMousePos);
+
+        offset = rectTransform.anchoredPosition - localMousePos;
+
         // Escala con rebote
         myTween = rectTransform.DOScale(1.1f, 1f).SetEase(Ease.OutElastic);
     }
@@ -66,15 +75,15 @@ public class DragCartaUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (!estaArrastrando) return;
 
-        Vector2 localMousePos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             rectTransform.parent as RectTransform,
             eventData.position,
             canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
-            out localMousePos);
+            out Vector2 localMousePos);
 
-        rectTransform.anchoredPosition = localMousePos;
+        rectTransform.anchoredPosition = localMousePos + offset;
     }
+
 
     public void OnPointerUp(PointerEventData eventData)
     {

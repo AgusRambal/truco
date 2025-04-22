@@ -2978,7 +2978,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -89.866, y: -1285}
+  m_AnchoredPosition: {x: -108, y: -1285}
   m_SizeDelta: {x: 933.066, y: 321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &545268865
@@ -4021,6 +4021,7 @@ MonoBehaviour:
   EnvidoCantado: 0
   EnvidoFueDelJugador: 0
   EnvidoRespondido: 0
+  ganoJugador: 0
   TipoDeEnvidoActual: 0
 --- !u!4 &732447878
 Transform:
@@ -7223,7 +7224,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -89.866, y: -1285}
+  m_AnchoredPosition: {x: -108, y: -950}
   m_SizeDelta: {x: 933.066, y: 321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1388111577
@@ -11978,7 +11979,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -108, y: -953}
+  m_AnchoredPosition: {x: -108, y: -618}
   m_SizeDelta: {x: 933.066, y: 321}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2026193668
