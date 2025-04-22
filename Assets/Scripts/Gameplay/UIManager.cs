@@ -310,13 +310,15 @@ public class UIManager : MonoBehaviour
         bool envidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido);
         bool realEnvidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido);
 
-        // Solo desactivás el botón si fue el jugador quien lo cantó
-        if (GameManager.Instance.EnvidoFueDelJugador && envidoYaCantado)
+        // Se permite subir una vez si todavía no respondieron y solo hay un canto
+        bool puedeSubir = !GameManager.Instance.EnvidoRespondido && GameManager.Instance.EnvidoCantos.Count < 2;
+
+        if (GameManager.Instance.EnvidoFueDelJugador && envidoYaCantado && !puedeSubir)
             envido.interactable = false;
         else
             envido.interactable = true;
 
-        if (GameManager.Instance.EnvidoFueDelJugador && realEnvidoYaCantado)
+        if (GameManager.Instance.EnvidoFueDelJugador && realEnvidoYaCantado && !puedeSubir)
             realEnvido.interactable = false;
         else
             realEnvido.interactable = true;

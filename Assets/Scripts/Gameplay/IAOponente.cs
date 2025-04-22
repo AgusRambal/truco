@@ -52,12 +52,12 @@ public class IAOponente : MonoBehaviour
             float r = Random.value;
             if (r < chanceBase / 2f)
             {
-                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido);
+                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
                 yield break;
             }
             else if (r < chanceBase)
             {
-                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.Envido);
+                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
                 yield break;
             }
         }
@@ -322,15 +322,16 @@ public class IAOponente : MonoBehaviour
             uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
         }
 
-        // Restaurar el turno original antes del Envido
-        GameManager.Instance.turnoActual = GameManager.Instance.TurnoAntesDelEnvido;
         GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
         GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
 
-        if (GameManager.Instance.turnoActual == TurnoActual.Oponente)
+        if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
+            GameManager.Instance.CantidadCartasOponenteJugadas < GameManager.Instance.CantidadCartasJugadorJugadas)
         {
             JugarCarta();
         }
+
+        GameManager.Instance.EnvidoRespondido = true;
 
         GameManager.Instance.EnvidoRespondido = true;
     }
@@ -344,8 +345,7 @@ public class IAOponente : MonoBehaviour
         // Si ya estamos en Envido, chance de subir
         if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && chance < 0.2f)
         {
-            GameManager.Instance.turnoActual = TurnoActual.Oponente; // NECESARIO
-            GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido);
+            GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
             yield break;
         }
 

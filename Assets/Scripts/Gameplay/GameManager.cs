@@ -65,7 +65,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
     [HideInInspector] public List<TipoEnvido> EnvidoCantos = new List<TipoEnvido>();
-    [HideInInspector] public TurnoActual TurnoAntesDelEnvido;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -373,6 +372,7 @@ public class GameManager : MonoBehaviour
         rondaSeDefiniraEnProxima = false;
         EnvidoCantado = false;
         PuedeResponderTruco = true;
+        EnvidoRespondido = false;
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -393,7 +393,6 @@ public class GameManager : MonoBehaviour
 
         estadoRonda = EstadoRonda.Repartiendo;
     }
-
 
     private void DevolverCartas()
     {
@@ -498,7 +497,6 @@ public class GameManager : MonoBehaviour
             uiManager.ActualizarBotonesSegunEstado();
         }
 
-
         else
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
@@ -531,22 +529,18 @@ public class GameManager : MonoBehaviour
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
     }
 
-    public void CantarEnvido(TipoEnvido tipo)
+    public void CantarEnvido(TipoEnvido tipo, bool esJugador)
     {
         if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
             return;
 
-        bool cantoJugadorAhora = turnoActual == TurnoActual.Jugador;
-
         if (!EnvidoCantado)
         {
             EnvidoCantado = true;
-            TurnoAntesDelEnvido = turnoActual;
             EnvidoCantos.Clear();
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
-
-            EnvidoFueDelJugador = cantoJugadorAhora;
+            EnvidoFueDelJugador = esJugador;
         }
         else
         {
@@ -555,12 +549,9 @@ public class GameManager : MonoBehaviour
 
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
-
-            // IMPORTANTE: actualizar quién hizo el último canto
-            EnvidoFueDelJugador = cantoJugadorAhora;
+            EnvidoFueDelJugador = esJugador;
         }
 
-        // MOSTRAR EL MENSAJE DEL LADO CORRECTO
         uiManager.MostrarTrucoMensaje(EnvidoFueDelJugador, tipo switch
         {
             TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
@@ -569,34 +560,31 @@ public class GameManager : MonoBehaviour
             _ => UIManager.TrucoMensajeTipo.Envido
         });
 
-        //  Ofrecer respuesta al otro
         if (EnvidoFueDelJugador)
         {
-            // Cantó el jugador → responde IA
             StartCoroutine(iaOponente.ResponderEnvidoExtendido());
         }
         else
         {
-            // Cantó la IA → responde el jugador
             uiManager.MostrarOpcionesEnvido();
         }
 
         uiManager.ActualizarBotonesEnvido();
     }
 
-    public void CantarEnvidoNormal()
+    public void CantarEnvidoNormal(bool jugador)
     {
-        CantarEnvido(TipoEnvido.Envido);
+        CantarEnvido(TipoEnvido.Envido, jugador);
     }
 
-    public void CantarRealEnvido()
+    public void CantarRealEnvido(bool jugador)
     {
-        CantarEnvido(TipoEnvido.RealEnvido);
+        CantarEnvido(TipoEnvido.RealEnvido, jugador);
     }
 
-    public void CantarFaltaEnvido()
+    public void CantarFaltaEnvido(bool jugador)
     {
-        CantarEnvido(TipoEnvido.FaltaEnvido);
+        CantarEnvido(TipoEnvido.FaltaEnvido, jugador);
     }
 
     public int CalcularPuntosEnvido(bool esJugador)
@@ -725,15 +713,16 @@ public class GameManager : MonoBehaviour
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
 
-        turnoActual = TurnoAntesDelEnvido;
         estadoRonda = EstadoRonda.Jugando;
         uiManager.ActualizarBotonesSegunEstado();
 
         if (turnoActual == TurnoActual.Oponente)
         {
-            estadoRonda = EstadoRonda.Jugando;
-            uiManager.ActualizarBotonesSegunEstado();
-            iaOponente.JugarCarta();
+            // Verificamos si ya jugó la carta antes del Envido
+            if (CantidadCartasOponenteJugadas < CantidadCartasJugadorJugadas)
+            {
+                iaOponente.JugarCarta();
+            }
         }
     }
 
