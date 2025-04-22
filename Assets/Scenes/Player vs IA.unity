@@ -1319,6 +1319,7 @@ MonoBehaviour:
   truco: {fileID: 988022588}
   meVoy: {fileID: 797768637}
   envido: {fileID: 46852786}
+  realEnvido: {fileID: 151812002}
   playerPointsText: {fileID: 1843690654}
   opponentPointsText: {fileID: 322106590}
   resultText: {fileID: 1528029670}
@@ -4022,7 +4023,9 @@ MonoBehaviour:
   EnvidoFueDelJugador: 0
   EnvidoRespondido: 0
   ganoJugador: 0
+  PuedeResponderTruco: 1
   TipoDeEnvidoActual: 0
+  EnvidoCantos: 
 --- !u!4 &732447878
 Transform:
   m_ObjectHideFlags: 0

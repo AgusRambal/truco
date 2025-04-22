@@ -322,13 +322,36 @@ public class IAOponente : MonoBehaviour
             uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
         }
 
+        // Restaurar el turno original antes del Envido
+        GameManager.Instance.turnoActual = GameManager.Instance.TurnoAntesDelEnvido;
+        GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+        GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+
         if (GameManager.Instance.turnoActual == TurnoActual.Oponente)
         {
-            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
-            GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
             JugarCarta();
         }
 
         GameManager.Instance.EnvidoRespondido = true;
     }
+
+
+    public IEnumerator ResponderEnvidoExtendido()
+    {
+        yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+        float chance = Random.value;
+
+        // Si ya estamos en Envido, chance de subir
+        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && chance < 0.2f)
+        {
+            GameManager.Instance.turnoActual = TurnoActual.Oponente; // NECESARIO
+            GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido);
+            yield break;
+        }
+
+        // Si no sube más → simplemente responde
+        StartCoroutine(ResponderEnvidoCoroutine());
+    }
+
 }

@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool ganoJugador = false;
     [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
+    [HideInInspector] public List<TipoEnvido> EnvidoCantos = new List<TipoEnvido>();
+    [HideInInspector] public TurnoActual TurnoAntesDelEnvido;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -313,7 +315,7 @@ public class GameManager : MonoBehaviour
                 SumarPuntos(false);
             else
             {
-                Debug.Log("Empate triple — gana el jugador por ser mano");
+                Debug.Log("Empate triple — gana el jugador por ganar la primer mano");
                 SumarPuntos(true);
             }
         }
@@ -364,6 +366,7 @@ public class GameManager : MonoBehaviour
     {
         cartasJugadorJugadas.Clear();
         cartasOponenteJugadas.Clear();
+        EnvidoCantos.Clear();
         manosGanadasJugador = 0;
         manosGanadasOponente = 0;
         ultimaManoFueEmpate = false;
@@ -386,6 +389,7 @@ public class GameManager : MonoBehaviour
 
         //Alternar quién empieza
         turnoJugadorEmpieza = !turnoJugadorEmpieza;
+        turnoActual = turnoJugadorEmpieza ? TurnoActual.Jugador : TurnoActual.Oponente;
 
         estadoRonda = EstadoRonda.Repartiendo;
     }
@@ -529,42 +533,55 @@ public class GameManager : MonoBehaviour
 
     public void CantarEnvido(TipoEnvido tipo)
     {
-        if (EnvidoCantado || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
+        if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
             return;
 
-        if (tipo == TipoEnvido.FaltaEnvido && turnoActual != TurnoActual.Jugador)
-            return; // Solo el jugador puede cantar Falta Envido
+        bool cantoJugadorAhora = turnoActual == TurnoActual.Jugador;
 
-        EnvidoCantado = true;
-        TipoDeEnvidoActual = tipo;
-
-        if (turnoActual == TurnoActual.Jugador && cartasJugadorJugadas.Count == 0)
+        if (!EnvidoCantado)
         {
-            EnvidoFueDelJugador = true;
+            EnvidoCantado = true;
+            TurnoAntesDelEnvido = turnoActual;
+            EnvidoCantos.Clear();
+            EnvidoCantos.Add(tipo);
+            TipoDeEnvidoActual = tipo;
 
-            uiManager.MostrarTrucoMensaje(true, tipo switch
-            {
-                TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
-                TipoEnvido.RealEnvido => UIManager.TrucoMensajeTipo.RealEnvido,
-                TipoEnvido.FaltaEnvido => UIManager.TrucoMensajeTipo.FaltaEnvido,
-                _ => UIManager.TrucoMensajeTipo.Envido
-            });
-
-            StartCoroutine(iaOponente.ResponderEnvidoCoroutine());
+            EnvidoFueDelJugador = cantoJugadorAhora;
         }
-        else if (turnoActual == TurnoActual.Oponente && cartasOponenteJugadas.Count == 0)
+        else
         {
-            EnvidoFueDelJugador = false;
+            if (EnvidoCantos.Contains(tipo))
+                return;
 
-            uiManager.MostrarTrucoMensaje(false, tipo switch
-            {
-                TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
-                TipoEnvido.RealEnvido => UIManager.TrucoMensajeTipo.RealEnvido,
-                _ => UIManager.TrucoMensajeTipo.Envido
-            });
+            EnvidoCantos.Add(tipo);
+            TipoDeEnvidoActual = tipo;
 
+            // IMPORTANTE: actualizar quién hizo el último canto
+            EnvidoFueDelJugador = cantoJugadorAhora;
+        }
+
+        // MOSTRAR EL MENSAJE DEL LADO CORRECTO
+        uiManager.MostrarTrucoMensaje(EnvidoFueDelJugador, tipo switch
+        {
+            TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
+            TipoEnvido.RealEnvido => UIManager.TrucoMensajeTipo.RealEnvido,
+            TipoEnvido.FaltaEnvido => UIManager.TrucoMensajeTipo.FaltaEnvido,
+            _ => UIManager.TrucoMensajeTipo.Envido
+        });
+
+        //  Ofrecer respuesta al otro
+        if (EnvidoFueDelJugador)
+        {
+            // Cantó el jugador → responde IA
+            StartCoroutine(iaOponente.ResponderEnvidoExtendido());
+        }
+        else
+        {
+            // Cantó la IA → responde el jugador
             uiManager.MostrarOpcionesEnvido();
         }
+
+        uiManager.ActualizarBotonesEnvido();
     }
 
     public void CantarEnvidoNormal()
@@ -707,6 +724,10 @@ public class GameManager : MonoBehaviour
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
+
+        turnoActual = TurnoAntesDelEnvido;
+        estadoRonda = EstadoRonda.Jugando;
+        uiManager.ActualizarBotonesSegunEstado();
 
         if (turnoActual == TurnoActual.Oponente)
         {

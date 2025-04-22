@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button truco;
     [SerializeField] private Button meVoy;
     [SerializeField] private Button envido;
+    [SerializeField] private Button realEnvido;
 
     [Header("Texts")]
     [SerializeField] private TMP_Text playerPointsText;
@@ -92,7 +93,6 @@ public class UIManager : MonoBehaviour
 
         truco.interactable = puedeCantarTruco;
     }
-
 
     public void ChangeTrucoState(int state)
     {
@@ -305,4 +305,20 @@ public class UIManager : MonoBehaviour
             });
     }
 
+    public void ActualizarBotonesEnvido()
+    {
+        bool envidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido);
+        bool realEnvidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido);
+
+        // Solo desactivás el botón si fue el jugador quien lo cantó
+        if (GameManager.Instance.EnvidoFueDelJugador && envidoYaCantado)
+            envido.interactable = false;
+        else
+            envido.interactable = true;
+
+        if (GameManager.Instance.EnvidoFueDelJugador && realEnvidoYaCantado)
+            realEnvido.interactable = false;
+        else
+            realEnvido.interactable = true;
+    }
 }
