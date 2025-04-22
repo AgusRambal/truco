@@ -614,13 +614,13 @@ public class GameManager : MonoBehaviour
                 mejorPuntaje = Mathf.Max(mejorPuntaje, suma);
             }
 
-            Debug.Log($"✔️ Resultado final de Envido: {mejorPuntaje}");
+            Debug.Log($"Resultado final de Envido: {mejorPuntaje}");
             return mejorPuntaje;
         }
 
         // Si no hay cartas del mismo palo, usar la de mayor valor
         int maxSinPalo = cartas.Max(c => ValorEnvido(c));
-        Debug.Log($"❌ No hay palo repetido. Mayor carta: {maxSinPalo}");
+        Debug.Log($"No hay palo repetido. Mayor carta: {maxSinPalo}");
         return maxSinPalo;
     }
 

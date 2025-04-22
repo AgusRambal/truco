@@ -30,18 +30,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float delayEntreBotones = 0.05f;
     [SerializeField] private float duracionAnimacion = 0.25f;
 
-    void Awake()
-    {
-        DOTween.Init();
-    }
-
     private void Start()
     {
-        foreach (var carta in cartasMenu)
-        {
-            StartCoroutine(ShakeCartaLoop(carta));
-        }
-
         AudioManager.Instance.PlayRandomMenuTrack();
 
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
@@ -97,25 +87,6 @@ public class MenuManager : MonoBehaviour
             btn.DOScale(Vector3.one, duracionAnimacion)
                .SetEase(Ease.OutBack)
                .SetDelay(botonesPuntos.Count * delayEntreBotones + i * delayEntreBotones);
-        }
-    }
-
-    private IEnumerator<WaitForSeconds> ShakeCartaLoop(Transform carta)
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(shakeInterval * 0.5f, shakeInterval * 1.5f));
-
-            if (carta != null)
-            {
-                carta.DOShakeRotation(
-                    shakeDuration,
-                    new Vector3(0f, 0f, shakeStrength),
-                    vibrato: 10,
-                    randomness: 90,
-                    fadeOut: true
-                );
-            }
         }
     }
 

@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 103038884}
   - component: {fileID: 103038883}
   - component: {fileID: 103038885}
+  - component: {fileID: 103038886}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -346,6 +347,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &103038886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103038881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &140653030
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +486,7 @@ GameObject:
   - component: {fileID: 163364649}
   - component: {fileID: 163364648}
   - component: {fileID: 163364650}
+  - component: {fileID: 163364651}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -548,6 +566,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &163364651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163364646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &198042891
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +684,7 @@ GameObject:
   - component: {fileID: 200597452}
   - component: {fileID: 200597451}
   - component: {fileID: 200597453}
+  - component: {fileID: 200597454}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -729,6 +764,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &200597454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200597449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &293812989
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1275,7 @@ GameObject:
   - component: {fileID: 355597234}
   - component: {fileID: 355597233}
   - component: {fileID: 355597235}
+  - component: {fileID: 355597236}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -1303,6 +1355,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &355597236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355597231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &384934434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,6 +1652,7 @@ GameObject:
   - component: {fileID: 444979185}
   - component: {fileID: 444979184}
   - component: {fileID: 444979186}
+  - component: {fileID: 444979187}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -1663,6 +1732,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &444979187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444979182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &446949927
 GameObject:
   m_ObjectHideFlags: 0
@@ -2690,6 +2775,7 @@ GameObject:
   - component: {fileID: 604919740}
   - component: {fileID: 604919739}
   - component: {fileID: 604919741}
+  - component: {fileID: 604919742}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -2769,6 +2855,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &604919742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604919737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &611317072
 GameObject:
   m_ObjectHideFlags: 0
@@ -2781,6 +2883,7 @@ GameObject:
   - component: {fileID: 611317075}
   - component: {fileID: 611317074}
   - component: {fileID: 611317076}
+  - component: {fileID: 611317077}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -2827,7 +2930,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8862e592e7b9387439391b15ccdc8cd6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e0f1fc4c49ec7dc409821b0f4307b9c8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2860,6 +2963,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &611317077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611317072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &615888757
 GameObject:
   m_ObjectHideFlags: 0
@@ -3619,6 +3738,7 @@ GameObject:
   - component: {fileID: 805114024}
   - component: {fileID: 805114023}
   - component: {fileID: 805114025}
+  - component: {fileID: 805114026}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -3698,6 +3818,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &805114026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805114021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &859629870
 GameObject:
   m_ObjectHideFlags: 0
@@ -4229,6 +4365,7 @@ GameObject:
   - component: {fileID: 940990966}
   - component: {fileID: 940990965}
   - component: {fileID: 940990967}
+  - component: {fileID: 940990968}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -4275,7 +4412,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fa67c38d77273874398edcfee8ace512, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 876f9c13eba9c6647adf30c7c178ac0d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4308,6 +4445,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &940990968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940990963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &951920864
 GameObject:
   m_ObjectHideFlags: 0
@@ -4809,6 +4962,7 @@ GameObject:
   - component: {fileID: 1041862388}
   - component: {fileID: 1041862387}
   - component: {fileID: 1041862389}
+  - component: {fileID: 1041862390}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -4888,6 +5042,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1041862390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1041862385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1100705784
 GameObject:
   m_ObjectHideFlags: 0
@@ -4900,6 +5070,7 @@ GameObject:
   - component: {fileID: 1100705787}
   - component: {fileID: 1100705786}
   - component: {fileID: 1100705788}
+  - component: {fileID: 1100705789}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -4979,6 +5150,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1100705789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100705784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1101895246
 GameObject:
   m_ObjectHideFlags: 0
@@ -6501,6 +6688,7 @@ GameObject:
   - component: {fileID: 1320215347}
   - component: {fileID: 1320215346}
   - component: {fileID: 1320215348}
+  - component: {fileID: 1320215349}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -6547,7 +6735,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d2090dcf8d77cb48aa930eafdc31386, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1dbadf8a203cba04b8c190b0e2b14085, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6580,6 +6768,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1320215349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320215344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1332170716
 GameObject:
   m_ObjectHideFlags: 0
@@ -6592,6 +6796,7 @@ GameObject:
   - component: {fileID: 1332170719}
   - component: {fileID: 1332170718}
   - component: {fileID: 1332170720}
+  - component: {fileID: 1332170721}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -6671,6 +6876,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1332170721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332170716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1336178708
 GameObject:
   m_ObjectHideFlags: 0
@@ -6683,6 +6904,7 @@ GameObject:
   - component: {fileID: 1336178711}
   - component: {fileID: 1336178710}
   - component: {fileID: 1336178712}
+  - component: {fileID: 1336178713}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -6729,7 +6951,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d2090dcf8d77cb48aa930eafdc31386, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c3b6a8b5f6353204681daad3b434e54b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6762,6 +6984,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1336178713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336178708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1376082158
 GameObject:
   m_ObjectHideFlags: 0
@@ -7846,6 +8084,7 @@ GameObject:
   - component: {fileID: 1678324366}
   - component: {fileID: 1678324365}
   - component: {fileID: 1678324367}
+  - component: {fileID: 1678324368}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -7892,7 +8131,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d2090dcf8d77cb48aa930eafdc31386, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dbb003ee94230f14baf3f02750d89710, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7925,6 +8164,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1678324368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678324363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1706384807
 GameObject:
   m_ObjectHideFlags: 0
@@ -8086,6 +8341,7 @@ GameObject:
   - component: {fileID: 1746512972}
   - component: {fileID: 1746512971}
   - component: {fileID: 1746512973}
+  - component: {fileID: 1746512974}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -8165,6 +8421,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &1746512974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1746512969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &1757181969
 GameObject:
   m_ObjectHideFlags: 0
@@ -8216,7 +8488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9817,7 +10089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9853,6 +10125,7 @@ GameObject:
   - component: {fileID: 2031629219}
   - component: {fileID: 2031629218}
   - component: {fileID: 2031629220}
+  - component: {fileID: 2031629221}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -9932,6 +10205,22 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: -7.6, y: -7.6}
   m_UseGraphicAlpha: 1
+--- !u!114 &2031629221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031629216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a9321dfe599cc644870b2e649c3da12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDuration: 0.5
+  shakeStrength: 1
+  shakeDelayMin: 1
+  shakeDelayMax: 15
 --- !u!1 &2036915028
 GameObject:
   m_ObjectHideFlags: 0
@@ -9983,7 +10272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
