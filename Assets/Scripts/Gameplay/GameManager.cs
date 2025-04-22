@@ -61,7 +61,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool EnvidoCantado = false;
     [HideInInspector] public bool EnvidoFueDelJugador = false;
     [HideInInspector] public bool EnvidoRespondido = false;
-     public bool ganoJugador = false;
+    [HideInInspector] public bool ganoJugador = false;
+    [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
 
     //Privates
@@ -221,7 +222,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Todavía no se completó la subronda → activar próximo turno
+            if (TrucoState < 3)
+            {
+                PuedeResponderTruco = true;
+                Debug.Log("Se desbloqueó el truco: podés cantar el siguiente estado.");
+            }
+            else
+            {
+                Debug.Log("No se puede desbloquear: ya estamos en Vale Cuatro.");
+            }
+
             if (turnoActual == TurnoActual.Oponente)
             {
                 turnoActual = TurnoActual.Jugador;
@@ -359,6 +369,7 @@ public class GameManager : MonoBehaviour
         ultimaManoFueEmpate = false;
         rondaSeDefiniraEnProxima = false;
         EnvidoCantado = false;
+        PuedeResponderTruco = true;
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -475,11 +486,15 @@ public class GameManager : MonoBehaviour
         if (quiero)
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
-            TrucoState++;
             puntosEnJuego++;
             estadoRonda = EstadoRonda.Jugando;
+            PuedeResponderTruco = false;
+            UltimoCantoFueDelJugador = true;
             ChangeTruco();
+            uiManager.ActualizarBotonesSegunEstado();
         }
+
+
         else
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);

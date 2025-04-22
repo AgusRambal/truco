@@ -231,6 +231,7 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
             GameManager.Instance.UltimoCantoFueDelJugador = false;
         }
+
         else
         {
             bool acepta = Random.value > 0.4f;
@@ -242,6 +243,9 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.puntosEnJuego += 1;
                 GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
                 GameManager.Instance.ChangeTruco();
+
+                if (GameManager.Instance.TrucoState < 3)
+                    GameManager.Instance.PuedeResponderTruco = false;
             }
             else
             {

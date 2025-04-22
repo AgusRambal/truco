@@ -73,21 +73,21 @@ public class UIManager : MonoBehaviour
     {
         bool puedeCantarTruco = false;
 
-        //  Caso 1: turno normal del jugador
         if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando)
         {
             puedeCantarTruco =
                 GameManager.Instance.TrucoState < 3 &&
                 GameManager.Instance.turnoActual == TurnoActual.Jugador &&
-                GameManager.Instance.CantidadCartasJugadorJugadas < 3;
+                GameManager.Instance.CantidadCartasJugadorJugadas < 3 &&
+                GameManager.Instance.PuedeResponderTruco;
         }
 
-        //  Caso 2: estoy respondiendo un canto (Truco o Retruco)
         else if (GameManager.Instance.estadoRonda == EstadoRonda.EsperandoRespuesta &&
-                 GameManager.Instance.UltimoCantoFueDelJugador == false &&
-                 GameManager.Instance.TrucoState < 3)
+         GameManager.Instance.UltimoCantoFueDelJugador == false &&
+         GameManager.Instance.TrucoState < 3 &&
+         GameManager.Instance.PuedeResponderTruco)
         {
-            puedeCantarTruco = true; // puedo subir el canto
+            puedeCantarTruco = true;
         }
 
         truco.interactable = puedeCantarTruco;
