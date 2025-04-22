@@ -33,6 +33,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float distanciaAnimacionRespuesta = 100f;
     [SerializeField] private float tiempoAnimacionRespuesta = 0.3f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip notification;
+
     public enum TrucoMensajeTipo
     {
         Truco,
@@ -122,6 +125,8 @@ public class UIManager : MonoBehaviour
     {
         GameObject target = esJugador ? trucoMessagePlayer : trucoMessageOponente;
         TMP_Text texto = target.GetComponentInChildren<TMP_Text>();
+
+        AudioManager.Instance.PlaySFX(notification);
 
         texto.text = tipo switch
         {

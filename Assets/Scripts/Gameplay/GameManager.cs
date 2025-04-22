@@ -507,4 +507,9 @@ public class GameManager : MonoBehaviour
         AudioClip randomClip = list[Random.Range(0, list.Count)];
         return randomClip;
     }
+
+    public void PlaySFXCopy(AudioClip clip)
+    {
+        AudioManager.Instance.sfxSource.PlayOneShot(clip);
+    }
 }
