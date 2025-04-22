@@ -39,7 +39,9 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
-        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)        
+        bool cantoEnvido = false;
+
+        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)
         {
             float chanceBase = estilo switch
             {
@@ -53,13 +55,19 @@ public class IAOponente : MonoBehaviour
             if (r < chanceBase / 2f)
             {
                 GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
-                yield break;
+                cantoEnvido = true;
             }
             else if (r < chanceBase)
             {
-                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
-                yield break;
+                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.Envido, false);
+                cantoEnvido = true;
             }
+        }
+
+        // Si cantó Envido, no juega la carta todavía
+        if (cantoEnvido || GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
+        {
+            yield break;
         }
 
 
@@ -324,16 +332,13 @@ public class IAOponente : MonoBehaviour
 
         GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
         GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+        GameManager.Instance.EnvidoRespondido = true;
 
         if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
             GameManager.Instance.CantidadCartasOponenteJugadas < GameManager.Instance.CantidadCartasJugadorJugadas)
         {
             JugarCarta();
         }
-
-        GameManager.Instance.EnvidoRespondido = true;
-
-        GameManager.Instance.EnvidoRespondido = true;
     }
 
     public IEnumerator ResponderEnvidoExtendido()

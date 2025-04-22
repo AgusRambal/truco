@@ -719,10 +719,20 @@ public class GameManager : MonoBehaviour
         if (turnoActual == TurnoActual.Oponente)
         {
             // Verificamos si ya jugó la carta antes del Envido
-            if (CantidadCartasOponenteJugadas < CantidadCartasJugadorJugadas)
+            if (CantidadCartasOponenteJugadas == 0)
             {
-                iaOponente.JugarCarta();
+                StartCoroutine(EsperarYLlamarAJugarIA());
             }
+        }
+    }
+
+    private IEnumerator EsperarYLlamarAJugarIA()
+    {
+        yield return new WaitForSeconds(0.05f); // Esperar para que estadoRonda se propague
+
+        if (turnoActual == TurnoActual.Oponente && estadoRonda == EstadoRonda.Jugando && CantidadCartasOponenteJugadas == 0)
+        {
+            iaOponente.JugarCarta();
         }
     }
 
