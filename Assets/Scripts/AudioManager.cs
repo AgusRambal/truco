@@ -14,8 +14,9 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxSource;
     public AudioSource uiSource;
 
-    [Header("Músicas del menú")]
+    [Header("Audios")]
     public List<AudioClip> menuTracks = new List<AudioClip>();
+    public AudioClip hoverSound;
 
     private void Awake()
     {

@@ -3860,6 +3860,18 @@ MonoBehaviour:
   puntosOponente: 0
   puntosJugador: 0
   puntosEnJuego: 1
+  drops:
+  - {fileID: 8300000, guid: 37efe7100065b3645abd438ccfc00d62, type: 3}
+  - {fileID: 8300000, guid: b966ec73bdc51704fbcbcf36e7b9e41e, type: 3}
+  - {fileID: 8300000, guid: e27480f23c56d6441af6976e53115689, type: 3}
+  - {fileID: 8300000, guid: e845005f9501ae145bb9e9e7d5ac54c7, type: 3}
+  - {fileID: 8300000, guid: 92b8f224e95332643a125bb39228fbb1, type: 3}
+  - {fileID: 8300000, guid: 253ae314259af53419d355688b8144f6, type: 3}
+  plays:
+  - {fileID: 8300000, guid: 98a36efe7d423dd47bdb8f06834dc65d, type: 3}
+  - {fileID: 8300000, guid: d9a072d8f632240408ec2832684f8ebc, type: 3}
+  - {fileID: 8300000, guid: f3b87cc0e82ec4842b8e518725e9a3f4, type: 3}
+  - {fileID: 8300000, guid: 014ca9a36da7f6742ba6caa1b4798d2a, type: 3}
   TrucoState: 0
   SeJugoCartaDesdeUltimoCanto: 1
   UltimoCantoFueDelJugador: 0

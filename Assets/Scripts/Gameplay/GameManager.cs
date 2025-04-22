@@ -48,6 +48,10 @@ public class GameManager : MonoBehaviour
     public int puntosJugador = 0;
     public int puntosEnJuego = 1;
 
+    [Header("Audio")]
+    [SerializeField] private List<AudioClip> drops = new List<AudioClip>();
+    [SerializeField] private List<AudioClip> plays = new List<AudioClip>();
+
     //Hidden
     [HideInInspector] public int TrucoState = 0;
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
@@ -129,6 +133,7 @@ public class GameManager : MonoBehaviour
                 cardSelector.isOpponent = true;
             }
 
+            AudioManager.Instance.PlaySFX(GetRandomDrop(drops));
             Sequence s = DOTween.Sequence();
 
             if (isOpponentDraw)
@@ -192,6 +197,8 @@ public class GameManager : MonoBehaviour
         {
             cartasJugadorJugadas.Add(cartaData);
         }
+
+        AudioManager.Instance.PlaySFX(GetRandomDrop(plays));
 
         // Si ya jugaron ambos → evaluar mano
         if (cartasJugadorJugadas.Count > 0 && cartasJugadorJugadas.Count == cartasOponenteJugadas.Count)
@@ -372,6 +379,7 @@ public class GameManager : MonoBehaviour
         {
             Transform cartaTransform = c.transform;
             Sequence s = DOTween.Sequence();
+            AudioManager.Instance.PlaySFX(GetRandomDrop(drops));
 
             if (!c.isOpponent)
             {
@@ -492,5 +500,11 @@ public class GameManager : MonoBehaviour
     public void CantarEnvido()
     {
         Debug.Log("Envido no implementado todavía");
+    }
+
+    private AudioClip GetRandomDrop(List<AudioClip> list)
+    {
+        AudioClip randomClip = list[Random.Range(0, list.Count)];
+        return randomClip;
     }
 }
