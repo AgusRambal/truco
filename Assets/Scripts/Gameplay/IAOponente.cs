@@ -367,6 +367,7 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
             GameManager.Instance.EnvidoRespondido = true;
+            GameManager.Instance.EnvidoCantado = false;
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
             yield break;
@@ -469,8 +470,17 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
             GameManager.Instance.EnvidoRespondido = true;
+            GameManager.Instance.EnvidoCantado = false;
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+
+            if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
+            GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
+            GameManager.Instance.CantidadCartasOponenteJugadas < 3)
+            {
+                JugarCarta();
+            }
+
             yield break;
         }
 
@@ -528,6 +538,4 @@ public class IAOponente : MonoBehaviour
         // Si no sube más → simplemente responde
         yield return StartCoroutine(ResponderEnvidoCoroutine());
     }
-
-
 }

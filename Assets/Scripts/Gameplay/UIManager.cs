@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using static UnityEngine.GraphicsBuffer;
-using UnityEditor.Experimental.GraphView;
 
 public class UIManager : MonoBehaviour
 {
@@ -119,16 +117,9 @@ public class UIManager : MonoBehaviour
             puedeCantarTruco = true;
         }
 
-       /* Debug.Log($"[UI] ¿Truco habilitado? {puedeCantarTruco} | " +
-                  $"Estado: {gm.estadoRonda} | TrucoState: {gm.TrucoState} | " +
-                  $"TurnoActual: {gm.turnoActual} | CartasJugador: {gm.CantidadCartasJugadorJugadas} | " +
-                  $"PuedeResponderTruco: {gm.PuedeResponderTruco} | " +
-                  $"UltimoCantoFueDelJugador: {gm.UltimoCantoFueDelJugador} | " +
-                  $"EnvidoCantado: {gm.EnvidoCantado} | EnvidoRespondido: {gm.EnvidoRespondido}");*/
-
         truco.interactable = puedeCantarTruco;
+        meVoy.interactable = puedeCantarTruco;
     }
-
 
     public void ChangeTrucoState(int state)
     {
@@ -371,5 +362,10 @@ public class UIManager : MonoBehaviour
 
         realEnvido.interactable = puedeCantarReal;
 
+    }
+
+    public void BlockMeVoy(bool state)
+    {
+        meVoy.interactable = state;
     }
 }

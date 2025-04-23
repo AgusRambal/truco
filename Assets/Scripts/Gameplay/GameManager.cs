@@ -369,6 +369,7 @@ public class GameManager : MonoBehaviour
         PuedeResponderTruco = true;
         EnvidoRespondido = false;
         EnvidoFueDelJugador = false;
+        uiManager.BlockMeVoy(true);
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -523,6 +524,7 @@ public class GameManager : MonoBehaviour
             SumarPuntos(true);
 
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
+        uiManager.BlockMeVoy(false);
     }
 
     public void CantarEnvido(TipoEnvido tipo, bool esJugador)
