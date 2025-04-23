@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -45,8 +46,21 @@ public class AudioManager : MonoBehaviour
         if (musicSource.clip == clip) return;
 
         musicSource.clip = clip;
-        musicSource.loop = true;
+        musicSource.loop = false; // NO en loop
         musicSource.Play();
+
+        // Registrar evento cuando termina la canción
+        StartCoroutine(EsperarFinDeMusica(clip.length));
+    }
+
+    private IEnumerator EsperarFinDeMusica(float duracion)
+    {
+        yield return new WaitForSeconds(duracion + 0.1f); // Le das un poco de margen
+
+        if (!musicSource.isPlaying) // Por si se frenó manualmente
+        {
+            PlayRandomMenuTrack();
+        }
     }
 
     public void PlaySFX(AudioClip clip)

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Build;
 using UnityEngine;
 using static Utils;
 
@@ -58,9 +59,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
     [HideInInspector] public bool isPaused = false;
-    [HideInInspector] public bool EnvidoCantado = false;
+     public bool EnvidoCantado = false;
     [HideInInspector] public bool EnvidoFueDelJugador = false;
-    [HideInInspector] public bool EnvidoRespondido = false;
+     public bool EnvidoRespondido = false;
     [HideInInspector] public bool ganoJugador = false;
     [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
     public int CantidadCartasOponenteJugadas => cartasOponenteJugadas.Count;
     public List<CardSelector> AllCards => allCards;
     public bool UltimaManoFueEmpate => ultimaManoFueEmpate;
+    public int PointsToEnd => pointsToEnd;
 
     public enum TipoEnvido
     {
@@ -226,24 +228,20 @@ public class GameManager : MonoBehaviour
             if (TrucoState < 3)
             {
                 PuedeResponderTruco = true;
-                Debug.Log("Se desbloqueó el truco: podés cantar el siguiente estado.");
-            }
-            else
-            {
-                Debug.Log("No se puede desbloquear: ya estamos en Vale Cuatro.");
             }
 
             if (turnoActual == TurnoActual.Oponente)
             {
                 turnoActual = TurnoActual.Jugador;
-                uiManager.ActualizarBotonesSegunEstado();
             }
+
             else
             {
                 turnoActual = TurnoActual.Oponente;
-                uiManager.ActualizarBotonesSegunEstado();
                 iaOponente.JugarCarta();
             }
+
+            uiManager.ActualizarBotonesSegunEstado();
         }
     }
 
@@ -323,13 +321,10 @@ public class GameManager : MonoBehaviour
         {
             if (turnoActual == TurnoActual.Oponente)
             {
-                uiManager.ActualizarBotonesSegunEstado();
                 iaOponente.JugarCarta();
             }
-            else
-            {
-                uiManager.ActualizarBotonesSegunEstado();
-            }
+
+            uiManager.ActualizarBotonesSegunEstado();
         }
     }
 
@@ -534,9 +529,11 @@ public class GameManager : MonoBehaviour
         if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
             return;
 
+
         if (!EnvidoCantado)
         {
             EnvidoCantado = true;
+            uiManager.ActualizarBotonesSegunEstado();
             EnvidoCantos.Clear();
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
@@ -653,8 +650,9 @@ public class GameManager : MonoBehaviour
     {
         EnvidoRespondido = true;
         uiManager.OcultarOpcionesEnvido();
-            int envidoJugador = CalcularPuntosEnvido(true);
-            int envidoOponente = CalcularPuntosEnvido(false);
+
+        int envidoJugador = CalcularPuntosEnvido(true);
+        int envidoOponente = CalcularPuntosEnvido(false);
 
         if (quiero)
         {
@@ -696,6 +694,7 @@ public class GameManager : MonoBehaviour
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
         }
+
         else
         {
             if (EnvidoFueDelJugador)
@@ -713,12 +712,12 @@ public class GameManager : MonoBehaviour
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
 
+        EnvidoCantado = false;
         estadoRonda = EstadoRonda.Jugando;
         uiManager.ActualizarBotonesSegunEstado();
 
         if (turnoActual == TurnoActual.Oponente)
         {
-            // Verificamos si ya jugó la carta antes del Envido
             if (CantidadCartasOponenteJugadas == 0)
             {
                 StartCoroutine(EsperarYLlamarAJugarIA());

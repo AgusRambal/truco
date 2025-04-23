@@ -267,10 +267,25 @@ public class IAOponente : MonoBehaviour
     public IEnumerator ResponderEnvidoCoroutine()
     {
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
         bool quiere = Random.value > 0.5f;
 
         int envidoJugador = GameManager.Instance.CalcularPuntosEnvido(true);
         int envidoOponente = GameManager.Instance.CalcularPuntosEnvido(false);
+
+        if (GameManager.Instance.TipoDeEnvidoActual == GameManager.TipoEnvido.FaltaEnvido)
+        {
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+            Debug.Log("IA: No quiero Falta Envido (canto directo)");
+            GameManager.Instance.puntosJugador += 1;
+            GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+            GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+            GameManager.Instance.EnvidoRespondido = true;
+            yield break;
+        }
 
         if (quiere)
         {
@@ -311,6 +326,7 @@ public class IAOponente : MonoBehaviour
             }
 
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
+            uiManager.ActualizarBotonesSegunEstado();
         }
         else
         {
@@ -345,10 +361,22 @@ public class IAOponente : MonoBehaviour
     {
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
 
+        if (GameManager.Instance.TipoDeEnvidoActual == GameManager.TipoEnvido.FaltaEnvido)
+        {
+            Debug.Log("IA: No quiero Falta Envido");
+            GameManager.Instance.puntosJugador += 1;
+            GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+            GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+            GameManager.Instance.EnvidoRespondido = true;
+            yield break;
+        }
+
         float chance = Random.value;
 
         // Si ya estamos en Envido, chance de subir
-        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && chance < 0.2f)
+        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && chance < 0.9f)
         {
             GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
             yield break;

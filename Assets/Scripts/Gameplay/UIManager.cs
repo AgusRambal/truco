@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text opponentPointsText;
     [SerializeField] private TMP_Text resultText;
     [SerializeField] private TMP_Text creditos;
+    [SerializeField] private TMP_Text info;
 
     [Header("Obejcts")]
     [SerializeField] private Image resultBG;
@@ -62,19 +63,30 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject trucoMessageOponente;
 
     private Vector3 quieroOriginalPos;
-    private Vector3 noQuieroOriginalPos;
+    private Vector3 noQuieroOriginalPos;    
+    private Vector3 quieroEnvidoOriginalPos;
+    private Vector3 noQuieroEnvidoOriginalPos;
 
     private void Start()
     {
         quieroOriginalPos = botonQuiero.transform.localPosition;
         noQuieroOriginalPos = botonNoQuiero.transform.localPosition;
+        quieroEnvidoOriginalPos = botonQuieroEnvido.transform.localPosition;
+        noQuieroEnvidoOriginalPos = botonNoQuieroEnvido.transform.localPosition;
+
+        MostrarInfo();
+    }
+
+    private void MostrarInfo()
+    {
+        info.text = $"- PARTIDA A {GameManager.Instance.PointsToEnd} RONDAS\n - SIN FLOR\n - IA ESTILO CANCHERO";
     }
 
     public void ActualizarBotonesSegunEstado()
     {
         bool puedeCantarTruco = false;
 
-        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando)
+        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando && (!GameManager.Instance.EnvidoCantado || GameManager.Instance.EnvidoRespondido))
         {
             puedeCantarTruco =
                 GameManager.Instance.TrucoState < 3 &&
@@ -128,17 +140,17 @@ public class UIManager : MonoBehaviour
 
     public void MostrarOpcionesEnvido()
     {
-        botonQuieroEnvido.transform.localPosition = quieroOriginalPos;
-        botonNoQuieroEnvido.transform.localPosition = noQuieroOriginalPos;
+        botonQuieroEnvido.transform.localPosition = quieroEnvidoOriginalPos;
+        botonNoQuieroEnvido.transform.localPosition = noQuieroEnvidoOriginalPos;
 
-        botonQuieroEnvido.transform.DOLocalMoveX(quieroOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
-        botonNoQuieroEnvido.transform.DOLocalMoveX(noQuieroOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
+        botonQuieroEnvido.transform.DOLocalMoveX(quieroEnvidoOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
+        botonNoQuieroEnvido.transform.DOLocalMoveX(noQuieroEnvidoOriginalPos.x + distanciaAnimacionRespuesta, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
     }
 
     public void OcultarOpcionesEnvido()
     {
-        botonQuieroEnvido.transform.DOLocalMove(quieroOriginalPos, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
-        botonNoQuieroEnvido.transform.DOLocalMove(noQuieroOriginalPos, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
+        botonQuieroEnvido.transform.DOLocalMove(quieroEnvidoOriginalPos, tiempoAnimacionRespuesta).SetEase(Ease.OutBack);
+        botonNoQuieroEnvido.transform.DOLocalMove(noQuieroEnvidoOriginalPos, tiempoAnimacionRespuesta).SetDelay(.1f).SetEase(Ease.OutBack);
     }
 
     public void SetPointsInScreen(int playerPoints, int oponentPoints)
@@ -300,7 +312,7 @@ public class UIManager : MonoBehaviour
                     .SetDelay(2f)
                     .OnComplete(() =>
                     {
-                        SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+                        GameManager.Instance.EnvidoCantado = false;
                     });
             });
     }
