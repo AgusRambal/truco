@@ -30,6 +30,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float animationDuration = 0.4f;
     [SerializeField] private List<Image> glowImagesPlayer = new List<Image>();
     [SerializeField] private List<Image> glowImagesOponent = new List<Image>();
+    [SerializeField] private GameObject manoJugador;
+    [SerializeField] private GameObject manoRival;
+    [SerializeField] private List<Image> subPuntosJugador = new List<Image>();
+    [SerializeField] private List<Image> subPuntosRival = new List<Image>();
 
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
@@ -120,7 +124,6 @@ public class UIManager : MonoBehaviour
         }
 
         truco.interactable = puedeCantarTruco;
-        meVoy.interactable = puedeCantarTruco;
     }
 
     public void ChangeTrucoState(int state)
@@ -363,7 +366,6 @@ public class UIManager : MonoBehaviour
      !GameManager.Instance.JugadorYaCantoEsteTipo(GameManager.TipoEnvido.RealEnvido);
 
         realEnvido.interactable = puedeCantarReal;
-
     }
 
     public void BlockMeVoy(bool state)
@@ -380,6 +382,8 @@ public class UIManager : MonoBehaviour
                 glowImagesPlayer[i].DOFade(1f, 0.25f).SetEase(Ease.InOutCubic);
                 glowImagesOponent[i].DOFade(0f, 0.25f).SetEase(Ease.InOutCubic);
             }
+
+            meVoy.interactable = true;
         }
 
         else
@@ -389,6 +393,39 @@ public class UIManager : MonoBehaviour
                 glowImagesPlayer[i].DOFade(0f, 0.25f).SetEase(Ease.InOutCubic);
                 glowImagesOponent[i].DOFade(1f, 0.25f).SetEase(Ease.InOutCubic);
             }
+
+            meVoy.interactable = false;
         }
+    }
+
+    public void MostrarMano(TurnoActual turno)
+    {
+        if (turno == TurnoActual.Jugador)
+        {
+            manoJugador.transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.InOutBack);
+            manoRival.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
+        }
+
+        else
+        {
+            manoJugador.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
+            manoRival.transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.InOutBack);
+        }
+    }
+
+    public void MostrarSubPuntos(bool isPlayer, int subronda)
+    {
+        if (subronda < 1 || subronda > 3) return;
+
+        if (isPlayer)
+            subPuntosJugador[subronda - 1].transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.InOutBack);
+        else
+            subPuntosRival[subronda - 1].transform.DOScale(Vector3.one, 0.25f).SetEase(Ease.InOutBack);
+    }
+
+    public void ResetSubRondas()
+    {
+        foreach (var img in subPuntosJugador) img.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
+        foreach (var img in subPuntosRival) img.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
     }
 }

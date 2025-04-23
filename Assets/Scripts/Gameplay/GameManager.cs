@@ -45,8 +45,6 @@ public class GameManager : MonoBehaviour
     [Header("Game stats")]
     public EstadoRonda estadoRonda = EstadoRonda.Jugando;
     public TurnoActual turnoActual = TurnoActual.Jugador;
-    public int puntosOponente = 0;
-    public int puntosJugador = 0;
     public int puntosEnJuego = 1;
 
     [Header("Audio")]
@@ -54,6 +52,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<AudioClip> plays = new List<AudioClip>();
 
     //Hidden
+    [HideInInspector] public int puntosOponente = 0;
+    [HideInInspector] public int puntosJugador = 0;
     [HideInInspector] public int TrucoState = 0;
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
@@ -63,8 +63,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
     [HideInInspector] public List<TipoEnvido> EnvidoCantos = new List<TipoEnvido>();
-     public bool EnvidoCantado = false;
-     public bool EnvidoRespondido = false;
+    [HideInInspector] public int gameSubPointState = 0;
+    [HideInInspector] public bool EnvidoCantado = false;
+    [HideInInspector] public bool EnvidoRespondido = false;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -111,10 +112,15 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        uiManager.FadePlayerTurn(turnoActual);
         mazo = new List<CartaSO>(cartas);
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         Invoke("SpawnCards", .5f);
+        Invoke("DelayedGlow", .5f);
+    }
+
+    public void DelayedGlow()
+    { 
+        uiManager.FadePlayerTurn(turnoActual);
     }
 
     public void SpawnCards()
@@ -122,6 +128,7 @@ public class GameManager : MonoBehaviour
         uiManager.ActualizarBotonesSegunEstado();
         estadoRonda = EstadoRonda.Repartiendo;
         StartCoroutine(SpawnCardsSequence());
+        uiManager.MostrarMano(turnoActual);
     }
 
     private IEnumerator SpawnCardsSequence()
@@ -275,6 +282,17 @@ public class GameManager : MonoBehaviour
             // En caso de empate: no cambiar turnoActual
         }
 
+        int subrondaActual = GameManager.Instance.cartasJugadorJugadas.Count;
+
+        if (jug.jerarquiaTruco > opo.jerarquiaTruco)
+        {
+            uiManager.MostrarSubPuntos(true, subrondaActual);
+        }
+        else if (opo.jerarquiaTruco > jug.jerarquiaTruco)
+        {
+            uiManager.MostrarSubPuntos(false, subrondaActual);
+        }
+
         uiManager.FadePlayerTurn(turnoActual);
         VerificarFinDeRonda();
     }
@@ -375,6 +393,7 @@ public class GameManager : MonoBehaviour
         EnvidoRespondido = false;
         EnvidoFueDelJugador = false;
         uiManager.BlockMeVoy(true);
+        uiManager.ResetSubRondas();
 
         ResetZOffset();
         uiManager.ResetTruco();
