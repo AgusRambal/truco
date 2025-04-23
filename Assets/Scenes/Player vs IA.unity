@@ -3442,15 +3442,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 207373598}
+  estilo: 0
   minResponseTime: 0.5
   maxResponseTime: 2
   minTrucoResponseTime: 0.25
   maxTrucoResponseTime: 1
-  estilo: 0
   usarEstiloParaChances: 1
   chanceCantarEnvido: 1
-  chanceDeQueSeaReal: 0
-  chanceResponderConSubida: 1
+  chanceDeQueSeaReal: 1
+  chanceResponderConSubida: 0
 --- !u!4 &596016131
 Transform:
   m_ObjectHideFlags: 0

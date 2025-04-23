@@ -17,14 +17,14 @@ public class IAOponente : MonoBehaviour
     public UIManager uiManager;
 
     [Header("Parameters")]
+    [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
     [SerializeField] private float minResponseTime = 0.5f;
     [SerializeField] private float maxResponseTime = 3f;
     [SerializeField] private float minTrucoResponseTime = 0.25f;
     [SerializeField] private float maxTrucoResponseTime = 1f;
-    [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
-    [SerializeField] private bool usarEstiloParaChances = true;
 
     [Header("Probabilidades de Envido")]
+    [SerializeField] private bool usarEstiloParaChances = true;
     [SerializeField, Range(0f, 1f)] private float chanceCantarEnvido = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceDeQueSeaReal = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceResponderConSubida = 0.8f;
@@ -78,8 +78,6 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
 
-        bool cantoEnvido = false;
-
         if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)
         {
             float chanceBase = estilo switch
@@ -98,16 +96,14 @@ public class IAOponente : MonoBehaviour
                     : TipoEnvido.Envido;
 
                 Instance.CantarEnvido(tipoACantar, false);
-                cantoEnvido = true;
             }
         }
 
         // Si cantó Envido, no juega la carta todavía
-        if (cantoEnvido || Instance.estadoRonda != EstadoRonda.Jugando)
+        if (Instance.EnvidoCantado || Instance.estadoRonda != EstadoRonda.Jugando)
         {
             yield break;
         }
-
 
         if (Instance.estadoRonda != EstadoRonda.Jugando)
         {
@@ -389,7 +385,8 @@ public class IAOponente : MonoBehaviour
         GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
 
         if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
-            GameManager.Instance.CantidadCartasOponenteJugadas < GameManager.Instance.CantidadCartasJugadorJugadas)
+    GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
+    GameManager.Instance.CantidadCartasOponenteJugadas < 3)
         {
             JugarCarta();
         }

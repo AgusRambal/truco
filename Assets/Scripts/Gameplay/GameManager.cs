@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Build;
 using UnityEngine;
 using static Utils;
 
@@ -748,20 +747,7 @@ public class GameManager : MonoBehaviour
         estadoRonda = EstadoRonda.Jugando;
         uiManager.ActualizarBotonesSegunEstado();
 
-        if (turnoActual == TurnoActual.Oponente)
-        {
-            if (CantidadCartasOponenteJugadas == 0)
-            {
-                StartCoroutine(EsperarYLlamarAJugarIA());
-            }
-        }
-    }
-
-    private IEnumerator EsperarYLlamarAJugarIA()
-    {
-        yield return new WaitForSeconds(0.05f); // Esperar para que estadoRonda se propague
-
-        if (turnoActual == TurnoActual.Oponente && estadoRonda == EstadoRonda.Jugando && CantidadCartasOponenteJugadas == 0)
+        if (turnoActual == TurnoActual.Oponente && estadoRonda == EstadoRonda.Jugando && CantidadCartasOponenteJugadas < 3)
         {
             iaOponente.JugarCarta();
         }
