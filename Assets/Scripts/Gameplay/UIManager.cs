@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform popupOpciones;
     [SerializeField] private Button opciones;
     [SerializeField] private float animationDuration = 0.4f;
+    [SerializeField] private List<Image> glowImagesPlayer = new List<Image>();
+    [SerializeField] private List<Image> glowImagesOponent = new List<Image>();
 
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
@@ -367,5 +369,26 @@ public class UIManager : MonoBehaviour
     public void BlockMeVoy(bool state)
     {
         meVoy.interactable = state;
+    }
+
+    public void FadePlayerTurn(TurnoActual turno)
+    {
+        if (turno == TurnoActual.Jugador)
+        {
+            for (int i = 0; i < glowImagesPlayer.Count; i++)
+            {
+                glowImagesPlayer[i].DOFade(1f, 0.25f).SetEase(Ease.InOutCubic);
+                glowImagesOponent[i].DOFade(0f, 0.25f).SetEase(Ease.InOutCubic);
+            }
+        }
+
+        else
+        {
+            for (int i = 0; i < glowImagesPlayer.Count; i++)
+            {
+                glowImagesPlayer[i].DOFade(0f, 0.25f).SetEase(Ease.InOutCubic);
+                glowImagesOponent[i].DOFade(1f, 0.25f).SetEase(Ease.InOutCubic);
+            }
+        }
     }
 }

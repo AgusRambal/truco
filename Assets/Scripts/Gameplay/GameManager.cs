@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        uiManager.FadePlayerTurn(turnoActual);
         mazo = new List<CartaSO>(cartas);
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         Invoke("SpawnCards", .5f);
@@ -243,6 +244,7 @@ public class GameManager : MonoBehaviour
                 iaOponente.JugarCarta();
             }
 
+            uiManager.FadePlayerTurn(turnoActual);
             uiManager.ActualizarBotonesSegunEstado();
         }
     }
@@ -273,6 +275,7 @@ public class GameManager : MonoBehaviour
             // En caso de empate: no cambiar turnoActual
         }
 
+        uiManager.FadePlayerTurn(turnoActual);
         VerificarFinDeRonda();
     }
 
@@ -747,12 +750,12 @@ public class GameManager : MonoBehaviour
             if (EnvidoFueDelJugador)
             {
                 puntosJugador += puntosPorNoQuerer;
-                Debug.Log($"🛑 Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para el jugador");
+                Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para el jugador");
             }
             else
             {
                 puntosOponente += puntosPorNoQuerer;
-                Debug.Log($"🛑 Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para la IA");
+                Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para la IA");
             }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
@@ -768,7 +771,6 @@ public class GameManager : MonoBehaviour
             iaOponente.JugarCarta();
         }
     }
-
 
     private AudioClip GetRandomDrop(List<AudioClip> list)
     {
@@ -788,7 +790,7 @@ public class GameManager : MonoBehaviour
 
     public void DebugEstadoCantos()
     {
-        Debug.Log("📊 Estado de cantos por jugador:");
+        Debug.Log("Estado de cantos por jugador:");
 
         foreach (var kvp in cantosPorJugador)
         {
