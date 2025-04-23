@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
+using static GameManager;
 
 public enum EstiloIA
 {
@@ -21,7 +22,12 @@ public class IAOponente : MonoBehaviour
     [SerializeField] private float minTrucoResponseTime = 0.25f;
     [SerializeField] private float maxTrucoResponseTime = 1f;
     [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
-    
+
+    [Header("Probabilidades de Envido")]
+    [SerializeField, Range(0f, 1f)] private float chanceCantarEnvido = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceDeQueSeaReal = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceResponderConSubida = 0.8f;
+
     private enum EstiloJugada
     {
         Fuerte,
@@ -52,26 +58,25 @@ public class IAOponente : MonoBehaviour
             };
 
             float r = Random.value;
-            if (r < chanceBase / 2f)
+            if (r < chanceCantarEnvido)
             {
-                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
-                cantoEnvido = true;
-            }
-            else if (r < chanceBase)
-            {
-                GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.Envido, false);
+                TipoEnvido tipoACantar = Random.value < chanceDeQueSeaReal
+                    ? TipoEnvido.RealEnvido
+                    : TipoEnvido.Envido;
+
+                Instance.CantarEnvido(tipoACantar, false);
                 cantoEnvido = true;
             }
         }
 
         // Si cantó Envido, no juega la carta todavía
-        if (cantoEnvido || GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
+        if (cantoEnvido || Instance.estadoRonda != EstadoRonda.Jugando)
         {
             yield break;
         }
 
 
-        if (GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
+        if (Instance.estadoRonda != EstadoRonda.Jugando)
         {
             Debug.Log("IA: se canceló la jugada porque ya no estamos jugando.");
             yield break;
@@ -281,9 +286,9 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.puntosJugador += 1;
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+            GameManager.Instance.EnvidoRespondido = true;
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
-            GameManager.Instance.EnvidoRespondido = true;
             yield break;
         }
 
@@ -346,9 +351,9 @@ public class IAOponente : MonoBehaviour
             uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
         }
 
+        GameManager.Instance.EnvidoRespondido = true;
         GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
         GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
-        GameManager.Instance.EnvidoRespondido = true;
 
         if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
             GameManager.Instance.CantidadCartasOponenteJugadas < GameManager.Instance.CantidadCartasJugadorJugadas)
@@ -367,9 +372,9 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.puntosJugador += 1;
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+            GameManager.Instance.EnvidoRespondido = true;
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
-            GameManager.Instance.EnvidoRespondido = true;
             yield break;
         }
 
@@ -377,23 +382,47 @@ public class IAOponente : MonoBehaviour
 
         GameManager.Instance.DebugEstadoCantos();
 
+        // Si ya cantó Real Envido antes, no puede volver a cantarlo
         bool yaLoCantoLaIA = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido) &&
-                     GameManager.Instance.YaCantoEsteJugador(GameManager.TipoEnvido.RealEnvido, false);
+                             GameManager.Instance.YaCantoEsteJugador(GameManager.TipoEnvido.RealEnvido, false);
 
         if (yaLoCantoLaIA)
         {
-            StartCoroutine(ResponderEnvidoCoroutine());
+            yield return StartCoroutine(ResponderEnvidoCoroutine());
+            yield break;
+        }
+
+        // 🔒 No se puede subir con Envido si el último canto fue Real o Falta
+        if (GameManager.Instance.TipoDeEnvidoActual != GameManager.TipoEnvido.Envido)
+        {
+            Debug.LogWarning("❌ El último canto no fue Envido, no se puede subir con Envido.");
+            yield return StartCoroutine(ResponderEnvidoCoroutine());
             yield break;
         }
 
         if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) &&
-            chance < 0.9f)
+            Random.value < chanceResponderConSubida)
         {
-            GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
-            yield break;
+            if (Random.value < chanceCantarEnvido)
+            {
+                TipoEnvido tipoSubida = Random.value < chanceDeQueSeaReal
+                    ? GameManager.TipoEnvido.RealEnvido
+                    : GameManager.TipoEnvido.Envido;
+
+                if (GameManager.Instance.YaCantoEsteJugador(tipoSubida, false))
+                {
+                    Debug.LogWarning($"❌ IA ya cantó {tipoSubida}, no puede repetir.");
+                    yield return StartCoroutine(ResponderEnvidoCoroutine());
+                    yield break;
+                }
+
+                GameManager.Instance.CantarEnvido(tipoSubida, false);
+                yield break;
+            }
         }
 
         // Si no sube más → simplemente responde
-        StartCoroutine(ResponderEnvidoCoroutine());
+        yield return StartCoroutine(ResponderEnvidoCoroutine());
     }
+
 }

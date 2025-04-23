@@ -592,9 +592,8 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.ActualizarBotonesEnvido();
+        uiManager.ActualizarBotonesSegunEstado();
     }
-
-
 
     public bool YaCantoEsteJugador(TipoEnvido tipo, bool esJugador)
     {

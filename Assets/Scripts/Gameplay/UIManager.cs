@@ -86,7 +86,8 @@ public class UIManager : MonoBehaviour
     {
         bool puedeCantarTruco = false;
 
-        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando && (!GameManager.Instance.EnvidoCantado || GameManager.Instance.EnvidoRespondido))
+        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
+            (!GameManager.Instance.EnvidoCantado || GameManager.Instance.EnvidoRespondido))
         {
             puedeCantarTruco =
                 GameManager.Instance.TrucoState < 3 &&
@@ -94,20 +95,17 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.CantidadCartasJugadorJugadas < 3 &&
                 GameManager.Instance.PuedeResponderTruco;
         }
-
         else if (GameManager.Instance.estadoRonda == EstadoRonda.EsperandoRespuesta &&
-         GameManager.Instance.UltimoCantoFueDelJugador == false &&
-         GameManager.Instance.TrucoState < 3 &&
-         GameManager.Instance.PuedeResponderTruco)
+                 GameManager.Instance.UltimoCantoFueDelJugador == false &&
+                 GameManager.Instance.TrucoState < 3 &&
+                 GameManager.Instance.PuedeResponderTruco)
         {
             puedeCantarTruco = true;
         }
 
-        meVoy.interactable = GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
-                     GameManager.Instance.turnoActual == TurnoActual.Jugador;
-
         truco.interactable = puedeCantarTruco;
     }
+
 
     public void ChangeTrucoState(int state)
     {
@@ -347,13 +345,4 @@ public class UIManager : MonoBehaviour
         else
             realEnvido.interactable = true;
     }
-
-
-    private bool JugadorYaCantoEsteTipo(GameManager.TipoEnvido tipo)
-    {
-        return GameManager.Instance.EnvidoCantos.Contains(tipo) &&
-               GameManager.Instance.EnvidoFueDelJugador;
-    }
-
-
 }

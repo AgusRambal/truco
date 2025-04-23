@@ -3447,6 +3447,9 @@ MonoBehaviour:
   minTrucoResponseTime: 0.25
   maxTrucoResponseTime: 1
   estilo: 0
+  chanceCantarEnvido: 1
+  chanceDeQueSeaReal: 0
+  chanceResponderConSubida: 1
 --- !u!4 &596016131
 Transform:
   m_ObjectHideFlags: 0
