@@ -22,6 +22,7 @@ public class IAOponente : MonoBehaviour
     [SerializeField] private float minTrucoResponseTime = 0.25f;
     [SerializeField] private float maxTrucoResponseTime = 1f;
     [SerializeField] private EstiloIA estilo = EstiloIA.Canchero;
+    [SerializeField] private bool usarEstiloParaChances = true;
 
     [Header("Probabilidades de Envido")]
     [SerializeField, Range(0f, 1f)] private float chanceCantarEnvido = 0.5f;
@@ -33,6 +34,38 @@ public class IAOponente : MonoBehaviour
         Fuerte,
         Débil,
         Amague
+    }
+
+    private void Start()
+    {
+        SelectIAChance();
+    }
+
+    private void SelectIAChance()
+    {
+        if (usarEstiloParaChances)
+        {
+            switch (estilo)
+            {
+                case EstiloIA.Canchero:
+                    chanceCantarEnvido = 0.6f;
+                    chanceDeQueSeaReal = 0.4f;
+                    chanceResponderConSubida = 0.8f;
+                    break;
+
+                case EstiloIA.Conservador:
+                    chanceCantarEnvido = 0.3f;
+                    chanceDeQueSeaReal = 0.2f;
+                    chanceResponderConSubida = 0.4f;
+                    break;
+
+                case EstiloIA.Caotico:
+                    chanceCantarEnvido = 0.9f;
+                    chanceDeQueSeaReal = 0.6f;
+                    chanceResponderConSubida = 1.0f;
+                    break;
+            }
+        }
     }
 
     public void JugarCarta()
