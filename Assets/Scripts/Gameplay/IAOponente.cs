@@ -409,33 +409,40 @@ public class IAOponente : MonoBehaviour
 
             GameManager.Instance.ShowEnvidoResults(envidoJugador, envidoOponente);
 
-            switch (GameManager.Instance.TipoDeEnvidoActual)
-            {
-                case GameManager.TipoEnvido.Envido:
-                    if (ganaOponente)
-                    {
-                        GameManager.Instance.puntosOponente += 2;
-                        Debug.Log("Resultado Envido: Gana el oponente (+2 puntos)");
-                    }
-                    else
-                    {
-                        GameManager.Instance.puntosJugador += 2;
-                        Debug.Log("Resultado Envido: Gana el jugador (+2 puntos)");
-                    }
-                    break;
+            int puntosAGanar = 0;
 
-                case GameManager.TipoEnvido.RealEnvido:
-                    if (ganaOponente)
+            var cantos = GameManager.Instance.EnvidoCantos;
+
+            if (cantos.Contains(GameManager.TipoEnvido.FaltaEnvido))
+            {
+                puntosAGanar = GameManager.Instance.PointsToEnd -
+                               Mathf.Max(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
+            }
+            else
+            {
+                foreach (var canto in cantos)
+                {
+                    switch (canto)
                     {
-                        GameManager.Instance.puntosOponente += 3;
-                        Debug.Log("Resultado Real Envido: Gana el oponente (+3 puntos)");
+                        case GameManager.TipoEnvido.Envido:
+                            puntosAGanar += 2;
+                            break;
+                        case GameManager.TipoEnvido.RealEnvido:
+                            puntosAGanar += 3;
+                            break;
                     }
-                    else
-                    {
-                        GameManager.Instance.puntosJugador += 3;
-                        Debug.Log("Resultado Real Envido: Gana el jugador (+3 puntos)");
-                    }
-                    break;
+                }
+            }
+
+            if (ganaOponente)
+            {
+                GameManager.Instance.puntosOponente += puntosAGanar;
+                Debug.Log($"Resultado Envido: Gana la IA (+{puntosAGanar} puntos)");
+            }
+            else
+            {
+                GameManager.Instance.puntosJugador += puntosAGanar;
+                Debug.Log($"Resultado Envido: Gana el jugador (+{puntosAGanar} puntos)");
             }
 
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
@@ -444,7 +451,7 @@ public class IAOponente : MonoBehaviour
 
         else
         {
-            int puntosPorNoQuerer = 1; // Valor por defecto
+            int puntosPorNoQuerer = 1;
 
             var cantos = GameManager.Instance.EnvidoCantos;
 
@@ -452,10 +459,23 @@ public class IAOponente : MonoBehaviour
             {
                 if (cantos.Contains(GameManager.TipoEnvido.Envido) &&
                     cantos.Contains(GameManager.TipoEnvido.RealEnvido))
+                {
                     puntosPorNoQuerer = 2;
+                }
                 else if (cantos[0] == GameManager.TipoEnvido.Envido &&
                          cantos[1] == GameManager.TipoEnvido.Envido)
+                {
                     puntosPorNoQuerer = 2;
+                }
+            }
+            else if (cantos.Count == 3)
+            {
+                if (cantos[0] == GameManager.TipoEnvido.Envido &&
+                    cantos[1] == GameManager.TipoEnvido.Envido &&
+                    cantos[2] == GameManager.TipoEnvido.RealEnvido)
+                {
+                    puntosPorNoQuerer = 3;
+                }
             }
 
             if (GameManager.Instance.EnvidoFueDelJugador)
@@ -472,6 +492,7 @@ public class IAOponente : MonoBehaviour
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
         }
+
 
         GameManager.Instance.EnvidoRespondido = true;
         GameManager.Instance.EnvidoCantado = false;

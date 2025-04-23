@@ -740,9 +740,18 @@ public class GameManager : MonoBehaviour
                 else if (EnvidoCantos.Count == 2)
                 {
                     if (EnvidoCantos.Contains(TipoEnvido.Envido) && EnvidoCantos.Contains(TipoEnvido.RealEnvido))
-                        puntosAGanar = 5;
+                        puntosAGanar = 5; // Envido + Real Envido
                     else if (EnvidoCantos[0] == TipoEnvido.Envido && EnvidoCantos[1] == TipoEnvido.Envido)
-                        puntosAGanar = 4;
+                        puntosAGanar = 4; // Envido + Envido
+                }
+                else if (EnvidoCantos.Count == 3)
+                {
+                    if (EnvidoCantos[0] == TipoEnvido.Envido &&
+                        EnvidoCantos[1] == TipoEnvido.Envido &&
+                        EnvidoCantos[2] == TipoEnvido.RealEnvido)
+                    {
+                        puntosAGanar = 7; // Envido + Envido + Real Envido
+                    }
                 }
             }
 
@@ -764,6 +773,15 @@ public class GameManager : MonoBehaviour
                     puntosPorNoQuerer = 2;
                 else if (EnvidoCantos[0] == TipoEnvido.Envido && EnvidoCantos[1] == TipoEnvido.Envido)
                     puntosPorNoQuerer = 2;
+            }
+            else if (EnvidoCantos.Count == 3)
+            {
+                if (EnvidoCantos[0] == TipoEnvido.Envido &&
+                    EnvidoCantos[1] == TipoEnvido.Envido &&
+                    EnvidoCantos[2] == TipoEnvido.RealEnvido)
+                {
+                    puntosPorNoQuerer = 3;
+                }
             }
 
             if (EnvidoFueDelJugador)

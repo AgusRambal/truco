@@ -211,7 +211,7 @@ public class UIManager : MonoBehaviour
                 target.transform
                     .DOScale(Vector3.zero, 0.3f)
                     .SetEase(Ease.InBack)
-                    .SetDelay(0.8f);
+                    .SetDelay(1f);
             });
     }
 
