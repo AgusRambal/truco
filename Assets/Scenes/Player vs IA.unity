@@ -3447,9 +3447,9 @@ MonoBehaviour:
   maxResponseTime: 2
   minTrucoResponseTime: 0.25
   maxTrucoResponseTime: 1
-  usarEstiloParaChances: 1
-  chanceCantarEnvido: 1
-  chanceDeQueSeaReal: 1
+  usarEstiloParaChances: 0
+  chanceCantarEnvido: 0
+  chanceDeQueSeaReal: 0
   chanceResponderConSubida: 0
 --- !u!4 &596016131
 Transform:

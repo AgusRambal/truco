@@ -86,22 +86,45 @@ public class UIManager : MonoBehaviour
     {
         bool puedeCantarTruco = false;
 
-        if (GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
-            (!GameManager.Instance.EnvidoCantado || GameManager.Instance.EnvidoRespondido))
+        var gm = GameManager.Instance;
+
+        // 1. Jugador puede iniciar Truco
+        if (gm.estadoRonda == EstadoRonda.Jugando &&
+            (!gm.EnvidoCantado || gm.EnvidoRespondido))
         {
             puedeCantarTruco =
-                GameManager.Instance.TrucoState < 3 &&
-                GameManager.Instance.turnoActual == TurnoActual.Jugador &&
-                GameManager.Instance.CantidadCartasJugadorJugadas < 3 &&
-                GameManager.Instance.PuedeResponderTruco;
+                gm.TrucoState < 3 &&
+                gm.turnoActual == TurnoActual.Jugador &&
+                gm.CantidadCartasJugadorJugadas < 3 &&
+                gm.PuedeResponderTruco;
         }
-        else if (GameManager.Instance.estadoRonda == EstadoRonda.EsperandoRespuesta &&
-                 GameManager.Instance.UltimoCantoFueDelJugador == false &&
-                 GameManager.Instance.TrucoState < 3 &&
-                 GameManager.Instance.PuedeResponderTruco)
+
+        // 2. Jugador puede responder a Truco / Retruco
+        else if (gm.estadoRonda == EstadoRonda.EsperandoRespuesta &&
+                 gm.UltimoCantoFueDelJugador == false &&
+                 gm.TrucoState < 3 &&
+                 gm.PuedeResponderTruco)
         {
             puedeCantarTruco = true;
         }
+
+        // 3. Nueva ronda, la IA cantó algo y es mi turno para subir
+        else if (gm.estadoRonda == EstadoRonda.Jugando &&
+                 gm.turnoActual == TurnoActual.Jugador &&
+                 gm.CantidadCartasJugadorJugadas == 0 &&
+                 gm.TrucoState < 3 &&
+                 gm.PuedeResponderTruco &&
+                 gm.UltimoCantoFueDelJugador == false)
+        {
+            puedeCantarTruco = true;
+        }
+
+       /* Debug.Log($"[UI] ¿Truco habilitado? {puedeCantarTruco} | " +
+                  $"Estado: {gm.estadoRonda} | TrucoState: {gm.TrucoState} | " +
+                  $"TurnoActual: {gm.turnoActual} | CartasJugador: {gm.CantidadCartasJugadorJugadas} | " +
+                  $"PuedeResponderTruco: {gm.PuedeResponderTruco} | " +
+                  $"UltimoCantoFueDelJugador: {gm.UltimoCantoFueDelJugador} | " +
+                  $"EnvidoCantado: {gm.EnvidoCantado} | EnvidoRespondido: {gm.EnvidoRespondido}");*/
 
         truco.interactable = puedeCantarTruco;
     }
@@ -339,10 +362,14 @@ public class UIManager : MonoBehaviour
         else
             envido.interactable = true;
 
-        // REAL ENVIDO
-        if (yaCantaronFalta || yoCanteReal || !puedeSubir)
-            realEnvido.interactable = false;
-        else
-            realEnvido.interactable = true;
+        //REAL ENVIDO
+        bool puedeCantarReal =
+     !yaCantaronFalta &&
+     !GameManager.Instance.EnvidoRespondido &&
+     GameManager.Instance.EnvidoCantos.Count < 3 && // permite Envido → Envido → Real como límite
+     !GameManager.Instance.JugadorYaCantoEsteTipo(GameManager.TipoEnvido.RealEnvido);
+
+        realEnvido.interactable = puedeCantarReal;
+
     }
 }

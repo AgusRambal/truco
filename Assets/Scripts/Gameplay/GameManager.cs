@@ -58,13 +58,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
     [HideInInspector] public bool isPaused = false;
-     public bool EnvidoCantado = false;
     [HideInInspector] public bool EnvidoFueDelJugador = false;
-     public bool EnvidoRespondido = false;
     [HideInInspector] public bool ganoJugador = false;
     [HideInInspector] public bool PuedeResponderTruco = true;
     [HideInInspector] public TipoEnvido TipoDeEnvidoActual;
     [HideInInspector] public List<TipoEnvido> EnvidoCantos = new List<TipoEnvido>();
+     public bool EnvidoCantado = false;
+     public bool EnvidoRespondido = false;
 
     //Privates
     private List<CardSelector> allCards = new List<CardSelector>();
@@ -368,6 +368,7 @@ public class GameManager : MonoBehaviour
         EnvidoCantado = false;
         PuedeResponderTruco = true;
         EnvidoRespondido = false;
+        EnvidoFueDelJugador = false;
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -694,49 +695,60 @@ public class GameManager : MonoBehaviour
 
             ShowEnvidoResults(envidoJugador, envidoOponente);
 
-            switch (TipoDeEnvidoActual)
+            int puntosAGanar = 0;
+
+            if (EnvidoCantos.Contains(TipoEnvido.FaltaEnvido))
             {
-                case TipoEnvido.Envido:
-                    if (ganoJugador)
-                    {
-                        puntosJugador += 2;
-                        Debug.Log("Resultado Envido: Gana el jugador (+2 puntos)");
-                    }
-                    else
-                    {
-                        puntosOponente += 2;
-                        Debug.Log("Resultado Envido: Gana el oponente (+2 puntos)");
-                    }
-                    break;
-
-                case TipoEnvido.RealEnvido:
-                    if (ganoJugador)
-                    {
-                        puntosJugador += 3;
-                        Debug.Log("Resultado Real Envido: Gana el jugador (+3 puntos)");
-                    }
-                    else
-                    {
-                        puntosOponente += 3;
-                        Debug.Log("Resultado Real Envido: Gana el oponente (+3 puntos)");
-                    }
-                    break;
-            }
-
-            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
-        }
-
-        else
-        {
-            if (EnvidoFueDelJugador)
-            {
-                puntosJugador += 1;
-                Debug.Log("Resultado: No quiso. +1 punto para el jugador");
+                puntosAGanar = PointsToEnd -
+                               Mathf.Max(puntosJugador, puntosOponente);
             }
             else
             {
-                puntosOponente += 1;
-                Debug.Log("Resultado: No quiso. +1 punto para el oponente");
+                if (EnvidoCantos.Count == 1)
+                {
+                    if (EnvidoCantos[0] == TipoEnvido.Envido)
+                        puntosAGanar = 2;
+                    else if (EnvidoCantos[0] == TipoEnvido.RealEnvido)
+                        puntosAGanar = 3;
+                }
+                else if (EnvidoCantos.Count == 2)
+                {
+                    if (EnvidoCantos.Contains(TipoEnvido.Envido) && EnvidoCantos.Contains(TipoEnvido.RealEnvido))
+                        puntosAGanar = 5;
+                    else if (EnvidoCantos[0] == TipoEnvido.Envido && EnvidoCantos[1] == TipoEnvido.Envido)
+                        puntosAGanar = 4;
+                }
+            }
+
+            if (ganoJugador)
+                puntosJugador += puntosAGanar;
+            else
+                puntosOponente += puntosAGanar;
+
+            uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
+            uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+        }
+        else
+        {
+            int puntosPorNoQuerer = 1;
+
+            if (EnvidoCantos.Count == 2)
+            {
+                if (EnvidoCantos.Contains(TipoEnvido.Envido) && EnvidoCantos.Contains(TipoEnvido.RealEnvido))
+                    puntosPorNoQuerer = 2;
+                else if (EnvidoCantos[0] == TipoEnvido.Envido && EnvidoCantos[1] == TipoEnvido.Envido)
+                    puntosPorNoQuerer = 2;
+            }
+
+            if (EnvidoFueDelJugador)
+            {
+                puntosJugador += puntosPorNoQuerer;
+                Debug.Log($"🛑 Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para el jugador");
+            }
+            else
+            {
+                puntosOponente += puntosPorNoQuerer;
+                Debug.Log($"🛑 Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para la IA");
             }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
@@ -753,6 +765,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     private AudioClip GetRandomDrop(List<AudioClip> list)
     {
         AudioClip randomClip = list[Random.Range(0, list.Count)];
@@ -764,7 +777,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.sfxSource.PlayOneShot(clip);
     }
 
-    private string NombreJugador(bool esJugador)
+    public string NombreJugador(bool esJugador)
     {
         return esJugador ? "Jugador" : "IA";
     }
@@ -778,5 +791,10 @@ public class GameManager : MonoBehaviour
             string quien = kvp.Value ? "Jugador" : "IA";
             Debug.Log($"→ {kvp.Key}: cantado por {quien}");
         }
+    }
+
+    public bool JugadorYaCantoEsteTipo(TipoEnvido tipo)
+    {
+        return cantosPorJugador.TryGetValue(tipo, out bool fueDelJugador) && fueDelJugador == true;
     }
 }
