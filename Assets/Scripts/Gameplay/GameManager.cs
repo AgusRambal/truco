@@ -87,6 +87,8 @@ public class GameManager : MonoBehaviour
     public List<CardSelector> AllCards => allCards;
     public bool UltimaManoFueEmpate => ultimaManoFueEmpate;
     public int PointsToEnd => pointsToEnd;
+    public int ManosGanadasJugador => manosGanadasJugador;
+    public int ManosGanadasOponente => manosGanadasOponente;
 
     public enum TipoEnvido
     {

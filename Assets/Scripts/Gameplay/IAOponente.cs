@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
-using static GameManager;
 
 public enum EstiloIA
 {
@@ -36,6 +35,9 @@ public class IAOponente : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float chanceCantarValeCuatro = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceResponderTruco = 0.5f;
 
+    [Header("Probabilidades de Irse")]
+    [SerializeField] private bool usarEstiloParaChancesIrse = true;
+    [SerializeField, Range(0f, 1f)] private float chanceDeIrse = 0.5f;
 
     private enum EstiloJugada
     {
@@ -101,6 +103,24 @@ public class IAOponente : MonoBehaviour
                     break;
             }
         }
+
+        if (usarEstiloParaChancesIrse)
+        {
+            switch (estilo)
+            {
+                case EstiloIA.Canchero:
+                    chanceDeIrse = 0.1f;
+                    break;
+
+                case EstiloIA.Conservador:
+                    chanceDeIrse = 0.4f;
+                    break;
+
+                case EstiloIA.Caotico:
+                    chanceDeIrse = 0.05f;
+                    break;
+            }
+        }
     }
 
     public void JugarCarta()
@@ -112,6 +132,13 @@ public class IAOponente : MonoBehaviour
     {
         float delay = Random.Range(minResponseTime, maxResponseTime);
         yield return new WaitForSeconds(delay);
+
+        if (EvaluarSiIrse())
+        {
+            Debug.Log("IA decide irse antes de jugar carta.");
+            GameManager.Instance.MeVoy(false); // false = IA
+            yield break;
+        }
 
         if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)
         {
@@ -126,21 +153,21 @@ public class IAOponente : MonoBehaviour
             float r = Random.value;
             if (r < chanceCantarEnvido)
             {
-                TipoEnvido tipoACantar = Random.value < chanceDeQueSeaReal
-                    ? TipoEnvido.RealEnvido
-                    : TipoEnvido.Envido;
+                GameManager.TipoEnvido tipoACantar = Random.value < chanceDeQueSeaReal
+                    ? GameManager.TipoEnvido.RealEnvido
+                    : GameManager.TipoEnvido.Envido;
 
-                Instance.CantarEnvido(tipoACantar, false);
+                GameManager.Instance.CantarEnvido(tipoACantar, false);
             }
         }
 
         // Si cantó Envido, no juega la carta todavía
-        if (Instance.EnvidoCantado || Instance.estadoRonda != EstadoRonda.Jugando)
+        if (GameManager.Instance.EnvidoCantado || GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
         {
             yield break;
         }
 
-        if (Instance.estadoRonda != EstadoRonda.Jugando)
+        if (GameManager.Instance.estadoRonda != EstadoRonda.Jugando)
         {
             Debug.Log("IA: se canceló la jugada porque ya no estamos jugando.");
             yield break;
@@ -509,7 +536,7 @@ public class IAOponente : MonoBehaviour
         {
             if (Random.value < chanceCantarEnvido)
             {
-                TipoEnvido tipoSubida = Random.value < chanceDeQueSeaReal
+                GameManager.TipoEnvido tipoSubida = Random.value < chanceDeQueSeaReal
                     ? GameManager.TipoEnvido.RealEnvido
                     : GameManager.TipoEnvido.Envido;
 
@@ -538,4 +565,26 @@ public class IAOponente : MonoBehaviour
         // Si no sube más → simplemente responde
         yield return StartCoroutine(ResponderEnvidoCoroutine());
     }
+
+    private bool EvaluarSiIrse()
+    {
+        bool yaPerdioPrimera = GameManager.Instance.ManosGanadasJugador > GameManager.Instance.ManosGanadasOponente;
+
+        var disponibles = GameManager.Instance.AllCards
+            .Where(c => c != null && c.isOpponent && !c.hasBeenPlayed && c.gameObject != null)
+            .ToList();
+
+        bool tieneCartasMalas = disponibles.All(c => c.GetComponent<Carta>().jerarquiaTruco < 7);
+        bool estaEnPeligro = GameManager.Instance.puntosJugador >= 27;
+
+        if (yaPerdioPrimera && tieneCartasMalas && estaEnPeligro)
+        {
+            float r = Random.value;
+            Debug.Log($"Evaluando irse: chanceDeIrse = {chanceDeIrse}, random = {r}");
+            return r < chanceDeIrse;
+        }
+
+        return false;
+    }
+
 }
