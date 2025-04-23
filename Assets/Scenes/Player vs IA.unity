@@ -3447,10 +3447,15 @@ MonoBehaviour:
   maxResponseTime: 2
   minTrucoResponseTime: 0.25
   maxTrucoResponseTime: 1
-  usarEstiloParaChances: 0
-  chanceCantarEnvido: 0
-  chanceDeQueSeaReal: 0
-  chanceResponderConSubida: 0
+  usarEstiloParaChancesEnvido: 1
+  chanceCantarEnvido: 0.493
+  chanceDeQueSeaReal: 0.423
+  chanceResponderConSubida: 0.558
+  usarEstiloParaChancesTruco: 1
+  chanceCantarTruco: 0.5
+  chanceCantarRetruco: 0.5
+  chanceCantarValeCuatro: 0.5
+  chanceResponderTruco: 0.5
 --- !u!4 &596016131
 Transform:
   m_ObjectHideFlags: 0
@@ -4162,13 +4167,13 @@ MonoBehaviour:
   SeJugoCartaDesdeUltimoCanto: 1
   UltimoCantoFueDelJugador: 0
   isPaused: 0
-  EnvidoCantado: 0
   EnvidoFueDelJugador: 0
-  EnvidoRespondido: 0
   ganoJugador: 0
   PuedeResponderTruco: 1
   TipoDeEnvidoActual: 0
   EnvidoCantos: 
+  EnvidoCantado: 0
+  EnvidoRespondido: 0
 --- !u!4 &732447878
 Transform:
   m_ObjectHideFlags: 0

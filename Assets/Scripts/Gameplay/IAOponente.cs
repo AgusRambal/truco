@@ -24,10 +24,18 @@ public class IAOponente : MonoBehaviour
     [SerializeField] private float maxTrucoResponseTime = 1f;
 
     [Header("Probabilidades de Envido")]
-    [SerializeField] private bool usarEstiloParaChances = true;
+    [SerializeField] private bool usarEstiloParaChancesEnvido = true;
     [SerializeField, Range(0f, 1f)] private float chanceCantarEnvido = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceDeQueSeaReal = 0.5f;
-    [SerializeField, Range(0f, 1f)] private float chanceResponderConSubida = 0.8f;
+    [SerializeField, Range(0f, 1f)] private float chanceResponderConSubida = 0.5f;
+
+    [Header("Probabilidades de Truco")]
+    [SerializeField] private bool usarEstiloParaChancesTruco = true;
+    [SerializeField, Range(0f, 1f)] private float chanceCantarTruco = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceCantarRetruco = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceCantarValeCuatro = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceResponderTruco = 0.5f;
+
 
     private enum EstiloJugada
     {
@@ -43,7 +51,7 @@ public class IAOponente : MonoBehaviour
 
     private void SelectIAChance()
     {
-        if (usarEstiloParaChances)
+        if (usarEstiloParaChancesEnvido)
         {
             switch (estilo)
             {
@@ -63,6 +71,33 @@ public class IAOponente : MonoBehaviour
                     chanceCantarEnvido = 0.9f;
                     chanceDeQueSeaReal = 0.6f;
                     chanceResponderConSubida = 1.0f;
+                    break;
+            }
+        }
+
+        if (usarEstiloParaChancesTruco)
+        {
+            switch (estilo)
+            {
+                case EstiloIA.Canchero:
+                    chanceCantarTruco = 0.5f;
+                    chanceCantarRetruco = 0.5f;
+                    chanceCantarValeCuatro = 0.3f;
+                    chanceResponderTruco = 0.9f;
+                    break;
+
+                case EstiloIA.Conservador:
+                    chanceCantarTruco = 0.3f;
+                    chanceCantarRetruco = 0.1f;
+                    chanceCantarValeCuatro = 0.05f;
+                    chanceResponderTruco = 0.6f;
+                    break;
+
+                case EstiloIA.Caotico:
+                    chanceCantarTruco = 0.9f;
+                    chanceCantarRetruco = 0.7f;
+                    chanceCantarValeCuatro = 0.7f;
+                    chanceResponderTruco = 1f;
                     break;
             }
         }
@@ -130,20 +165,32 @@ public class IAOponente : MonoBehaviour
 
         if (puedeCantar && GameManager.Instance.SeJugoCartaDesdeUltimoCanto)
         {
-            if (trucoState == 0 && ((tieneCartasFuertes && chance < 0.25f) || (tieneCartasMalas && chance < 0.15f)))
+            if (trucoState == 0)
             {
-                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Truco);
-                GameManager.Instance.TrucoState++;
-                GameManager.Instance.puntosEnJuego++;
-                GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
-                GameManager.Instance.ChangeTruco();
-                GameManager.Instance.uiManager.MostrarOpcionesTruco();
-                GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
-                GameManager.Instance.UltimoCantoFueDelJugador = false;
-                GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
-                yield break;
+                float chanceFinal = chanceCantarTruco;
+
+                if (tieneCartasFuertes)
+                    chanceFinal *= 1.2f; // aumenta chance si tiene buena mano
+                else if (tieneCartasMalas)
+                    chanceFinal *= 0.8f; // reduce chance si tiene mala mano
+
+                chanceFinal = Mathf.Clamp01(chanceFinal);  // asegura entre 0 y 1
+
+                if (Random.value < chanceFinal)
+                {
+                    uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Truco);
+                    GameManager.Instance.TrucoState++;
+                    GameManager.Instance.puntosEnJuego++;
+                    GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
+                    GameManager.Instance.ChangeTruco();
+                    GameManager.Instance.uiManager.MostrarOpcionesTruco();
+                    GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
+                    GameManager.Instance.UltimoCantoFueDelJugador = false;
+                    GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+                    yield break;
+                }
             }
-            else if (trucoState == 1 && chance < 0.3f)
+            else if (trucoState == 1 && chance < chanceCantarRetruco)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
                 GameManager.Instance.TrucoState++;
@@ -156,7 +203,7 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
                 yield break;
             }
-            else if (trucoState == 2 && chance < 0.35f)
+            else if (trucoState == 2 && chance < chanceCantarValeCuatro)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
                 GameManager.Instance.TrucoState++;
@@ -255,10 +302,10 @@ public class IAOponente : MonoBehaviour
         int estadoActual = GameManager.Instance.TrucoState;
         bool quiereSubir = false;
 
-        if (estadoActual < 2)
-        {
-            quiereSubir = Random.value < 0.4f;
-        }
+        if (estadoActual == 0)
+            quiereSubir = Random.value < chanceCantarRetruco;
+        else if (estadoActual == 1)
+            quiereSubir = Random.value < chanceCantarValeCuatro;
 
         if (quiereSubir)
         {
@@ -280,7 +327,7 @@ public class IAOponente : MonoBehaviour
 
         else
         {
-            bool acepta = Random.value > 0.4f;
+            bool acepta = Random.value < chanceResponderTruco;
 
             if (acepta)
             {
