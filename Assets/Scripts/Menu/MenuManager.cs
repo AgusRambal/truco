@@ -10,11 +10,6 @@ public class MenuManager : MonoBehaviour
     [Header("Cartas en pantalla")]
     [SerializeField] private List<Transform> cartasMenu;
 
-    [Header("Configuración del movimiento")]
-    [SerializeField] private float shakeDuration = 1.5f;
-    [SerializeField] private float shakeStrength = 2f;
-    [SerializeField] private float shakeInterval = 2f;
-
     [Header("Referencias")]
     [SerializeField] private RectTransform popupOpciones;
     [SerializeField] private float animationDuration = 0.4f;

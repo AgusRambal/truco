@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
     private int pointsToEnd;
     private int manosGanadasJugador = 0;
     private int manosGanadasOponente = 0;
+    private Dictionary<TipoEnvido, bool> cantosPorJugador = new();
 
     //Propiedades
     public int CantidadCartasJugadorJugadas => cartasJugadorJugadas.Count;
@@ -529,26 +530,49 @@ public class GameManager : MonoBehaviour
         if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
             return;
 
+        // 🔒 Bloqueo global: ese tipo ya fue cantado por alguien
+        if (EnvidoCantos.Contains(tipo))
+        {
+            // Pero si lo cantó el oponente, y ahora lo canto yo, está permitido
+            if (YaCantoEsteJugador(tipo, esJugador))
+            {
+                Debug.LogWarning($"🚫 {NombreJugador(esJugador)} ya cantó {tipo}, no puede repetir.");
+                return;
+            }
+        }
 
         if (!EnvidoCantado)
         {
             EnvidoCantado = true;
-            uiManager.ActualizarBotonesSegunEstado();
             EnvidoCantos.Clear();
+            cantosPorJugador.Clear(); // <-- importante: limpiar al inicio
+
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
             EnvidoFueDelJugador = esJugador;
+
+            // Registrar solo si aún no fue cantado ese tipo
+            if (!cantosPorJugador.ContainsKey(tipo))
+                cantosPorJugador[tipo] = esJugador;
         }
         else
         {
-            if (EnvidoCantos.Contains(tipo))
-                return;
-
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
             EnvidoFueDelJugador = esJugador;
+
+            // Registrar solo si aún no fue cantado ese tipo
+            if (!cantosPorJugador.ContainsKey(tipo))
+                cantosPorJugador[tipo] = esJugador;
         }
 
+        Debug.Log($"✅ {NombreJugador(esJugador)} canta {tipo}");
+
+        // Ocultar opciones si lo cantaste vos
+        if (esJugador)
+            uiManager.OcultarOpcionesEnvido();
+
+        // Mostrar mensaje en pantalla
         uiManager.MostrarTrucoMensaje(EnvidoFueDelJugador, tipo switch
         {
             TipoEnvido.Envido => UIManager.TrucoMensajeTipo.Envido,
@@ -557,6 +581,7 @@ public class GameManager : MonoBehaviour
             _ => UIManager.TrucoMensajeTipo.Envido
         });
 
+        // Lógica de turno
         if (EnvidoFueDelJugador)
         {
             StartCoroutine(iaOponente.ResponderEnvidoExtendido());
@@ -567,6 +592,16 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.ActualizarBotonesEnvido();
+    }
+
+
+
+    public bool YaCantoEsteJugador(TipoEnvido tipo, bool esJugador)
+    {
+        if (!cantosPorJugador.ContainsKey(tipo))
+            return false;
+
+        return cantosPorJugador[tipo] == esJugador;
     }
 
     public void CantarEnvidoNormal(bool jugador)
@@ -604,16 +639,14 @@ public class GameManager : MonoBehaviour
         }
 
         // DEBUG: mostrar cartas y sus valores
-        Debug.Log($"=== Cartas del {(esJugador ? "jugador" : "oponente")} ===");
+        //Debug.Log($"=== Cartas del {(esJugador ? "jugador" : "oponente")} ===");
         foreach (var c in cartas)
         {
-            Debug.Log($"Carta: {c.valor} de {c.palo} → Envido: {ValorEnvido(c)}"); 
+            //Debug.Log($"Carta: {c.valor} de {c.palo} → Envido: {ValorEnvido(c)}"); 
         }
 
         // Agrupar por palo
-        var porPalo = cartas.GroupBy(c => c.palo)
-                            .Where(g => g.Count() >= 2)
-                            .ToList();
+        var porPalo = cartas.GroupBy(c => c.palo).Where(g => g.Count() >= 2).ToList();
 
         if (porPalo.Count > 0)
         {
@@ -627,17 +660,17 @@ public class GameManager : MonoBehaviour
                 var top2 = cartasDelPalo.OrderByDescending(c => ValorEnvido(c)).Take(2).ToList();
                 int suma = ValorEnvido(top2[0]) + ValorEnvido(top2[1]) + 20;
 
-                Debug.Log($"→ Palo {grupo.Key}: {ValorEnvido(top2[0])} + {ValorEnvido(top2[1])} + 20 = {suma}");
+                //Debug.Log($"→ Palo {grupo.Key}: {ValorEnvido(top2[0])} + {ValorEnvido(top2[1])} + 20 = {suma}");
                 mejorPuntaje = Mathf.Max(mejorPuntaje, suma);
             }
 
-            Debug.Log($"Resultado final de Envido: {mejorPuntaje}");
+            //Debug.Log($"Resultado final de Envido: {mejorPuntaje}");
             return mejorPuntaje;
         }
 
         // Si no hay cartas del mismo palo, usar la de mayor valor
         int maxSinPalo = cartas.Max(c => ValorEnvido(c));
-        Debug.Log($"No hay palo repetido. Mayor carta: {maxSinPalo}");
+        //Debug.Log($"No hay palo repetido. Mayor carta: {maxSinPalo}");
         return maxSinPalo;
     }
 
@@ -744,5 +777,21 @@ public class GameManager : MonoBehaviour
     public void PlaySFXCopy(AudioClip clip)
     {
         AudioManager.Instance.sfxSource.PlayOneShot(clip);
+    }
+
+    private string NombreJugador(bool esJugador)
+    {
+        return esJugador ? "Jugador" : "IA";
+    }
+
+    public void DebugEstadoCantos()
+    {
+        Debug.Log("📊 Estado de cantos por jugador:");
+
+        foreach (var kvp in cantosPorJugador)
+        {
+            string quien = kvp.Value ? "Jugador" : "IA";
+            Debug.Log($"→ {kvp.Key}: cantado por {quien}");
+        }
     }
 }

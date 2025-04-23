@@ -103,6 +103,9 @@ public class UIManager : MonoBehaviour
             puedeCantarTruco = true;
         }
 
+        meVoy.interactable = GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
+                     GameManager.Instance.turnoActual == TurnoActual.Jugador;
+
         truco.interactable = puedeCantarTruco;
     }
 
@@ -312,27 +315,45 @@ public class UIManager : MonoBehaviour
                     .SetDelay(2f)
                     .OnComplete(() =>
                     {
-                        GameManager.Instance.EnvidoCantado = false;
+                        SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
                     });
             });
     }
 
     public void ActualizarBotonesEnvido()
     {
-        bool envidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido);
-        bool realEnvidoYaCantado = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido);
+        var cantos = GameManager.Instance.EnvidoCantos;
+        bool envidoRespondido = GameManager.Instance.EnvidoRespondido;
 
-        // Se permite subir una vez si todavía no respondieron y solo hay un canto
-        bool puedeSubir = !GameManager.Instance.EnvidoRespondido && GameManager.Instance.EnvidoCantos.Count < 2;
+        bool yaCantaronEnvido = cantos.Contains(GameManager.TipoEnvido.Envido);
+        bool yaCantaronReal = cantos.Contains(GameManager.TipoEnvido.RealEnvido);
+        bool yaCantaronFalta = cantos.Contains(GameManager.TipoEnvido.FaltaEnvido);
 
-        if (GameManager.Instance.EnvidoFueDelJugador && envidoYaCantado && !puedeSubir)
+        bool yoCanteEnvido = yaCantaronEnvido && GameManager.Instance.EnvidoFueDelJugador;
+        bool yoCanteReal = yaCantaronReal && GameManager.Instance.EnvidoFueDelJugador;
+
+        // Solo una subida por ronda permitida
+        bool puedeSubir = !envidoRespondido && cantos.Count < 3 && !(yoCanteEnvido && yoCanteReal);
+
+        // ENVIDO
+        if (yaCantaronReal || yaCantaronFalta || yoCanteEnvido || !puedeSubir)
             envido.interactable = false;
         else
             envido.interactable = true;
 
-        if (GameManager.Instance.EnvidoFueDelJugador && realEnvidoYaCantado && !puedeSubir)
+        // REAL ENVIDO
+        if (yaCantaronFalta || yoCanteReal || !puedeSubir)
             realEnvido.interactable = false;
         else
             realEnvido.interactable = true;
     }
+
+
+    private bool JugadorYaCantoEsteTipo(GameManager.TipoEnvido tipo)
+    {
+        return GameManager.Instance.EnvidoCantos.Contains(tipo) &&
+               GameManager.Instance.EnvidoFueDelJugador;
+    }
+
+
 }

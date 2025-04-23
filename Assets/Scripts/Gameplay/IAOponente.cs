@@ -375,8 +375,19 @@ public class IAOponente : MonoBehaviour
 
         float chance = Random.value;
 
-        // Si ya estamos en Envido, chance de subir
-        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && chance < 0.9f)
+        GameManager.Instance.DebugEstadoCantos();
+
+        bool yaLoCantoLaIA = GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido) &&
+                     GameManager.Instance.YaCantoEsteJugador(GameManager.TipoEnvido.RealEnvido, false);
+
+        if (yaLoCantoLaIA)
+        {
+            StartCoroutine(ResponderEnvidoCoroutine());
+            yield break;
+        }
+
+        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) &&
+            chance < 0.9f)
         {
             GameManager.Instance.CantarEnvido(GameManager.TipoEnvido.RealEnvido, false);
             yield break;
