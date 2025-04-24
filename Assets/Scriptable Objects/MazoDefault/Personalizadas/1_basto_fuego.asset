@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
   m_Name: 1_basto_fuego
   m_EditorClassIdentifier: 
-  imagen: {fileID: 21300000, guid: aad9de788bbcc664a8de88519047d030, type: 3}
+  imagen: {fileID: 21300000, guid: bca16ad793874bf4dae931d3c648042b, type: 3}
   palo: 1
   valor: 1
   id: 1_basto_fuego

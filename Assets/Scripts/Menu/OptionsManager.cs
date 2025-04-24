@@ -8,39 +8,66 @@ public class OptionsManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown dropdownResolucion;
     [SerializeField] private Toggle togglePantallaCompleta;
     [SerializeField] private TMP_Dropdown dropdownGraficos;
-    [SerializeField] private Button botonAplicar;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider SFXSlider;
 
-
     private Resolution[] resoluciones;
-    private int resolucionSeleccionadaIndex;
-    private bool pantallaCompletaSeleccionada;
-    private int calidadGraficaSeleccionada;
 
     void Start()
     {
         CargarResoluciones();
         CargarCalidadesGraficas();
 
-        pantallaCompletaSeleccionada = Screen.fullScreen;
+        // Leer configuración guardada
+        int resolIndex = PlayerPrefs.GetInt("ResolucionIndex", -1);
+        int fullscreen = PlayerPrefs.GetInt("Fullscreen", Screen.fullScreen ? 1 : 0);
+        int calidad = PlayerPrefs.GetInt("CalidadGrafica", QualitySettings.GetQualityLevel());
+
+        bool pantallaCompletaSeleccionada = fullscreen == 1;
         togglePantallaCompleta.isOn = pantallaCompletaSeleccionada;
+        Screen.fullScreen = pantallaCompletaSeleccionada;
+
+        dropdownGraficos.value = calidad;
+        dropdownGraficos.RefreshShownValue();
+        QualitySettings.SetQualityLevel(calidad);
+
+        if (resolIndex >= 0 && resolIndex < resoluciones.Length)
+        {
+            dropdownResolucion.value = resolIndex;
+            dropdownResolucion.RefreshShownValue();
+            AplicarResolucion(resolIndex);
+        }
 
         // Obtener valores guardados de volumen
         float musicVol = PlayerPrefs.GetFloat("MusicVolume", 1f);
         float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
-        musicSlider.value = Mathf.Clamp(PlayerPrefs.GetFloat("MusicVolume", 1f), 0.0001f, 1f);
-        SFXSlider.value = Mathf.Clamp(PlayerPrefs.GetFloat("SFXVolume", 1f), 0.0001f, 1f);
+        musicSlider.value = Mathf.Clamp(musicVol, 0.0001f, 1f);
+        SFXSlider.value = Mathf.Clamp(sfxVol, 0.0001f, 1f);
 
-        // También actualizar el AudioManager (por si no se hizo aún)
         AudioManager.Instance.SetMusicVolume(musicVol);
         AudioManager.Instance.SetSFXVolume(sfxVol);
 
-        // Listeners → actualizan solo variables locales
-        dropdownResolucion.onValueChanged.AddListener((i) => { resolucionSeleccionadaIndex = i; });
-        togglePantallaCompleta.onValueChanged.AddListener((b) => { pantallaCompletaSeleccionada = b; });
-        dropdownGraficos.onValueChanged.AddListener((i) => { calidadGraficaSeleccionada = i; });
+        dropdownResolucion.onValueChanged.AddListener((i) =>
+        {
+            PlayerPrefs.SetInt("ResolucionIndex", i);
+            PlayerPrefs.Save();
+            AplicarResolucion(i);
+        });
+
+        togglePantallaCompleta.onValueChanged.AddListener((b) =>
+        {
+            PlayerPrefs.SetInt("Fullscreen", b ? 1 : 0);
+            PlayerPrefs.Save();
+            AplicarPantallaCompleta(b);
+        });
+
+        dropdownGraficos.onValueChanged.AddListener((i) =>
+        {
+            PlayerPrefs.SetInt("CalidadGrafica", i);
+            PlayerPrefs.Save();
+            QualitySettings.SetQualityLevel(i);
+        });
     }
 
     public void CargarResoluciones()
@@ -64,10 +91,18 @@ public class OptionsManager : MonoBehaviour
         }
 
         dropdownResolucion.AddOptions(opciones);
-        dropdownResolucion.value = indexActual;
         dropdownResolucion.RefreshShownValue();
+    }
 
-        resolucionSeleccionadaIndex = indexActual;
+    private void AplicarResolucion(int index)
+    {
+        Resolution resol = resoluciones[index];
+        Screen.SetResolution(resol.width, resol.height, Screen.fullScreen);
+    }
+
+    private void AplicarPantallaCompleta(bool fullscreen)
+    {
+        Screen.fullScreen = fullscreen;
     }
 
     public void CargarCalidadesGraficas()
@@ -76,25 +111,6 @@ public class OptionsManager : MonoBehaviour
 
         var opciones = new System.Collections.Generic.List<string>(QualitySettings.names);
         dropdownGraficos.AddOptions(opciones);
-
-        int actual = QualitySettings.GetQualityLevel();
-        dropdownGraficos.value = actual;
-        dropdownGraficos.RefreshShownValue();
-
-        calidadGraficaSeleccionada = actual;
-    }
-
-    public void AplicarCambios()
-    {
-        Resolution resol = resoluciones[resolucionSeleccionadaIndex];
-        Screen.SetResolution(resol.width, resol.height, pantallaCompletaSeleccionada);
-
-        Screen.fullScreen = pantallaCompletaSeleccionada;
-        QualitySettings.SetQualityLevel(calidadGraficaSeleccionada);
-
-        Debug.Log("Opciones aplicadas: " + resol.width + "x" + resol.height +
-                  " - Fullscreen: " + pantallaCompletaSeleccionada +
-                  " - Calidad: " + QualitySettings.names[calidadGraficaSeleccionada]);
     }
 
     public void OnMusicVolumeChanged(float value)

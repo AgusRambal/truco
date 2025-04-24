@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Linq;
 using System.Collections.Generic;
 using TMPro;
@@ -15,6 +15,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private List<CartaSO> todasLasCartas;   // TODAS (originales + personalizadas)
     [SerializeField] private List<CartaSO> mazoDefault;      // 40 originales
     [SerializeField] private List<CartaSO> mazoPersonalizado;
+    public List<CartaSO> cartasCompradas = new(); // visible en el inspector si querés debug
 
     [Header("Referencias")]
     [SerializeField] private float animationDuration = 0.4f;
@@ -23,25 +24,34 @@ public class MenuManager : MonoBehaviour
     [Header("Botones principales")]
     [SerializeField] private List<Transform> botonesMenuPrincipal;
 
-    [Header("Botones del men� de juego")]
+    [Header("Botones del menú de juego")]
     [SerializeField] private List<Transform> botonesPuntos;
     [SerializeField] private TMP_Dropdown dropdownEstiloIA;
 
-    [Header("Configuraci�n de animaci�n")]
+    [Header("Configuración de animación")]
     [SerializeField] private float delayEntreBotones = 0.05f;
     [SerializeField] private float duracionAnimacion = 0.25f;
 
+    [Header("Zona de personalización")]
+    [SerializeField] private Transform contenedorCartasCompradas; // zona donde se instancian
+    [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
+
+    private const string keyCartaSeleccionada = "CartaSeleccionada";
     private bool popUpState = false;
 
     private void Awake()
     {
         mazoPersonalizado = CartaSaveManager.CargarCartas(todasLasCartas);
-
         if (mazoPersonalizado.Count != 40)
-        {
-            Debug.Log("No hay mazo guardado o est� incompleto, usando mazo default");
             mazoPersonalizado = new List<CartaSO>(mazoDefault);
-        }
+
+        cartasCompradas = CargarCartasCompradas();
+    }
+
+    private List<CartaSO> CargarCartasCompradas()
+    {
+        var ids = CartaCompraManager.ObtenerIDsComprados();
+        return todasLasCartas.Where(c => ids.Contains(c.id)).ToList();
     }
 
     private void Start()
@@ -51,7 +61,50 @@ public class MenuManager : MonoBehaviour
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
         creditosTexto.text = $"{creditos}";
         SetIas();
+        SpawnCartasCompradas();
     }
+
+    private void SpawnCartasCompradas()
+    {
+        string idSeleccionada = PlayerPrefs.GetString("CartaSeleccionada", "");
+
+        foreach (var carta in cartasCompradas)
+        {
+            GameObject go = Instantiate(prefabCartaVisual, contenedorCartasCompradas);
+            var visual = go.GetComponent<CartaVisual>();
+
+            if (visual != null)
+            {
+                visual.Configurar(carta);
+
+                if (carta.id == idSeleccionada)
+                {
+                    visual.SetMarcoSeleccion(true);
+                }
+            }
+        }
+    }
+
+    public void AgregarCartaCompradaYSpawnear(CartaSO carta)
+    {
+        if (cartasCompradas.Any(c => c.id == carta.id))
+            return;
+
+        cartasCompradas.Add(carta);
+
+        // Spawnear solo esta carta reutilizando la lógica que ya tenés
+        GameObject go = Instantiate(prefabCartaVisual, contenedorCartasCompradas);
+        var visual = go.GetComponent<CartaVisual>();
+
+        if (visual != null)
+        {
+            visual.Configurar(carta);
+
+            string idSeleccionada = PlayerPrefs.GetString("CartaSeleccionada", "");
+            visual.SetMarcoSeleccion(carta.id == idSeleccionada);
+        }
+    }
+
 
     private void SetIas()
     {
@@ -72,10 +125,14 @@ public class MenuManager : MonoBehaviour
     }
 
     //PARA REEMPLAZAR UNA CARTA
-    public void ReemplazarCartaElegida(CartaSO nuevaCarta)
+    public void ReemplazarCartaElegida(CartaSO carta)
     {
-        CartaSaveManager.ReemplazarCarta(nuevaCarta, mazoPersonalizado);
+        CartaSaveManager.ReemplazarCarta(carta, mazoPersonalizado);
         CartaSaveManager.GuardarCartas(mazoPersonalizado);
+
+        // Guardar qué carta fue seleccionada como personalizada
+        PlayerPrefs.SetString(keyCartaSeleccionada, carta.id);
+        PlayerPrefs.Save();
     }
 
     private int CalcularGanancia(EstiloIA estilo, int puntosFinales)
@@ -175,11 +232,44 @@ public class MenuManager : MonoBehaviour
 #endif
     }
 
-    [ContextMenu("Resetear Cr�ditos")]
+    public void ActualizarCreditosUI()
+    {
+        int creditos = PlayerPrefs.GetInt("Creditos", 0);
+        creditosTexto.text = $"{creditos}";
+    }
+
+    [ContextMenu("Resetear Créditos")]
     public void ResetearCreditosDesdeEditor()
     {
         PlayerPrefs.SetInt("Creditos", 0);
         PlayerPrefs.Save();
-        Debug.Log("Cr�ditos reseteados desde el editor.");
+        Debug.Log("Créditos reseteados desde el editor.");
+    }
+
+    [ContextMenu("Sumar 100 Créditos")]
+    public void SumarCreditos()
+    {
+        int creditos = PlayerPrefs.GetInt("Creditos", 0);
+        creditos += 100;
+        PlayerPrefs.SetInt("Creditos", creditos);
+        PlayerPrefs.Save();
+        Debug.Log("Se sumaron 100 créditos.");
+        ActualizarCreditosUI();
+    }
+
+    [ContextMenu("Borrar Cartas Compradas")]
+    public void BorrarCartasCompradas()
+    {
+        PlayerPrefs.DeleteKey("CartasCompradas");
+        PlayerPrefs.Save();
+        Debug.Log("Cartas compradas borradas.");
+    }
+
+    [ContextMenu("Borrar Mazo Personalizado (usar default)")]
+    public void BorrarMazoPersonalizado()
+    {
+        PlayerPrefs.DeleteKey("CartasPersonalizadas");
+        PlayerPrefs.Save();
+        Debug.Log("Mazo personalizado borrado. Se usará el mazo default la próxima vez.");
     }
 }
