@@ -66,8 +66,6 @@ public class MenuManager : MonoBehaviour
 
     private void SpawnCartasCompradas()
     {
-        string idSeleccionada = PlayerPrefs.GetString("CartaSeleccionada", "");
-
         foreach (var carta in cartasCompradas)
         {
             GameObject go = Instantiate(prefabCartaVisual, contenedorCartasCompradas);
@@ -77,10 +75,9 @@ public class MenuManager : MonoBehaviour
             {
                 visual.Configurar(carta);
 
-                if (carta.id == idSeleccionada)
-                {
-                    visual.SetMarcoSeleccion(true);
-                }
+                // Solo prende el marco si esta carta está actualmente en el mazo personalizado
+                bool estaEnUso = mazoPersonalizado.Any(c => c.id == carta.id);
+                visual.SetMarcoSeleccion(estaEnUso);
             }
         }
     }
@@ -92,7 +89,6 @@ public class MenuManager : MonoBehaviour
 
         cartasCompradas.Add(carta);
 
-        // Spawnear solo esta carta reutilizando la lógica que ya tenés
         GameObject go = Instantiate(prefabCartaVisual, contenedorCartasCompradas);
         var visual = go.GetComponent<CartaVisual>();
 
@@ -100,11 +96,11 @@ public class MenuManager : MonoBehaviour
         {
             visual.Configurar(carta);
 
-            string idSeleccionada = PlayerPrefs.GetString("CartaSeleccionada", "");
-            visual.SetMarcoSeleccion(carta.id == idSeleccionada);
+            // Prende el marco solo si se está usando en el mazo
+            bool estaEnUso = mazoPersonalizado.Any(c => c.id == carta.id);
+            visual.SetMarcoSeleccion(estaEnUso);
         }
     }
-
 
     private void SetIas()
     {

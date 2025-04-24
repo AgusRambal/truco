@@ -29,7 +29,6 @@ public class CartaEnTienda : MonoBehaviour
     {
         bool comprada = CartaCompraManager.YaEstaComprada(carta);
 
-        // ⬇️ En vez de SetActive:
         var img = marcoComprado.GetComponent<Image>();
         if (img != null)
         {

@@ -42,6 +42,4 @@ public class CartaVisual : MonoBehaviour
 
         marcoSeleccionado.DOFade(activo ? 1f : 0f, 0.25f).SetEase(Ease.OutQuad);
     }
-
-    public CartaSO GetCartaSO() => cartaSO;
 }
