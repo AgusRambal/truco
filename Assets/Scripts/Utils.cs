@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Utils : MonoBehaviour
@@ -7,6 +8,7 @@ public class Utils : MonoBehaviour
         public static int puntosParaGanar = 30;
         public static int gananciaCalculada = 10;
         public static EstiloIA estiloSeleccionado = EstiloIA.Canchero;
+        public static List<CartaSO> cartasSeleccionadas = new();
     }
 
 }

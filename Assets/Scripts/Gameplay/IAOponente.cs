@@ -51,7 +51,6 @@ public class IAOponente : MonoBehaviour
 
     private void Awake()
     {
-        estilo = Utils.ParametrosDePartida.estiloSeleccionado;
         SelectIAChance();     
     }
 

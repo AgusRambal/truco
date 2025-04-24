@@ -107,7 +107,10 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+
+        cartas = new List<CartaSO>(ParametrosDePartida.cartasSeleccionadas);
         pointsToEnd = ParametrosDePartida.puntosParaGanar;
+        iaOponente.estilo = ParametrosDePartida.estiloSeleccionado;
     }
 
     private void Start()

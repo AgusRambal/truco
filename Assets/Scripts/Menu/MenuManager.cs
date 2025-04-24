@@ -27,6 +27,21 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float delayEntreBotones = 0.05f;
     [SerializeField] private float duracionAnimacion = 0.25f;
 
+    [SerializeField] private List<CartaSO> mazoDefault;      // 40 originales
+    [SerializeField] private List<CartaSO> todasLasCartas;   // TODAS (originales + personalizadas)
+    public List<CartaSO> mazoPersonalizado;
+
+    private void Awake()
+    {
+        mazoPersonalizado = CartaSaveManager.CargarCartas(todasLasCartas);
+
+        if (mazoPersonalizado.Count != 40)
+        {
+            Debug.Log("No hay mazo guardado o está incompleto, usando mazo default");
+            mazoPersonalizado = new List<CartaSO>(mazoDefault);
+        }
+    }
+
     private void Start()
     {
         AudioManager.Instance.PlayRandomMenuTrack();
@@ -43,15 +58,22 @@ public class MenuManager : MonoBehaviour
         dropdownEstiloIA.AddOptions(nombresEstilos);
     }
 
-
     public void Jugar(int puntos)
     {
         ParametrosDePartida.puntosParaGanar = puntos;
         ParametrosDePartida.estiloSeleccionado = (EstiloIA)dropdownEstiloIA.value;
         ParametrosDePartida.gananciaCalculada = CalcularGanancia((EstiloIA)dropdownEstiloIA.value, puntos);
+        ParametrosDePartida.cartasSeleccionadas = new List<CartaSO>(mazoPersonalizado);
 
         DOTween.KillAll();
         SceneManager.LoadScene("Player vs IA");
+    }
+
+    //PARA REEMPLAZAR UNA CARTA
+    public void ReemplazarCartaElegida(CartaSO nuevaCarta)
+    {
+        CartaSaveManager.ReemplazarCarta(nuevaCarta, mazoPersonalizado);
+        CartaSaveManager.GuardarCartas(mazoPersonalizado);
     }
 
     private int CalcularGanancia(EstiloIA estilo, int puntosFinales)
