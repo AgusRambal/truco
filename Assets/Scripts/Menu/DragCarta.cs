@@ -97,4 +97,10 @@ public class DragCartaUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (shakeTween != null && shakeTween.IsActive()) shakeTween.Kill();
     }
+
+    private void OnDestroy()
+    {
+        shakeTween?.Kill();
+        myTween?.Kill();
+    }
 }

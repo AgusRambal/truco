@@ -49,6 +49,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip notification;
+    [SerializeField] private AudioClip win;
+    [SerializeField] private AudioClip lose;
 
     public enum TrucoMensajeTipo
     {
@@ -83,7 +85,7 @@ public class UIManager : MonoBehaviour
 
     private void MostrarInfo()
     {
-        info.text = $"- PARTIDA A {GameManager.Instance.PointsToEnd} RONDAS\n - SIN FLOR\n - IA ESTILO CANCHERO";
+        info.text = $"- PARTIDA A {GameManager.Instance.PointsToEnd} RONDAS\n - SIN FLOR\n - IA ESTILO {GameManager.Instance.iaOponente.estilo}";
     }
 
     public void ActualizarBotonesSegunEstado()
@@ -217,11 +219,13 @@ public class UIManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        DOTween.KillAll();
         SceneManager.LoadScene("Main Menu");
     }
 
     public void ReiniciarPartida()
     {
+        DOTween.KillAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -246,12 +250,14 @@ public class UIManager : MonoBehaviour
 
         if (ganoJugador)
         {
+            AudioManager.Instance.PlaySFX(win);
             resultText.text = $"GANASTE!!";
             creditos.text = $"OBTUVISTE {ganancia} CREDITOS";
         }
 
         else
         {
+            AudioManager.Instance.PlaySFX(lose);
             resultText.text = $"PERDISTE..";
             creditos.text = $"NO OBTUVISTE CREDITOS";
         }

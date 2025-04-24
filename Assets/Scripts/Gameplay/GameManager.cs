@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     public UIManager uiManager;
     public GameObject carta;
-    [SerializeField] private IAOponente iaOponente;
+    public IAOponente iaOponente;
 
     [Header("Transforms")]
     public Transform[] handPosition;
@@ -363,7 +363,7 @@ public class GameManager : MonoBehaviour
 
             if (ganoJugador)
             {
-                ganancia = Random.Range(1, 31); //Por ahora valor random
+                ganancia = ParametrosDePartida.gananciaCalculada;
                 int creditosActuales = PlayerPrefs.GetInt("Creditos", 0);
                 int total = creditosActuales + ganancia;
 
@@ -725,8 +725,7 @@ public class GameManager : MonoBehaviour
 
             if (EnvidoCantos.Contains(TipoEnvido.FaltaEnvido))
             {
-                puntosAGanar = PointsToEnd -
-                               Mathf.Max(puntosJugador, puntosOponente);
+                puntosAGanar = PointsToEnd - Mathf.Max(puntosJugador, puntosOponente);
             }
             else
             {

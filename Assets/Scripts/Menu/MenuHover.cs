@@ -8,6 +8,7 @@ public class MenuHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private float scaleTime = 0.2f;
 
     private Vector3 originalScale;
+    private Tween scaleTween;
 
     private void Start()
     {
@@ -16,11 +17,20 @@ public class MenuHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        transform.DOScale(originalScale * scaleAmount, scaleTime).SetEase(Ease.OutBack);
+        scaleTween?.Kill();
+
+        scaleTween = transform.DOScale(originalScale * scaleAmount, scaleTime).SetEase(Ease.OutBack);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        transform.DOScale(originalScale, scaleTime).SetEase(Ease.OutBack);
+        scaleTween?.Kill();
+
+        scaleTween = transform.DOScale(originalScale, scaleTime).SetEase(Ease.OutBack);
+    }
+
+    private void OnDisable()
+    {
+        scaleTween?.Kill();
     }
 }

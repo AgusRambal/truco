@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 57625
+  controlID: 49
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -195,9 +195,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 761f0400
-      m_LastClickedID: 270198
-      m_ExpandedIDs: 3abcfaffbcc4fafff4d4faffd4d7faff8c2dfbff526dfbff6482fbff76d9fbfff4ebfbff18eefbff6008fdffc40cfdff5e11fdffbc13fdffbe13fdff2e55fdff2a7bfdffdab5ffff0ad0ffff8ce6ffffdef1ffff0cfbfffff4ffffff0cb100002cc000008cd00000ccf30000ec210300e23603001c030400
+      m_SelectedIDs: d6c4ffff
+      m_LastClickedID: -15146
+      m_ExpandedIDs: 9aebffff0cfbfffff4ffffffacb20000c8b200006eb300002ebf00004ac10000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 57626
+  controlID: 50
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 57627
+  controlID: 51
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -293,8 +293,8 @@ MonoBehaviour:
     y: 0
     width: 779
     height: 876
-  m_MinSize: {x: 201, y: 226}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 8}
   m_Panes:
   - {fileID: 8}
@@ -895,9 +895,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 767.014, y: 746.3716, z: -4.705133}
+    m_Target: {x: 1339.4646, y: 592.37274, z: -3.7116745}
     speed: 2
-    m_Value: {x: 767.014, y: 746.3716, z: -4.705133}
+    m_Value: {x: 1346.6998, y: 597.0421, z: -3.891284}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -947,9 +947,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 515.8509
+    m_Target: 381.17014
     speed: 2
-    m_Value: 515.8509
+    m_Value: 399.13104
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1228,7 +1228,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Gameplay
+    - Assets/Scenes
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1238,16 +1238,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Scripts/Gameplay
+  - Assets/Scenes
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\gohan\Documents\GitHub\truco
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 6ab60000
-    m_LastClickedID: 46698
-    m_ExpandedIDs: 00000000c6b50000c8b50000cab50000ccb50000ceb50000d0b50000d2b50000d4b50000d6b50000d8b50000
+    m_SelectedIDs: ceb80000
+    m_LastClickedID: 47310
+    m_ExpandedIDs: 0000000032b8000034b8000036b8000038b800003ab800003cb800003eb8000040b8000042b8000044b80000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1276,7 +1276,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c6b50000c8b50000cab50000ccb50000ceb50000d0b50000d2b50000d4b50000d6b50000d8b50000
+    m_ExpandedIDs: 0000000032b8000034b8000036b8000038b800003ab800003cb800003eb8000040b8000042b8000044b80000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1302,8 +1302,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 761f0400
-    m_LastClickedInstanceID: 270198
+    m_SelectedInstanceIDs: d6c4ffff
+    m_LastClickedInstanceID: -15146
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300007c9900000a551700f0850000d8c60000a6610200327300003c8b000032f70000f200010022ea0000fec8000000c900006c490600e48d030064bf1200526305001ab50000
     m_RenameOverlay:
@@ -1408,7 +1408,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 270254
+  m_LastSelectedObjectID: 270198
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("Botones del menú de juego")]
     [SerializeField] private List<Transform> botonesPuntos;
+    [SerializeField] private TMP_Dropdown dropdownEstiloIA;
 
     [Header("Configuración de animación")]
     [SerializeField] private float delayEntreBotones = 0.05f;
@@ -31,12 +33,44 @@ public class MenuManager : MonoBehaviour
 
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
         creditosTexto.text = $"{creditos}";
+        SetIas();
     }
+
+    private void SetIas()
+    {
+        dropdownEstiloIA.ClearOptions();
+        List<string> nombresEstilos = System.Enum.GetNames(typeof(EstiloIA)).ToList();
+        dropdownEstiloIA.AddOptions(nombresEstilos);
+    }
+
 
     public void Jugar(int puntos)
     {
         ParametrosDePartida.puntosParaGanar = puntos;
+        ParametrosDePartida.estiloSeleccionado = (EstiloIA)dropdownEstiloIA.value;
+        ParametrosDePartida.gananciaCalculada = CalcularGanancia((EstiloIA)dropdownEstiloIA.value, puntos);
+
+        DOTween.KillAll();
         SceneManager.LoadScene("Player vs IA");
+    }
+
+    private int CalcularGanancia(EstiloIA estilo, int puntosFinales)
+    {
+        int baseGanancia = estilo switch
+        {
+            EstiloIA.Conservador => Random.Range(50, 101),
+            EstiloIA.Canchero => Random.Range(120, 181),
+            EstiloIA.Calculador => Random.Range(130, 200),
+            EstiloIA.Agresivo => Random.Range(200, 280),
+            EstiloIA.Mentiroso => Random.Range(220, 300),
+            EstiloIA.Caotico => Random.Range(250, 350),
+            _ => 100
+        };
+
+        if (puntosFinales == 30)
+            baseGanancia = Mathf.RoundToInt(baseGanancia * 1.5f);
+
+        return baseGanancia;
     }
 
     public void MostrarMenuJuego()
