@@ -11,8 +11,12 @@ public class MenuManager : MonoBehaviour
     [Header("Cartas en pantalla")]
     [SerializeField] private List<Transform> cartasMenu;
 
+    [Header("Mazo")]
+    [SerializeField] private List<CartaSO> todasLasCartas;   // TODAS (originales + personalizadas)
+    [SerializeField] private List<CartaSO> mazoDefault;      // 40 originales
+    [SerializeField] private List<CartaSO> mazoPersonalizado;
+
     [Header("Referencias")]
-    [SerializeField] private RectTransform popupOpciones;
     [SerializeField] private float animationDuration = 0.4f;
     [SerializeField] private TMP_Text creditosTexto;
 
@@ -27,9 +31,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float delayEntreBotones = 0.05f;
     [SerializeField] private float duracionAnimacion = 0.25f;
 
-    [SerializeField] private List<CartaSO> mazoDefault;      // 40 originales
-    [SerializeField] private List<CartaSO> todasLasCartas;   // TODAS (originales + personalizadas)
-    public List<CartaSO> mazoPersonalizado;
+    private bool popUpState = false;
 
     private void Awake()
     {
@@ -141,23 +143,28 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void AbrirOpciones()
+    public void AbrirPopUp(RectTransform rectTransform)
     {
-        popupOpciones.gameObject.SetActive(true);
-        popupOpciones.localScale = Vector3.zero;
+        popUpState = !popUpState;
 
-        popupOpciones.DOScale(Vector3.one, animationDuration)
-            .SetEase(Ease.OutBack);
-    }
+        if (popUpState)
+        {
+            rectTransform.gameObject.SetActive(true);
+            rectTransform.localScale = Vector3.zero;
 
-    public void CerrarOpciones()
-    {
-        popupOpciones.DOScale(Vector3.zero, animationDuration - 0.2f)
-            .SetEase(Ease.InBack)
-            .OnComplete(() =>
-            {
-                popupOpciones.gameObject.SetActive(false);
-            });
+            rectTransform.DOScale(Vector3.one, animationDuration)
+                .SetEase(Ease.OutBack);
+        }
+
+        else
+        {
+            rectTransform.DOScale(Vector3.zero, animationDuration - 0.2f)
+           .SetEase(Ease.InBack)
+           .OnComplete(() =>
+           {
+               rectTransform.gameObject.SetActive(false);
+           });
+        }
     }
 
     public void QuitGame()
