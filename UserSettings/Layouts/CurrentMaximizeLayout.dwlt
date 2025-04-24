@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 1305
+  controlID: 40129
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -149,8 +149,8 @@ MonoBehaviour:
     y: 0
     width: 418
     height: 1293
-  m_MinSize: {x: 201, y: 226}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 4}
   m_Panes:
   - {fileID: 4}
@@ -195,23 +195,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 44b20000
-      m_LastClickedID: 45636
-      m_ExpandedIDs: c89afeffca9afeff9c9cfeff9e9cfeff1c1bffff321bffff761bffff901bffffb266ffffae94ffff969bffff5af6ffff0cfbffff04b000003ab10000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: d439feff7c72feffc89afeffca9afeff9c9cfeff9e9cfeff1c1bffff321bffff761bffff901bffffb266ffffae94ffff969bffff5af6ffff0cfbffff04b00000f2680200fc690200186a0200
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Point
+        m_OriginalName: Point
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 158188
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 3}
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 1306
+  controlID: 40130
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 1307
+  controlID: 40131
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -293,8 +293,8 @@ MonoBehaviour:
     y: 0
     width: 779
     height: 876
-  m_MinSize: {x: 202, y: 226}
-  m_MaxSize: {x: 4002, y: 4026}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 8}
   m_Panes:
   - {fileID: 8}
@@ -895,9 +895,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 1412.5481, y: 816.50305, z: -11.150687}
+    m_Target: {x: 2231.9102, y: 709.2055, z: -6.7964168}
     speed: 2
-    m_Value: {x: 1412.5481, y: 816.50305, z: -11.150687}
+    m_Value: {x: 2233.873, y: 704.07764, z: -6.48514}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -947,9 +947,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1125.0791
+    m_Target: 722.8546
     speed: 2
-    m_Value: 1125.0791
+    m_Value: 691.7269
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1051,8 +1051,8 @@ MonoBehaviour:
   m_MipLevel: 0
   m_Zoom: 9.887837
   m_ScrollPosition: {x: 0, y: 0}
-  m_SelectedObject: {fileID: 2800000, guid: e2a7c0e879c70f84d87341e49f4222ee, type: 3}
-  m_SelectedSpriteRectGUID: 5e97eb03825dee720800000000000000
+  m_SelectedObject: {fileID: 0}
+  m_SelectedSpriteRectGUID: 00000000000000000000000000000000
   m_LastUsedModuleTypeName: UnityEditor.U2D.Sprites.SpriteFrameModule
 --- !u!114 &10
 MonoBehaviour:
@@ -1228,7 +1228,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs
+    - Assets/Layer Lab/GUI Pro-CasualGame/ResourcesData/Sprite/Components/UI_Etc
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1238,16 +1238,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Prefabs
+  - Assets/Layer Lab/GUI Pro-CasualGame/ResourcesData/Sprite/Components/UI_Etc
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\gohan\Documents\GitHub\truco
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c0b70000
-    m_LastClickedID: 47040
-    m_ExpandedIDs: 000000002cb700002eb7000030b7000032b7000034b7000036b7000038b700003ab70000
+    scrollPos: {x: 0, y: 125}
+    m_SelectedIDs: aecf0100
+    m_LastClickedID: 118702
+    m_ExpandedIDs: 000000002cb700002eb7000030b7000032b7000034b7000036b7000038b700003ab70000bab70000c8b70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1302,8 +1302,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 44b20000
-    m_LastClickedInstanceID: 45636
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300007c9900000a551700f0850000d8c60000a6610200327300003c8b000032f70000f200010022ea0000fec8000000c900006c490600e48d030064bf1200526305001ab5000092b40000
     m_RenameOverlay:
@@ -1330,7 +1330,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 135}
     m_GridSize: 96
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 241
@@ -1408,7 +1408,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 45636
+  m_LastSelectedObjectID: 157914
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1613,8 +1613,8 @@ MonoBehaviour:
     y: 0
     width: 480
     height: 1293
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 76}
+  m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}

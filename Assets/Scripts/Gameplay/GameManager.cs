@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Scriptable obejcts")]
     public List<CartaSO> cartas = new List<CartaSO>();
+    public List<CartaSO> cartasBackup = new List<CartaSO>();
 
     [Header("References")]
     public UIManager uiManager;
@@ -108,7 +109,10 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        cartas = new List<CartaSO>(ParametrosDePartida.cartasSeleccionadas);
+        cartas = ParametrosDePartida.cartasSeleccionadas != null && ParametrosDePartida.cartasSeleccionadas.Count == 40
+            ? new List<CartaSO>(ParametrosDePartida.cartasSeleccionadas)
+            : CartaSaveManager.CargarCartas(cartasBackup); 
+
         pointsToEnd = ParametrosDePartida.puntosParaGanar;
         iaOponente.estilo = ParametrosDePartida.estiloSeleccionado;
     }
