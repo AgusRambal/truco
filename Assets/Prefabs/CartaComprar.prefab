@@ -309,6 +309,8 @@ MonoBehaviour:
   marcoComprado: {fileID: 4904708641616342722}
   textoPrecio: {fileID: 257246470695962461}
   buy: {fileID: 8300000, guid: 3b05fb6e50b6c6f42bb3a7cfff5ca01c, type: 3}
+  textoAdvertenciaPrefab: {fileID: 1638414240421703480, guid: 798a25d6d18dcb84a9f513c83c113150, type: 3}
+  advertenciaOffset: {x: 5, y: -268}
 --- !u!1 &3620515910281155305
 GameObject:
   m_ObjectHideFlags: 0

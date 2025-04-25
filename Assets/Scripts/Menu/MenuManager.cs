@@ -20,6 +20,7 @@ public class MenuManager : MonoBehaviour
     [Header("Referencias")]
     [SerializeField] private float animationDuration = 0.4f;
     [SerializeField] private TMP_Text creditosTexto;
+    [SerializeField] private GameObject textoAdvertenciaPrefab;
 
     [Header("Botones principales")]
     [SerializeField] private List<Transform> botonesMenuPrincipal;
@@ -27,6 +28,8 @@ public class MenuManager : MonoBehaviour
     [Header("Botones del menú de juego")]
     [SerializeField] private List<Transform> botonesPuntos;
     [SerializeField] private TMP_Dropdown dropdownEstiloIA;
+    [SerializeField] private RectTransform coinsPlace;
+    [SerializeField] private Vector2 offset;
 
     [Header("Configuración de animación")]
     [SerializeField] private float delayEntreBotones = 0.05f;
@@ -35,6 +38,8 @@ public class MenuManager : MonoBehaviour
     [Header("Zona de personalización")]
     [SerializeField] private Transform contenedorCartasCompradas; // zona donde se instancian
     [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
+
+    
 
     private const string keyCartaSeleccionada = "CartaSeleccionada";
     private bool popUpState = false;
@@ -267,5 +272,36 @@ public class MenuManager : MonoBehaviour
         PlayerPrefs.DeleteKey("CartasPersonalizadas");
         PlayerPrefs.Save();
         Debug.Log("Mazo personalizado borrado. Se usará el mazo default la próxima vez.");
+    }
+
+    public void MostrarAdvertencia(string mensaje, Transform puntoReferencia, Vector2? offset = null, float? tamañoTexto = null, Color? colorTexto = null)
+    {
+        Vector2 finalOffset = offset ?? Vector2.zero;
+
+        GameObject instancia = Instantiate(textoAdvertenciaPrefab, puntoReferencia);
+        RectTransform rect = instancia.GetComponent<RectTransform>();
+        rect.localPosition = finalOffset;
+
+        TextMeshProUGUI tmp = instancia.GetComponentInChildren<TextMeshProUGUI>();
+        tmp.text = mensaje;
+
+        if (tamañoTexto.HasValue)
+            tmp.fontSize = tamañoTexto.Value;
+
+        if (colorTexto.HasValue)
+            tmp.color = colorTexto.Value;
+
+        float duracion = 1.2f;
+
+        rect.DOLocalMoveY(rect.localPosition.y + 50f, duracion).SetEase(Ease.OutCubic);
+
+        DOTween.ToAlpha(() => tmp.color, x => tmp.color = x, 0f, duracion)
+            .SetEase(Ease.OutCubic)
+            .OnComplete(() => Destroy(instancia));
+    }
+
+    public void ShowLessCredits(string points)
+    {
+        MostrarAdvertencia(points, coinsPlace, offset, 62, Color.red);
     }
 }

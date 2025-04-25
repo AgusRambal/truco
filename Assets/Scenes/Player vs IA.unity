@@ -1512,8 +1512,8 @@ MonoBehaviour:
   envidoPoints: {fileID: 145214225}
   envidoPoints2: {fileID: 1425219364}
   notification: {fileID: 8300000, guid: 8474ee9362e04f54e9bc3ab58eec30a6, type: 3}
-  win: {fileID: 0}
-  lose: {fileID: 0}
+  win: {fileID: 8300000, guid: a178ba71ac3d6324696cd740cb854243, type: 3}
+  lose: {fileID: 8300000, guid: 0106b6ddd33a0df4b8efb7e44da8817a, type: 3}
   trucoMessagePlayer: {fileID: 1734076858}
   trucoMessageOponente: {fileID: 643017828}
 --- !u!4 &207373599
@@ -5057,7 +5057,6 @@ MonoBehaviour:
   devolverCartasWaitTime: 0.5
   estadoRonda: 0
   turnoActual: 0
-  puntosEnJuego: 1
   drops:
   - {fileID: 8300000, guid: 37efe7100065b3645abd438ccfc00d62, type: 3}
   - {fileID: 8300000, guid: b966ec73bdc51704fbcbcf36e7b9e41e, type: 3}
@@ -5070,8 +5069,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d9a072d8f632240408ec2832684f8ebc, type: 3}
   - {fileID: 8300000, guid: f3b87cc0e82ec4842b8e518725e9a3f4, type: 3}
   - {fileID: 8300000, guid: 014ca9a36da7f6742ba6caa1b4798d2a, type: 3}
+  puntosEnJuego: 1
   puntosOponente: 0
-  puntosJugador: 0
+  puntosJugador: 29
   TrucoState: 0
   SeJugoCartaDesdeUltimoCanto: 1
   UltimoCantoFueDelJugador: 0

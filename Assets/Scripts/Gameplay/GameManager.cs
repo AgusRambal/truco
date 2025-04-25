@@ -46,15 +46,15 @@ public class GameManager : MonoBehaviour
     [Header("Game stats")]
     public EstadoRonda estadoRonda = EstadoRonda.Jugando;
     public TurnoActual turnoActual = TurnoActual.Jugador;
-    public int puntosEnJuego = 1;
 
     [Header("Audio")]
     [SerializeField] private List<AudioClip> drops = new List<AudioClip>();
     [SerializeField] private List<AudioClip> plays = new List<AudioClip>();
 
     //Hidden
-    [HideInInspector] public int puntosOponente = 0;
-    [HideInInspector] public int puntosJugador = 0;
+    [HideInInspector] public int puntosEnJuego = 1;
+     public int puntosOponente = 0;
+     public int puntosJugador = 0;
     [HideInInspector] public int TrucoState = 0;
     [HideInInspector] public bool SeJugoCartaDesdeUltimoCanto = true;
     [HideInInspector] public bool UltimoCantoFueDelJugador = false;
@@ -310,13 +310,13 @@ public class GameManager : MonoBehaviour
         if (rondaSeDefiniraEnProxima && cartasJugadorJugadas.Count == 2 && cartasOponenteJugadas.Count == 2)
         {
             if (manosGanadasJugador > manosGanadasOponente)
-                SumarPuntos(true);
+                SumarPuntos(true, true);
             else if (manosGanadasOponente > manosGanadasJugador)
-                SumarPuntos(false);
+                SumarPuntos(false, true);
             else
             {
                 Debug.Log("Empate incluso en mano definitoria — gana el jugador por ser mano");
-                SumarPuntos(true);
+                SumarPuntos(true, true);
             }
 
             return;
@@ -324,26 +324,26 @@ public class GameManager : MonoBehaviour
 
         if (manosGanadasJugador == 2)
         {
-            SumarPuntos(true);
+            SumarPuntos(true, true);
             return;
         }
 
         if (manosGanadasOponente == 2)
         {
-            SumarPuntos(false);
+            SumarPuntos(false, true);
             return;
         }
 
         if (cartasJugadorJugadas.Count == 3 && cartasOponenteJugadas.Count == 3)
         {
             if (manosGanadasJugador > manosGanadasOponente)
-                SumarPuntos(true);
+                SumarPuntos(true, true);
             else if (manosGanadasOponente > manosGanadasJugador)
-                SumarPuntos(false);
+                SumarPuntos(false, true);
             else
             {
                 Debug.Log("Empate triple — gana el jugador por ganar la primer mano");
-                SumarPuntos(true);
+                SumarPuntos(true, true);
             }
         }
 
@@ -380,9 +380,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"Ganaste {ganancia} créditos. Total acumulado: {total}");
             }
 
-            uiManager.MostrarResultadoFinal(ganoJugador, ganancia); 
-            
-            return;
+            uiManager.MostrarResultadoFinal(ganoJugador, ganancia);
         }
     }
 
@@ -463,7 +461,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         if (estadoRonda != EstadoRonda.Finalizado)
-        { 
+        {
+            Debug.Log("asdasd");
             SpawnCards(); 
         }
     }
@@ -528,7 +527,7 @@ public class GameManager : MonoBehaviour
         else
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
-            SumarPuntos(false);
+            SumarPuntos(false, true);
         }
 
         if (turnoActual == TurnoActual.Oponente)
@@ -537,22 +536,42 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SumarPuntos(bool isPlayer)
+    public void SumarPuntos(bool isPlayer, bool finish)
     {
         if (isPlayer) puntosJugador += puntosEnJuego;
         else puntosOponente += puntosEnJuego;
 
         uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
-        FinalizarRonda();
+
+        if (finish)
+        {
+            FinalizarRonda();
+            FinalCheck();
+        }
+    }
+
+    public void SumarPuntos(bool isPlayer, int amount, bool finish)
+    {
+        if (isPlayer) puntosJugador += amount;
+        else puntosOponente += amount;
+
+        uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
+
         FinalCheck();
+
+        if (finish)
+        {
+            Debug.Log("dfghghghf");
+            FinalizarRonda();
+        }
     }
 
     public void MeVoy(bool esJugador)
     {
         if (esJugador)
-            SumarPuntos(false);
+            SumarPuntos(false, true);
         else
-            SumarPuntos(true);
+            SumarPuntos(true, true);
 
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
         uiManager.BlockMeVoy(false);
@@ -563,13 +582,13 @@ public class GameManager : MonoBehaviour
         if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
             return;
 
-        // 🔒 Bloqueo global: ese tipo ya fue cantado por alguien
+        // Bloqueo global: ese tipo ya fue cantado por alguien
         if (EnvidoCantos.Contains(tipo))
         {
             // Pero si lo cantó el oponente, y ahora lo canto yo, está permitido
             if (YaCantoEsteJugador(tipo, esJugador))
             {
-                Debug.LogWarning($"🚫 {NombreJugador(esJugador)} ya cantó {tipo}, no puede repetir.");
+                Debug.LogWarning($" {NombreJugador(esJugador)} ya cantó {tipo}, no puede repetir.");
                 return;
             }
         }
@@ -599,7 +618,7 @@ public class GameManager : MonoBehaviour
                 cantosPorJugador[tipo] = esJugador;
         }
 
-        Debug.Log($"✅ {NombreJugador(esJugador)} canta {tipo}");
+        Debug.Log($"{NombreJugador(esJugador)} canta {tipo}");
 
         // Ocultar opciones si lo cantaste vos
         if (esJugador)
@@ -762,9 +781,9 @@ public class GameManager : MonoBehaviour
             }
 
             if (ganoJugador)
-                puntosJugador += puntosAGanar;
+                SumarPuntos(true, puntosAGanar, false);
             else
-                puntosOponente += puntosAGanar;
+                SumarPuntos(false, puntosAGanar, false);
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
@@ -792,12 +811,12 @@ public class GameManager : MonoBehaviour
 
             if (EnvidoFueDelJugador)
             {
-                puntosJugador += puntosPorNoQuerer;
+                SumarPuntos(true, puntosPorNoQuerer, false);
                 Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para el jugador");
             }
             else
             {
-                puntosOponente += puntosPorNoQuerer;
+                SumarPuntos(false, puntosPorNoQuerer, false);
                 Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para la IA");
             }
 
@@ -806,12 +825,16 @@ public class GameManager : MonoBehaviour
         }
 
         EnvidoCantado = false;
-        estadoRonda = EstadoRonda.Jugando;
-        uiManager.ActualizarBotonesSegunEstado();
 
-        if (turnoActual == TurnoActual.Oponente && estadoRonda == EstadoRonda.Jugando && CantidadCartasOponenteJugadas < 3)
+        if (estadoRonda != EstadoRonda.Finalizado)
         {
-            iaOponente.JugarCarta();
+            estadoRonda = EstadoRonda.Jugando;
+            uiManager.ActualizarBotonesSegunEstado();
+
+            if (turnoActual == TurnoActual.Oponente && CantidadCartasOponenteJugadas < 3)
+            {
+                iaOponente.JugarCarta();
+            }
         }
     }
 

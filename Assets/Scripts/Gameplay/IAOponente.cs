@@ -389,7 +389,7 @@ public class IAOponente : MonoBehaviour
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
                 Debug.Log("Oponente: ¡No quiero!");
-                GameManager.Instance.SumarPuntos(true);
+                GameManager.Instance.SumarPuntos(true, true);
             }
         }
     }
@@ -454,12 +454,12 @@ public class IAOponente : MonoBehaviour
 
             if (ganaOponente)
             {
-                GameManager.Instance.puntosOponente += puntosAGanar;
+                GameManager.Instance.SumarPuntos(false, puntosAGanar, false);
                 Debug.Log($"Resultado Envido: Gana la IA (+{puntosAGanar} puntos)");
             }
             else
             {
-                GameManager.Instance.puntosJugador += puntosAGanar;
+                GameManager.Instance.SumarPuntos(true, puntosAGanar, false);
                 Debug.Log($"Resultado Envido: Gana el jugador (+{puntosAGanar} puntos)");
             }
 
@@ -498,12 +498,12 @@ public class IAOponente : MonoBehaviour
 
             if (GameManager.Instance.EnvidoFueDelJugador)
             {
-                GameManager.Instance.puntosJugador += puntosPorNoQuerer;
+                GameManager.Instance.SumarPuntos(true, puntosPorNoQuerer, false);
                 Debug.Log($"IA no quiso: +{puntosPorNoQuerer} punto(s) para el jugador");
             }
             else
             {
-                GameManager.Instance.puntosOponente += puntosPorNoQuerer;
+                GameManager.Instance.SumarPuntos(false, puntosPorNoQuerer, false);
                 Debug.Log($"IA no quiso: +{puntosPorNoQuerer} punto(s) para la IA");
             }
 
@@ -511,17 +511,19 @@ public class IAOponente : MonoBehaviour
             uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
         }
 
-
         GameManager.Instance.EnvidoRespondido = true;
         GameManager.Instance.EnvidoCantado = false;
-        GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
-        GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
 
-        if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
-            GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
-            GameManager.Instance.CantidadCartasOponenteJugadas < 3)
+        if (GameManager.Instance.estadoRonda != EstadoRonda.Finalizado)
         {
-            JugarCarta();
+            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+
+            if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
+                GameManager.Instance.CantidadCartasOponenteJugadas < 3)
+            {
+                JugarCarta();
+            }
         }
     }
 
@@ -550,22 +552,20 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        float chance = Random.value;
-
         GameManager.Instance.DebugEstadoCantos();
 
-        // ⚠️ Solo una subida permitida
+        // Solo una subida permitida
         if (GameManager.Instance.EnvidoCantos.Count >= 2)
         {
-            Debug.LogWarning("❌ Ya se subió una vez, la IA no puede subir más.");
+            Debug.LogWarning(" Ya se subió una vez, la IA no puede subir más.");
             yield return StartCoroutine(ResponderEnvidoCoroutine());
             yield break;
         }
 
-        // 🛑 No se puede bajar: si ya estamos en Real o Falta, no subir con Envido
+        // No se puede bajar: si ya estamos en Real o Falta, no subir con Envido
         if (GameManager.Instance.TipoDeEnvidoActual != GameManager.TipoEnvido.Envido)
         {
-            Debug.LogWarning("❌ Último canto no fue Envido. No se puede subir con Envido.");
+            Debug.LogWarning(" Último canto no fue Envido. No se puede subir con Envido.");
             yield return StartCoroutine(ResponderEnvidoCoroutine());
             yield break;
         }
@@ -579,19 +579,19 @@ public class IAOponente : MonoBehaviour
                     ? GameManager.TipoEnvido.RealEnvido
                     : GameManager.TipoEnvido.Envido;
 
-                // ❌ No se puede repetir lo mismo
+                // No se puede repetir lo mismo
                 if (GameManager.Instance.YaCantoEsteJugador(tipoSubida, false))
                 {
-                    Debug.LogWarning($"❌ IA ya cantó {tipoSubida}, no puede repetir.");
+                    Debug.LogWarning($" IA ya cantó {tipoSubida}, no puede repetir.");
                     yield return StartCoroutine(ResponderEnvidoCoroutine());
                     yield break;
                 }
 
-                // ❌ No se puede subir con Real Envido si ya fue dicho (por cualquiera)
+                // No se puede subir con Real Envido si ya fue dicho (por cualquiera)
                 if (tipoSubida == GameManager.TipoEnvido.RealEnvido &&
                     GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.RealEnvido))
                 {
-                    Debug.LogWarning("❌ Real Envido ya fue cantado, no puede repetirse.");
+                    Debug.LogWarning(" Real Envido ya fue cantado, no puede repetirse.");
                     yield return StartCoroutine(ResponderEnvidoCoroutine());
                     yield break;
                 }

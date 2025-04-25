@@ -234,7 +234,7 @@ public class UIManager : MonoBehaviour
         Color c = resultBG.color;
         c.a = 0f;
         resultBG.color = c;
-
+        resultBG.raycastTarget = true;
         resultBG.DOFade(160f / 255f, 0.5f).SetEase(Ease.InOutCubic);
 
         foreach (var obj in resultObjects)

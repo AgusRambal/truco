@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class CartaEnTienda : MonoBehaviour
 {
-    public CartaSO carta;                  // asignás el SO desde el inspector
-    public int precio = 20;               // precio de esta carta
-    public Button botonComprar;           // botón del prefab
-    public GameObject marcoComprado;      // objeto visual para marcar compra
-    public TMP_Text textoPrecio;          // si querés mostrar el precio
-    public AudioClip buy;
+    [SerializeField] private CartaSO carta;
+    [SerializeField] private int precio = 20;
+    [SerializeField] private Button botonComprar;
+    [SerializeField] private GameObject marcoComprado;
+    [SerializeField] private TMP_Text textoPrecio;
+    [SerializeField] private AudioClip buy;
+    [SerializeField] private Vector2 advertenciaOffset = new Vector2(0f, 100f);
 
     private MenuManager menuManager;
 
@@ -29,8 +30,7 @@ public class CartaEnTienda : MonoBehaviour
     {
         bool comprada = CartaCompraManager.YaEstaComprada(carta);
 
-        var img = marcoComprado.GetComponent<Image>();
-        if (img != null)
+        if (marcoComprado.TryGetComponent<Image>(out var img))
         {
             float targetAlpha = comprada ? 1f : 0f;
             img.DOFade(targetAlpha, 0.25f).SetEase(Ease.OutQuad);
@@ -51,7 +51,7 @@ public class CartaEnTienda : MonoBehaviour
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
         if (creditos < precio)
         {
-            Debug.LogWarning("No tenés créditos suficientes.");
+            menuManager.MostrarAdvertencia("No tenes creditos suficientes", transform, advertenciaOffset, 20);
             return;
         }
 
@@ -59,6 +59,7 @@ public class CartaEnTienda : MonoBehaviour
         ActualizarVista();
         menuManager.ActualizarCreditosUI();
         menuManager.AgregarCartaCompradaYSpawnear(carta);
+        menuManager.ShowLessCredits($"-{precio}");
         AudioManager.Instance.PlaySFX(buy);
     }
 }
