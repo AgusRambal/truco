@@ -4276,9 +4276,9 @@ MonoBehaviour:
   minTrucoResponseTime: 0.25
   maxTrucoResponseTime: 1
   usarEstiloParaChancesEnvido: 1
-  chanceCantarEnvido: 0.493
-  chanceDeQueSeaReal: 0.423
-  chanceResponderConSubida: 0.558
+  chanceCantarEnvido: 0.5
+  chanceDeQueSeaReal: 0.5
+  chanceResponderConSubida: 0.5
   usarEstiloParaChancesTruco: 1
   chanceCantarTruco: 0.5
   chanceCantarRetruco: 0.5
@@ -5071,7 +5071,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 014ca9a36da7f6742ba6caa1b4798d2a, type: 3}
   puntosEnJuego: 1
   puntosOponente: 0
-  puntosJugador: 29
+  puntosJugador: 0
   TrucoState: 0
   SeJugoCartaDesdeUltimoCanto: 1
   UltimoCantoFueDelJugador: 0

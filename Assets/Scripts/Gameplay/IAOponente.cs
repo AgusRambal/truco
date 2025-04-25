@@ -49,6 +49,18 @@ public class IAOponente : MonoBehaviour
         Amague
     }
 
+    private class IAContextoDeDecision
+    {
+        public bool TieneCartasFuertes;
+        public bool TieneCartasDebiles;
+        public bool TieneCartasMedias;
+        public bool PerdioPrimeraMano;
+        public bool EstaEnPeligro;
+        public bool EsMano;
+        public int PuntosJugador;
+        public int PuntosOponente;
+    }
+
     private void Awake()
     {
         SelectIAChance();     
@@ -158,18 +170,27 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        if (!GameManager.Instance.EnvidoCantado && GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.TrucoState == 0)
-        {
-            float chanceBase = estilo switch
-            {
-                EstiloIA.Canchero => 0.5f,
-                EstiloIA.Conservador => 0.2f,
-                EstiloIA.Caotico => 0.8f,
-                _ => 0.3f
-            };
+        var contexto = AnalizarContexto();
 
-            float r = Random.value;
-            if (r < chanceCantarEnvido)
+        if (!GameManager.Instance.EnvidoCantado &&
+            GameManager.Instance.CantidadCartasOponenteJugadas == 0 &&
+            GameManager.Instance.TrucoState == 0)
+        {
+            float chanceFinal = chanceCantarEnvido;
+
+            // Ejemplo de lógica por estilo con contexto
+            if (estilo == EstiloIA.Conservador && contexto.EstaEnPeligro)
+                chanceFinal *= 1.2f;
+
+            if (estilo == EstiloIA.Agresivo && contexto.TieneCartasFuertes)
+                chanceFinal *= 1.3f;
+
+            if (estilo == EstiloIA.Canchero && contexto.EsMano)
+                chanceFinal *= 1.1f;
+
+            chanceFinal = Mathf.Clamp01(chanceFinal);
+
+            if (Random.value < chanceFinal)
             {
                 GameManager.TipoEnvido tipoACantar = Random.value < chanceDeQueSeaReal
                     ? GameManager.TipoEnvido.RealEnvido
@@ -210,16 +231,25 @@ public class IAOponente : MonoBehaviour
 
         if (puedeCantar && GameManager.Instance.SeJugoCartaDesdeUltimoCanto)
         {
+            var ctx = AnalizarContexto();
+
             if (trucoState == 0)
             {
                 float chanceFinal = chanceCantarTruco;
 
-                if (tieneCartasFuertes)
-                    chanceFinal *= 1.2f; // aumenta chance si tiene buena mano
-                else if (tieneCartasMalas)
-                    chanceFinal *= 0.8f; // reduce chance si tiene mala mano
+                if (estilo == EstiloIA.Canchero && ctx.TieneCartasMedias && ctx.EsMano)
+                    chanceFinal *= 1.2f;
 
-                chanceFinal = Mathf.Clamp01(chanceFinal);  // asegura entre 0 y 1
+                if (estilo == EstiloIA.Agresivo && ctx.TieneCartasFuertes)
+                    chanceFinal *= 1.4f;
+
+                if (estilo == EstiloIA.Conservador && ctx.EstaEnPeligro)
+                    chanceFinal *= 0.6f;
+
+                if (estilo == EstiloIA.Mentiroso && ctx.TieneCartasDebiles)
+                    chanceFinal *= 1.1f;
+
+                chanceFinal = Mathf.Clamp01(chanceFinal);
 
                 if (Random.value < chanceFinal)
                 {
@@ -235,7 +265,7 @@ public class IAOponente : MonoBehaviour
                     yield break;
                 }
             }
-            else if (trucoState == 1 && chance < chanceCantarRetruco)
+            else if (trucoState == 1 && Random.value < chanceCantarRetruco)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
                 GameManager.Instance.TrucoState++;
@@ -248,7 +278,7 @@ public class IAOponente : MonoBehaviour
                 GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
                 yield break;
             }
-            else if (trucoState == 2 && chance < chanceCantarValeCuatro)
+            else if (trucoState == 2 && Random.value < chanceCantarValeCuatro)
             {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
                 GameManager.Instance.TrucoState++;
@@ -272,10 +302,42 @@ public class IAOponente : MonoBehaviour
         }
         else
         {
+            var ctx = AnalizarContexto();
             var cartasOrdenadasIA = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).ToList();
-            EstiloJugada estilo = DecidirEstiloJugada(disponibles);
 
-            switch (estilo)
+            EstiloJugada estiloJugada;
+
+            if (estilo == EstiloIA.Conservador)
+            {
+                estiloJugada = ctx.EstaEnPeligro ? EstiloJugada.Fuerte : EstiloJugada.Débil;
+            }
+            else if (estilo == EstiloIA.Agresivo)
+            {
+                estiloJugada = ctx.TieneCartasFuertes ? EstiloJugada.Fuerte : EstiloJugada.Amague;
+            }
+            else if (estilo == EstiloIA.Canchero)
+            {
+                estiloJugada = Random.value < 0.6f ? EstiloJugada.Amague : EstiloJugada.Fuerte;
+            }
+            else if (estilo == EstiloIA.Mentiroso)
+            {
+                estiloJugada = Random.value < 0.5f ? EstiloJugada.Amague : EstiloJugada.Débil;
+            }
+            else if (estilo == EstiloIA.Calculador)
+            {
+                if (ctx.TieneCartasFuertes && ctx.EsMano)
+                    estiloJugada = EstiloJugada.Fuerte;
+                else if (ctx.TieneCartasDebiles)
+                    estiloJugada = EstiloJugada.Débil;
+                else
+                    estiloJugada = EstiloJugada.Amague;
+            }
+            else // Caótico u otro
+            {
+                estiloJugada = (EstiloJugada)Random.Range(0, 3);
+            }
+
+            switch (estiloJugada)
             {
                 case EstiloJugada.Fuerte:
                     elegida = cartasOrdenadasIA[0];
@@ -311,29 +373,6 @@ public class IAOponente : MonoBehaviour
         GameManager.Instance.CartaJugada(elegida);
     }
 
-    private EstiloJugada DecidirEstiloJugada(List<CardSelector> disponibles)
-    {
-        int jugadas = GameManager.Instance.AllCards.Count(c => c.isOpponent && c.hasBeenPlayed);
-
-        switch (estilo)
-        {
-            case EstiloIA.Canchero:
-                if (jugadas == 0) return Random.value < 0.7f ? EstiloJugada.Amague : EstiloJugada.Fuerte;
-                if (jugadas == 1) return Random.value < 0.4f ? EstiloJugada.Débil : EstiloJugada.Fuerte;
-                return EstiloJugada.Fuerte;
-
-            case EstiloIA.Conservador:
-                if (jugadas == 0) return EstiloJugada.Fuerte;
-                if (jugadas == 1) return Random.value < 0.3f ? EstiloJugada.Fuerte : EstiloJugada.Débil;
-                return EstiloJugada.Fuerte;
-
-            case EstiloIA.Caotico:
-                return (EstiloJugada)Random.Range(0, 3);
-        }
-
-        return EstiloJugada.Fuerte;
-    }
-
     public void ResponderTruco()
     {
         StartCoroutine(ResponderTrucoCoroutine());
@@ -344,22 +383,24 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minTrucoResponseTime, maxTrucoResponseTime);
         yield return new WaitForSeconds(delay);
 
+        var ctx = AnalizarContexto();
+
         int estadoActual = GameManager.Instance.TrucoState;
         bool quiereSubir = false;
 
+        // Subir Truco (Retruco o Vale Cuatro) con contexto
         if (estadoActual == 0)
-            quiereSubir = Random.value < chanceCantarRetruco;
+            quiereSubir = ctx.TieneCartasFuertes && Random.value < chanceCantarRetruco;
         else if (estadoActual == 1)
-            quiereSubir = Random.value < chanceCantarValeCuatro;
+            quiereSubir = ctx.TieneCartasFuertes && Random.value < chanceCantarValeCuatro;
 
         if (quiereSubir)
         {
-            if (GameManager.Instance.TrucoState == 1)
+            if (estadoActual == 1)
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
-            else if (GameManager.Instance.TrucoState == 2)
+            else if (estadoActual == 2)
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
 
-            Debug.Log("Oponente: ¡RETRUCO o VALE CUATRO!");
             GameManager.Instance.TrucoState++;
             GameManager.Instance.puntosEnJuego += 1;
             GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
@@ -368,37 +409,48 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.SeJugoCartaDesdeUltimoCanto = false;
             GameManager.Instance.UltimoCantoFueDelJugador = false;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
+            yield break;
         }
 
+        // Decidir si acepta el Truco
+        bool acepta = ctx.TieneCartasFuertes || (ctx.TieneCartasMedias && ctx.PuntosOponente < 27);
+
+        if (acepta)
+        {
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
+            GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState + 1;
+            GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
+            GameManager.Instance.ChangeTruco();
+
+            if (GameManager.Instance.TrucoState < 3)
+                GameManager.Instance.PuedeResponderTruco = false;
+
+            // Forzar jugada de IA si le toca después de aceptar
+            if (GameManager.Instance.turnoActual == TurnoActual.Oponente &&
+                GameManager.Instance.estadoRonda == EstadoRonda.Jugando &&
+                GameManager.Instance.CantidadCartasOponenteJugadas < 3)
+            {
+                GameManager.Instance.iaOponente.JugarCarta();
+            }
+        }
         else
         {
-            bool acepta = Random.value < chanceResponderTruco;
-
-            if (acepta)
-            {
-                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
-                Debug.Log("Oponente: ¡Quiero!");
-                GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState + 1;
-                GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
-                GameManager.Instance.ChangeTruco();
-
-                if (GameManager.Instance.TrucoState < 3)
-                    GameManager.Instance.PuedeResponderTruco = false;
-            }
-            else
-            {
-                uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
-                Debug.Log("Oponente: ¡No quiero!");
-                GameManager.Instance.SumarPuntos(true, true);
-            }
+            uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+            GameManager.Instance.SumarPuntos(true, true);
         }
     }
+
 
     public IEnumerator ResponderEnvidoCoroutine()
     {
         yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
 
-        bool quiere = Random.value > 0.5f;
+        var ctx = AnalizarContexto();
+
+        // Si el jugador tiene 29, la IA tiene que aceptar para no perder
+        bool quiere = ctx.PuntosJugador == GameManager.Instance.PointsToEnd - 1 ||
+                      ctx.TieneCartasFuertes ||
+                      (ctx.TieneCartasMedias && ctx.PuntosOponente < 25);
 
         int envidoJugador = GameManager.Instance.CalcularPuntosEnvido(true);
         int envidoOponente = GameManager.Instance.CalcularPuntosEnvido(false);
@@ -570,8 +622,12 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) &&
-            Random.value < chanceResponderConSubida)
+        var ctx = AnalizarContexto();
+
+        // Solo si tiene cartas buenas y no está al borde de perder
+        bool deberiaSubir = ctx.TieneCartasFuertes && ctx.PuntosJugador < GameManager.Instance.PointsToEnd - 1;
+
+        if (GameManager.Instance.EnvidoCantos.Contains(GameManager.TipoEnvido.Envido) && deberiaSubir && Random.value < chanceResponderConSubida)
         {
             if (Random.value < chanceCantarEnvido)
             {
@@ -624,6 +680,28 @@ public class IAOponente : MonoBehaviour
         }
 
         return false;
+    }
+
+    private IAContextoDeDecision AnalizarContexto()
+    {
+        var ctx = new IAContextoDeDecision();
+
+        var disponibles = GameManager.Instance.AllCards
+            .Where(c => c != null && c.isOpponent && !c.hasBeenPlayed && c.gameObject != null)
+            .Select(c => c.GetComponent<Carta>())
+            .ToList();
+
+        ctx.TieneCartasFuertes = disponibles.Any(c => c.jerarquiaTruco >= 12);
+        ctx.TieneCartasDebiles = disponibles.All(c => c.jerarquiaTruco < 7);
+        ctx.TieneCartasMedias = disponibles.Any(c => c.jerarquiaTruco >= 7 && c.jerarquiaTruco < 12);
+
+        ctx.PerdioPrimeraMano = GameManager.Instance.ManosGanadasJugador > GameManager.Instance.ManosGanadasOponente;
+        ctx.EstaEnPeligro = GameManager.Instance.puntosJugador >= 27;
+        ctx.EsMano = GameManager.Instance.CantidadCartasOponenteJugadas == 0 && GameManager.Instance.turnoActual == TurnoActual.Oponente;
+        ctx.PuntosJugador = GameManager.Instance.puntosJugador;
+        ctx.PuntosOponente = GameManager.Instance.puntosOponente;
+
+        return ctx;
     }
 
 }
