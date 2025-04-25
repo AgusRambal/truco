@@ -27,15 +27,21 @@ public class OptionsManager : MonoBehaviour
         togglePantallaCompleta.isOn = pantallaCompletaSeleccionada;
         Screen.fullScreen = pantallaCompletaSeleccionada;
 
-        dropdownGraficos.value = calidad;
-        dropdownGraficos.RefreshShownValue();
-        QualitySettings.SetQualityLevel(calidad);
-
-        if (resolIndex >= 0 && resolIndex < resoluciones.Length)
+        if (dropdownGraficos != null)
         {
-            dropdownResolucion.value = resolIndex;
-            dropdownResolucion.RefreshShownValue();
-            AplicarResolucion(resolIndex);
+            dropdownGraficos.value = calidad;
+            dropdownGraficos.RefreshShownValue();
+            QualitySettings.SetQualityLevel(calidad);
+        }
+
+        if (dropdownResolucion != null)
+        {
+            if (resolIndex >= 0 && resolIndex < resoluciones.Length)
+            {
+                dropdownResolucion.value = resolIndex;
+                dropdownResolucion.RefreshShownValue();
+                AplicarResolucion(resolIndex);
+            }
         }
 
         // Obtener valores guardados de volumen
@@ -48,12 +54,15 @@ public class OptionsManager : MonoBehaviour
         AudioManager.Instance.SetMusicVolume(musicVol);
         AudioManager.Instance.SetSFXVolume(sfxVol);
 
-        dropdownResolucion.onValueChanged.AddListener((i) =>
+        if (dropdownResolucion != null)
         {
-            PlayerPrefs.SetInt("ResolucionIndex", i);
-            PlayerPrefs.Save();
-            AplicarResolucion(i);
-        });
+            dropdownResolucion.onValueChanged.AddListener((i) =>
+            {
+                PlayerPrefs.SetInt("ResolucionIndex", i);
+                PlayerPrefs.Save();
+                AplicarResolucion(i);
+            });
+        }
 
         togglePantallaCompleta.onValueChanged.AddListener((b) =>
         {
@@ -62,18 +71,25 @@ public class OptionsManager : MonoBehaviour
             AplicarPantallaCompleta(b);
         });
 
-        dropdownGraficos.onValueChanged.AddListener((i) =>
+        if (dropdownGraficos != null)
         {
-            PlayerPrefs.SetInt("CalidadGrafica", i);
-            PlayerPrefs.Save();
-            QualitySettings.SetQualityLevel(i);
-        });
+            dropdownGraficos.onValueChanged.AddListener((i) =>
+            {
+                PlayerPrefs.SetInt("CalidadGrafica", i);
+                PlayerPrefs.Save();
+                QualitySettings.SetQualityLevel(i);
+            });
+        }
     }
 
     public void CargarResoluciones()
     {
         resoluciones = Screen.resolutions;
-        dropdownResolucion.ClearOptions();
+
+        if (dropdownResolucion != null)
+        {
+            dropdownResolucion.ClearOptions();
+        }
 
         int indexActual = 0;
         var opciones = new System.Collections.Generic.List<string>();
@@ -98,11 +114,13 @@ public class OptionsManager : MonoBehaviour
             }
         }
 
-        dropdownResolucion.AddOptions(opciones);
-        dropdownResolucion.value = indexActual;
-        dropdownResolucion.RefreshShownValue();
+        if (dropdownResolucion != null)
+        {
+            dropdownResolucion.AddOptions(opciones);
+            dropdownResolucion.value = indexActual;
+            dropdownResolucion.RefreshShownValue();
+        }
     }
-
 
     private void AplicarResolucion(int index)
     {
@@ -117,10 +135,13 @@ public class OptionsManager : MonoBehaviour
 
     public void CargarCalidadesGraficas()
     {
-        dropdownGraficos.ClearOptions();
+        if (dropdownGraficos != null)
+        {
+            dropdownGraficos.ClearOptions();
 
-        var opciones = new System.Collections.Generic.List<string>(QualitySettings.names);
-        dropdownGraficos.AddOptions(opciones);
+            var opciones = new System.Collections.Generic.List<string>(QualitySettings.names);
+            dropdownGraficos.AddOptions(opciones);
+        }
     }
 
     public void OnMusicVolumeChanged(float value)

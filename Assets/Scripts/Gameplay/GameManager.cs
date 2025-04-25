@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     public Transform spawnPosition;
 
     [Header("Parameters")]
+    [SerializeField] private string playerName;
+    [SerializeField] private string oponentName;
     [SerializeField] private float setTime = 0.25f;
     [SerializeField] private float resetTime = 0.25f;
     [SerializeField] private float devolverCartasWaitTime = 0.1f;
@@ -929,7 +931,7 @@ public class GameManager : MonoBehaviour
 
     public string NombreJugador(bool esJugador)
     {
-        return esJugador ? "Agustin" : "El Bot";
+        return esJugador ? playerName : oponentName;
     }
 
     public void DebugEstadoCantos()

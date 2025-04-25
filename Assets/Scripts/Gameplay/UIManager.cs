@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button realEnvido;
 
     [Header("Texts")]
+    [SerializeField] private TMP_Text playerName;
+    [SerializeField] private TMP_Text oponentName;
     [SerializeField] private TMP_Text playerPointsText;
     [SerializeField] private TMP_Text opponentPointsText;
     [SerializeField] private TMP_Text resultText;
@@ -21,11 +23,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text info;
 
     [Header("Obejcts")]
+    [SerializeField] private Sprite playerImageSprite;
+    [SerializeField] private Sprite oponentImageSprite;
+    [SerializeField] private Image playerImage;
+    [SerializeField] private Image oponentImage;
     [SerializeField] private Image resultBG;
     [SerializeField] private Image resultBG2;
     [SerializeField] private List<GameObject> resultObjects = new List<GameObject>();
-    [SerializeField] private RectTransform popupOpcionesParent;
     [SerializeField] private RectTransform popupOpciones;
+    [SerializeField] private GameObject popupSeguro;
     [SerializeField] private Button opciones;
     [SerializeField] private float animationDuration = 0.4f;
     [SerializeField] private List<Image> glowImagesPlayer = new List<Image>();
@@ -72,6 +78,9 @@ public class UIManager : MonoBehaviour
     private Vector3 noQuieroOriginalPos;    
     private Vector3 quieroEnvidoOriginalPos;
     private Vector3 noQuieroEnvidoOriginalPos;
+    private Tween fadeTween;
+    private Tween fadeTween2;
+    private bool seguro;
 
     private void Start()
     {
@@ -81,6 +90,10 @@ public class UIManager : MonoBehaviour
         noQuieroEnvidoOriginalPos = botonNoQuieroEnvido.transform.localPosition;
 
         MostrarInfo();
+        playerImage.sprite = playerImageSprite;
+        oponentImage.sprite = oponentImageSprite;
+        playerName.text = GameManager.Instance.NombreJugador(true);
+        oponentName.text = GameManager.Instance.NombreJugador(false);
     }
 
     private void MostrarInfo()
@@ -267,10 +280,11 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.isPaused = true;
 
-        resultBG2.DOFade(160f / 255f, 0.3f).SetEase(Ease.InOutCubic);
+        resultBG2.gameObject.SetActive(true);
+        fadeTween2.Kill();
+        fadeTween = resultBG2.DOFade(160f / 255f, 0.3f).SetEase(Ease.InOutCubic);
 
         opciones.interactable = false;
-        popupOpcionesParent.gameObject.SetActive(true);
         popupOpciones.localScale = Vector3.zero;
 
         popupOpciones.DOScale(Vector3.one, animationDuration)
@@ -281,14 +295,18 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.isPaused = false;
 
-        resultBG2.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
+        fadeTween.Kill();
+        fadeTween2 = resultBG2.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
 
         opciones.interactable = true;
         popupOpciones.DOScale(Vector3.zero, animationDuration - 0.2f)
             .SetEase(Ease.InBack)
             .OnComplete(() =>
             {
-                popupOpcionesParent.gameObject.SetActive(false);
+                if (!seguro) 
+                { 
+                    resultBG2.gameObject.SetActive(false);  
+                }
             });
     }
 
@@ -433,5 +451,32 @@ public class UIManager : MonoBehaviour
     {
         foreach (var img in subPuntosJugador) img.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
         foreach (var img in subPuntosRival) img.transform.DOScale(Vector3.zero, 0.25f).SetEase(Ease.InOutBack);
+    }
+
+    public void EstasSeguroPopUp()
+    {
+        seguro = true;
+        GameManager.Instance.isPaused = true;
+        resultBG2.gameObject.SetActive(true);
+        fadeTween2.Kill();
+
+        fadeTween = resultBG2.DOFade(160f / 255f, 0.3f).SetEase(Ease.InOutCubic);
+        opciones.interactable = false;
+        popupSeguro.transform.localScale = Vector3.zero;
+        popupSeguro.transform.DOScale(Vector3.one, animationDuration).SetEase(Ease.OutBack);
+    }
+
+    public void CerrarSeguro()
+    {
+        seguro = false;
+        GameManager.Instance.isPaused = false;
+        fadeTween.Kill();
+
+        fadeTween2 = resultBG2.DOFade(0f, 0.5f).SetEase(Ease.InOutCubic);
+        opciones.interactable = true;
+        popupSeguro.transform.DOScale(Vector3.zero, animationDuration - 0.2f).SetEase(Ease.InBack).OnComplete(() =>
+        {
+            resultBG2.gameObject.SetActive(false);
+        });
     }
 }
