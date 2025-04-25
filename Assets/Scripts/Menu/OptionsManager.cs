@@ -77,22 +77,32 @@ public class OptionsManager : MonoBehaviour
 
         int indexActual = 0;
         var opciones = new System.Collections.Generic.List<string>();
+        var resolucionesUnicas = new System.Collections.Generic.HashSet<string>();
 
         for (int i = 0; i < resoluciones.Length; i++)
         {
-            string opcion = resoluciones[i].width + " x " + resoluciones[i].height;
-            opciones.Add(opcion);
+            int hz = Mathf.RoundToInt((float)resoluciones[i].refreshRateRatio.value);
+            string opcion = $"{resoluciones[i].width} x {resoluciones[i].height} @{hz}Hz";
+
+            if (resolucionesUnicas.Add(opcion))
+            {
+                opciones.Add(opcion);
+            }
 
             if (resoluciones[i].width == Screen.currentResolution.width &&
-                resoluciones[i].height == Screen.currentResolution.height)
+                resoluciones[i].height == Screen.currentResolution.height &&
+                Mathf.RoundToInt((float)resoluciones[i].refreshRateRatio.value) ==
+                Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value))
             {
-                indexActual = i;
+                indexActual = opciones.Count - 1;
             }
         }
 
         dropdownResolucion.AddOptions(opciones);
+        dropdownResolucion.value = indexActual;
         dropdownResolucion.RefreshShownValue();
     }
+
 
     private void AplicarResolucion(int index)
     {

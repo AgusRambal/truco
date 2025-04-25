@@ -132,10 +132,14 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
+        uiManager.ResetSubRondas();
         uiManager.ActualizarBotonesSegunEstado();
         estadoRonda = EstadoRonda.Repartiendo;
         StartCoroutine(SpawnCardsSequence());
         uiManager.MostrarMano(turnoActual);
+
+        bool isPlayer = (turnoActual == TurnoActual.Jugador);
+        ChatManager.Instance.AgregarMensaje($"{NombreJugador(isPlayer)} es mano", TipoMensaje.Sistema);
     }
 
     private IEnumerator SpawnCardsSequence()
@@ -279,7 +283,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Empate en la mano");
+            ChatManager.Instance.AgregarMensaje($"Empate en la mano", TipoMensaje.Sistema);
             ultimaManoFueEmpate = true;
 
             // Si es la PRIMERA mano, la ronda se definirá en la siguiente
@@ -289,12 +293,13 @@ public class GameManager : MonoBehaviour
             // En caso de empate: no cambiar turnoActual
         }
 
-        int subrondaActual = GameManager.Instance.cartasJugadorJugadas.Count;
+        int subrondaActual = cartasJugadorJugadas.Count;
 
         if (jug.jerarquiaTruco > opo.jerarquiaTruco)
         {
             uiManager.MostrarSubPuntos(true, subrondaActual);
         }
+
         else if (opo.jerarquiaTruco > jug.jerarquiaTruco)
         {
             uiManager.MostrarSubPuntos(false, subrondaActual);
@@ -315,7 +320,8 @@ public class GameManager : MonoBehaviour
                 SumarPuntos(false, true);
             else
             {
-                Debug.Log("Empate incluso en mano definitoria — gana el jugador por ser mano");
+                ChatManager.Instance.AgregarMensaje($"Empate incluso en mano definitoria", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"Gana el jugador por ser mano", TipoMensaje.Sistema);
                 SumarPuntos(true, true);
             }
 
@@ -342,7 +348,8 @@ public class GameManager : MonoBehaviour
                 SumarPuntos(false, true);
             else
             {
-                Debug.Log("Empate triple — gana el jugador por ganar la primer mano");
+                ChatManager.Instance.AgregarMensaje($"Empate triple", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"Gana el jugador por ganar la primer mano", TipoMensaje.Sistema);
                 SumarPuntos(true, true);
             }
         }
@@ -377,7 +384,7 @@ public class GameManager : MonoBehaviour
                 PlayerPrefs.SetInt("Creditos", total);
                 PlayerPrefs.Save();
 
-                Debug.Log($"Ganaste {ganancia} créditos. Total acumulado: {total}");
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} creditos", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarResultadoFinal(ganoJugador, ganancia);
@@ -398,7 +405,6 @@ public class GameManager : MonoBehaviour
         EnvidoRespondido = false;
         EnvidoFueDelJugador = false;
         uiManager.BlockMeVoy(true);
-        uiManager.ResetSubRondas();
 
         ResetZOffset();
         uiManager.ResetTruco();
@@ -462,7 +468,6 @@ public class GameManager : MonoBehaviour
 
         if (estadoRonda != EstadoRonda.Finalizado)
         {
-            Debug.Log("asdasd");
             SpawnCards(); 
         }
     }
@@ -486,6 +491,14 @@ public class GameManager : MonoBehaviour
 
     public void CantarTruco()
     {
+        string nombreCanto = TrucoState switch
+        {
+            1 => "Truco",
+            2 => "Retruco",
+            3 => "Vale Cuatro",
+            _ => "Truco"
+        };
+
         if (!SeJugoCartaDesdeUltimoCanto && UltimoCantoFueDelJugador)
         {
             Debug.Log("No podés volver a cantar sin que se juegue una carta.");
@@ -493,15 +506,25 @@ public class GameManager : MonoBehaviour
         }
 
         if (TrucoState == 0)
+        { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Truco);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
+        }
+
         else if (TrucoState == 1)
+        {   
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Retruco);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
+        }
+
         else if (TrucoState == 2)
+        { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.ValeCuatro);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
+        }
 
         TrucoState++;
         estadoRonda = EstadoRonda.EsperandoRespuesta;
-        Debug.Log("Se cantó Truco. Esperando respuesta...");
         uiManager.OcultarOpcionesTruco();
         iaOponente.ResponderTruco();
 
@@ -516,6 +539,18 @@ public class GameManager : MonoBehaviour
         if (quiero)
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
+
+            string nombreCanto = TrucoState switch
+            {
+                1 => "Truco",
+                2 => "Retruco",
+                3 => "Vale Cuatro",
+                _ => "Truco"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreCanto}", TipoMensaje.Sistema); 
+
+            puntosEnJuego = TrucoState + 1;
             puntosEnJuego++;
             estadoRonda = EstadoRonda.Jugando;
             PuedeResponderTruco = false;
@@ -527,6 +562,18 @@ public class GameManager : MonoBehaviour
         else
         {
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
+
+            string nombreCanto = TrucoState switch
+            {
+                1 => "Truco",
+                2 => "Retruco",
+                3 => "Vale Cuatro",
+                _ => "Truco"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} no acepto el {nombreCanto}", TipoMensaje.Sistema); 
+
+            puntosEnJuego = TrucoState + 1;
             SumarPuntos(false, true);
         }
 
@@ -561,7 +608,6 @@ public class GameManager : MonoBehaviour
 
         if (finish)
         {
-            Debug.Log("dfghghghf");
             FinalizarRonda();
         }
     }
@@ -569,9 +615,16 @@ public class GameManager : MonoBehaviour
     public void MeVoy(bool esJugador)
     {
         if (esJugador)
-            SumarPuntos(false, true);
-        else
+        {
             SumarPuntos(true, true);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} se fue al mazo", TipoMensaje.Sistema);
+        }
+
+        else 
+        {
+            SumarPuntos(false, true);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} se fue al mazo", TipoMensaje.Sistema);
+        }
 
         uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.MeVoy);
         uiManager.BlockMeVoy(false);
@@ -618,7 +671,15 @@ public class GameManager : MonoBehaviour
                 cantosPorJugador[tipo] = esJugador;
         }
 
-        Debug.Log($"{NombreJugador(esJugador)} canta {tipo}");
+        string nombreEnvido = TipoDeEnvidoActual switch
+        {
+            TipoEnvido.Envido => "Envido",
+            TipoEnvido.RealEnvido => "Real Envido",
+            TipoEnvido.FaltaEnvido => "Falta Envido",
+            _ => "Envido"
+        };
+
+        ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canto {nombreEnvido}", TipoMensaje.Sistema);
 
         // Ocultar opciones si lo cantaste vos
         if (esJugador)
@@ -689,13 +750,6 @@ public class GameManager : MonoBehaviour
             return (c.valor >= 10 && c.valor <= 12) ? 0 : c.valor;
         }
 
-        // DEBUG: mostrar cartas y sus valores
-        //Debug.Log($"=== Cartas del {(esJugador ? "jugador" : "oponente")} ===");
-        foreach (var c in cartas)
-        {
-            //Debug.Log($"Carta: {c.valor} de {c.palo} → Envido: {ValorEnvido(c)}"); 
-        }
-
         // Agrupar por palo
         var porPalo = cartas.GroupBy(c => c.palo).Where(g => g.Count() >= 2).ToList();
 
@@ -711,17 +765,14 @@ public class GameManager : MonoBehaviour
                 var top2 = cartasDelPalo.OrderByDescending(c => ValorEnvido(c)).Take(2).ToList();
                 int suma = ValorEnvido(top2[0]) + ValorEnvido(top2[1]) + 20;
 
-                //Debug.Log($"→ Palo {grupo.Key}: {ValorEnvido(top2[0])} + {ValorEnvido(top2[1])} + 20 = {suma}");
                 mejorPuntaje = Mathf.Max(mejorPuntaje, suma);
             }
 
-            //Debug.Log($"Resultado final de Envido: {mejorPuntaje}");
             return mejorPuntaje;
         }
 
         // Si no hay cartas del mismo palo, usar la de mayor valor
         int maxSinPalo = cartas.Max(c => ValorEnvido(c));
-        //Debug.Log($"No hay palo repetido. Mayor carta: {maxSinPalo}");
         return maxSinPalo;
     }
 
@@ -746,6 +797,16 @@ public class GameManager : MonoBehaviour
             this.ganoJugador = ganoJugador;
 
             ShowEnvidoResults(envidoJugador, envidoOponente);
+
+            string nombreEnvido = TipoDeEnvidoActual switch
+            {
+                TipoEnvido.Envido => "Envido",
+                TipoEnvido.RealEnvido => "Real Envido",
+                TipoEnvido.FaltaEnvido => "Falta Envido",
+                _ => "Envido"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreEnvido}", TipoMensaje.Sistema);
 
             int puntosAGanar = 0;
 
@@ -781,16 +842,32 @@ public class GameManager : MonoBehaviour
             }
 
             if (ganoJugador)
+            {
                 SumarPuntos(true, puntosAGanar, false);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+            }
+
             else
+            {
                 SumarPuntos(false, puntosAGanar, false);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+            }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
+
         else
         {
             int puntosPorNoQuerer = 1;
+
+            string nombreEnvido = TipoDeEnvidoActual switch
+            {
+                TipoEnvido.Envido => "Envido",
+                TipoEnvido.RealEnvido => "Real Envido",
+                TipoEnvido.FaltaEnvido => "Falta Envido",
+                _ => "Envido"
+            };
 
             if (EnvidoCantos.Count == 2)
             {
@@ -812,12 +889,13 @@ public class GameManager : MonoBehaviour
             if (EnvidoFueDelJugador)
             {
                 SumarPuntos(true, puntosPorNoQuerer, false);
-                Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para el jugador");
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} no quiso {nombreEnvido}", TipoMensaje.Sistema);
             }
+
             else
             {
                 SumarPuntos(false, puntosPorNoQuerer, false);
-                Debug.Log($"Envido NO QUERIDO → +{puntosPorNoQuerer} puntos para la IA");
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} no quiso {nombreEnvido}", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.NoQuiero);
@@ -851,7 +929,7 @@ public class GameManager : MonoBehaviour
 
     public string NombreJugador(bool esJugador)
     {
-        return esJugador ? "Jugador" : "IA";
+        return esJugador ? "Agustin" : "El Bot";
     }
 
     public void DebugEstadoCantos()

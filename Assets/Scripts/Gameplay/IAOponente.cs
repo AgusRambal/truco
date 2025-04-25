@@ -165,7 +165,7 @@ public class IAOponente : MonoBehaviour
 
         if (EvaluarSiIrse())
         {
-            Debug.Log("IA decide irse antes de jugar carta.");
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} decide irse antes de jugar carta", TipoMensaje.Sistema);
             GameManager.Instance.MeVoy(false); // false = IA
             yield break;
         }
@@ -253,6 +253,7 @@ public class IAOponente : MonoBehaviour
 
                 if (Random.value < chanceFinal)
                 {
+                    ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} canto truco", TipoMensaje.Sistema);
                     uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Truco);
                     GameManager.Instance.TrucoState++;
                     GameManager.Instance.puntosEnJuego++;
@@ -267,6 +268,7 @@ public class IAOponente : MonoBehaviour
             }
             else if (trucoState == 1 && Random.value < chanceCantarRetruco)
             {
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} canto retruco", TipoMensaje.Sistema);
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
                 GameManager.Instance.TrucoState++;
                 GameManager.Instance.puntosEnJuego++;
@@ -280,6 +282,7 @@ public class IAOponente : MonoBehaviour
             }
             else if (trucoState == 2 && Random.value < chanceCantarValeCuatro)
             {
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} canto vale cuatro", TipoMensaje.Sistema);
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
                 GameManager.Instance.TrucoState++;
                 GameManager.Instance.puntosEnJuego++;
@@ -397,9 +400,16 @@ public class IAOponente : MonoBehaviour
         if (quiereSubir)
         {
             if (estadoActual == 1)
+            {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Retruco);
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} canta {UIManager.TrucoMensajeTipo.Retruco}", TipoMensaje.Sistema);
+            }
+
             else if (estadoActual == 2)
+            {
                 uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.ValeCuatro);
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} canta {UIManager.TrucoMensajeTipo.ValeCuatro}", TipoMensaje.Sistema);
+            }
 
             GameManager.Instance.TrucoState++;
             GameManager.Instance.puntosEnJuego += 1;
@@ -418,6 +428,16 @@ public class IAOponente : MonoBehaviour
         if (acepta)
         {
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
+
+            string nombreCanto = GameManager.Instance.TrucoState switch
+            {
+                1 => "Truco",
+                2 => "Retruco",
+                3 => "Vale Cuatro",
+                _ => "Truco"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} acepto el {nombreCanto}", TipoMensaje.Sistema); 
             GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState + 1;
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.ChangeTruco();
@@ -436,10 +456,20 @@ public class IAOponente : MonoBehaviour
         else
         {
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
+
+            string nombreCanto = GameManager.Instance.TrucoState switch
+            {
+                1 => "Truco",
+                2 => "Retruco",
+                3 => "Vale Cuatro",
+                _ => "Truco"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} acepto el {nombreCanto}", TipoMensaje.Sistema); 
+            GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState + 1;    
             GameManager.Instance.SumarPuntos(true, true);
         }
     }
-
 
     public IEnumerator ResponderEnvidoCoroutine()
     {
@@ -459,7 +489,7 @@ public class IAOponente : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
 
-            Debug.Log("IA: No quiero Falta Envido (canto directo)");
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} no quiso Falta Envido", TipoMensaje.Sistema);
             GameManager.Instance.puntosJugador += 1;
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
@@ -478,6 +508,16 @@ public class IAOponente : MonoBehaviour
             GameManager.Instance.ganoJugador = !ganaOponente;
 
             GameManager.Instance.ShowEnvidoResults(envidoJugador, envidoOponente);
+
+            string nombreEnvido = GameManager.Instance.TipoDeEnvidoActual switch
+            {
+                GameManager.TipoEnvido.Envido => "Envido",
+                GameManager.TipoEnvido.RealEnvido => "Real Envido",
+                GameManager.TipoEnvido.FaltaEnvido => "Falta Envido",
+                _ => "Envido"
+            };
+
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} acepto el {nombreEnvido}", TipoMensaje.Sistema);
 
             int puntosAGanar = 0;
 
@@ -507,12 +547,13 @@ public class IAOponente : MonoBehaviour
             if (ganaOponente)
             {
                 GameManager.Instance.SumarPuntos(false, puntosAGanar, false);
-                Debug.Log($"Resultado Envido: Gana la IA (+{puntosAGanar} puntos)");
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
+
             else
             {
                 GameManager.Instance.SumarPuntos(true, puntosAGanar, false);
-                Debug.Log($"Resultado Envido: Gana el jugador (+{puntosAGanar} puntos)");
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(true)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.Quiero);
@@ -551,12 +592,13 @@ public class IAOponente : MonoBehaviour
             if (GameManager.Instance.EnvidoFueDelJugador)
             {
                 GameManager.Instance.SumarPuntos(true, puntosPorNoQuerer, false);
-                Debug.Log($"IA no quiso: +{puntosPorNoQuerer} punto(s) para el jugador");
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(true)} no quiso el envido (+{puntosPorNoQuerer})", TipoMensaje.Sistema);
             }
+
             else
             {
                 GameManager.Instance.SumarPuntos(false, puntosPorNoQuerer, false);
-                Debug.Log($"IA no quiso: +{puntosPorNoQuerer} punto(s) para la IA");
+                ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} no quiso el envido (+{puntosPorNoQuerer})", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
@@ -585,7 +627,7 @@ public class IAOponente : MonoBehaviour
 
         if (GameManager.Instance.TipoDeEnvidoActual == GameManager.TipoEnvido.FaltaEnvido)
         {
-            Debug.Log("IA: No quiero Falta Envido");
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} no quiso falta envido", TipoMensaje.Sistema);
             GameManager.Instance.puntosJugador += 1;
             GameManager.Instance.uiManager.MostrarTrucoMensaje(false, UIManager.TrucoMensajeTipo.NoQuiero);
             GameManager.Instance.uiManager.SetPointsInScreen(GameManager.Instance.puntosJugador, GameManager.Instance.puntosOponente);
