@@ -4818,8 +4818,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropdownResolucion: {fileID: 0}
-  togglePantallaCompleta: {fileID: 279046316}
   dropdownGraficos: {fileID: 0}
+  togglePantallaCompleta: {fileID: 279046316}
   musicSlider: {fileID: 161603341}
   SFXSlider: {fileID: 1747879249}
 --- !u!114 &732447880

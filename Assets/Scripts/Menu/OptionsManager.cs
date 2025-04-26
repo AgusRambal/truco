@@ -86,7 +86,11 @@ public class OptionsManager : MonoBehaviour
     public void CargarResoluciones()
     {
         Resolution[] todas = Screen.resolutions;
-        dropdownResolucion.ClearOptions();
+
+        if (dropdownResolucion != null)
+        {
+            dropdownResolucion.ClearOptions();
+        }
 
         int indexActual = 0;
         var opciones = new List<string>();
@@ -113,9 +117,13 @@ public class OptionsManager : MonoBehaviour
         }
 
         resoluciones = resolucionesUnicas.ToArray(); // reemplazamos el array interno
-        dropdownResolucion.AddOptions(opciones);
-        dropdownResolucion.value = indexActual;
-        dropdownResolucion.RefreshShownValue();
+
+        if (dropdownResolucion != null)
+        {
+            dropdownResolucion.AddOptions(opciones);
+            dropdownResolucion.value = indexActual;
+            dropdownResolucion.RefreshShownValue();
+        }
     }
 
     private void AplicarResolucion(int index)
