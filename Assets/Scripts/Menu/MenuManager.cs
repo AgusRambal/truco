@@ -46,6 +46,8 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1f;
+
         mazoPersonalizado = CartaSaveManager.CargarCartas(todasLasCartas);
         if (mazoPersonalizado.Count != 40)
             mazoPersonalizado = new List<CartaSO>(mazoDefault);
@@ -122,7 +124,7 @@ public class MenuManager : MonoBehaviour
         ParametrosDePartida.cartasSeleccionadas = new List<CartaSO>(mazoPersonalizado);
 
         DOTween.KillAll();
-        SceneManager.LoadScene("Player vs IA");
+        SceneManager.LoadScene("Gameplay");
     }
 
     //PARA REEMPLAZAR UNA CARTA

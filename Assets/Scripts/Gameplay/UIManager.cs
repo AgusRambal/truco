@@ -40,6 +40,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject manoRival;
     [SerializeField] private List<Image> subPuntosJugador = new List<Image>();
     [SerializeField] private List<Image> subPuntosRival = new List<Image>();
+    [SerializeField] private Toggle toggleVelocidadRapida;
 
     [Header("Respuesta Truco")]
     [SerializeField] private Button botonQuiero;
@@ -57,6 +58,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AudioClip notification;
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip lose;
+
 
     public enum TrucoMensajeTipo
     {
@@ -81,9 +83,36 @@ public class UIManager : MonoBehaviour
     private Tween fadeTween;
     private Tween fadeTween2;
     private bool seguro;
+    private bool velocidadRapidaActivada = false;
 
     private void Start()
     {
+        Time.timeScale = 1f; // Siempre arrancamos normal
+
+        if (EsGameplay())
+        {
+            velocidadRapidaActivada = PlayerPrefs.GetInt("VelocidadRapida", 0) == 1;
+
+            if (toggleVelocidadRapida != null)
+            {
+                toggleVelocidadRapida.onValueChanged.RemoveAllListeners();
+                toggleVelocidadRapida.isOn = velocidadRapidaActivada;
+                toggleVelocidadRapida.onValueChanged.AddListener(delegate { ToggleVelocidadRapida(); });
+
+                if (velocidadRapidaActivada)
+                {
+                    ToggleVelocidadRapida();
+                }
+            }
+        }
+        else
+        {
+            if (toggleVelocidadRapida != null)
+            {
+                toggleVelocidadRapida.isOn = false;
+            }
+        }
+
         quieroOriginalPos = botonQuiero.transform.localPosition;
         noQuieroOriginalPos = botonNoQuiero.transform.localPosition;
         quieroEnvidoOriginalPos = botonQuieroEnvido.transform.localPosition;
@@ -233,7 +262,7 @@ public class UIManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         DOTween.KillAll();
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("Menu");
     }
 
     public void ReiniciarPartida()
@@ -478,5 +507,24 @@ public class UIManager : MonoBehaviour
         {
             resultBG2.gameObject.SetActive(false);
         });
+    }
+
+    public void ToggleVelocidadRapida()
+    {
+        velocidadRapidaActivada = toggleVelocidadRapida.isOn;
+
+        if (EsGameplay())
+        {
+            Time.timeScale = velocidadRapidaActivada ? 2f : 1f;
+        }
+
+        PlayerPrefs.SetInt("VelocidadRapida", velocidadRapidaActivada ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+
+    private bool EsGameplay()
+    {
+        return SceneManager.GetActiveScene().name == "Gameplay"; // o el nombre que uses para tu escena de partida
     }
 }
