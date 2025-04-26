@@ -34,6 +34,9 @@ public class AudioManager : MonoBehaviour
 
     public void PlayRandomMenuTrack()
     {
+        if (musicSource.isPlaying && musicSource.clip != null)
+            return;
+
         if (menuTracks == null || menuTracks.Count == 0)
             return;
 
@@ -46,18 +49,17 @@ public class AudioManager : MonoBehaviour
         if (musicSource.clip == clip) return;
 
         musicSource.clip = clip;
-        musicSource.loop = false; // NO en loop
+        musicSource.loop = false; 
         musicSource.Play();
 
-        // Registrar evento cuando termina la canción
         StartCoroutine(EsperarFinDeMusica(clip.length));
     }
 
     private IEnumerator EsperarFinDeMusica(float duracion)
     {
-        yield return new WaitForSeconds(duracion + 0.1f); // Le das un poco de margen
+        yield return new WaitForSeconds(duracion + 0.1f); 
 
-        if (!musicSource.isPlaying) // Por si se frenó manualmente
+        if (!musicSource.isPlaying)
         {
             PlayRandomMenuTrack();
         }
