@@ -274,6 +274,13 @@ public class MenuManager : MonoBehaviour
         Debug.Log("Mazo personalizado borrado. Se usará el mazo default la próxima vez.");
     }
 
+    [ContextMenu("Borrar Todo")]
+    public void DeletePlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+    }
+
     public void MostrarAdvertencia(string mensaje, Transform puntoReferencia, Vector2? offset = null, float? tamañoTexto = null, Color? colorTexto = null)
     {
         Vector2 finalOffset = offset ?? Vector2.zero;

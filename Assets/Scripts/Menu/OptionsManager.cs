@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class OptionsManager : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private TMP_Dropdown dropdownResolucion;
-    [SerializeField] private Toggle togglePantallaCompleta;
     [SerializeField] private TMP_Dropdown dropdownGraficos;
+    [SerializeField] private Toggle togglePantallaCompleta;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider SFXSlider;
 
@@ -84,48 +85,49 @@ public class OptionsManager : MonoBehaviour
 
     public void CargarResoluciones()
     {
-        resoluciones = Screen.resolutions;
-
-        if (dropdownResolucion != null)
-        {
-            dropdownResolucion.ClearOptions();
-        }
+        Resolution[] todas = Screen.resolutions;
+        dropdownResolucion.ClearOptions();
 
         int indexActual = 0;
-        var opciones = new System.Collections.Generic.List<string>();
-        var resolucionesUnicas = new System.Collections.Generic.HashSet<string>();
+        var opciones = new List<string>();
+        var resolucionesUnicas = new List<Resolution>();
 
-        for (int i = 0; i < resoluciones.Length; i++)
+        HashSet<string> tamañosUnicos = new();
+
+        foreach (var r in todas)
         {
-            int hz = Mathf.RoundToInt((float)resoluciones[i].refreshRateRatio.value);
-            string opcion = $"{resoluciones[i].width} x {resoluciones[i].height} @{hz}Hz";
+            string clave = $"{r.width}x{r.height}";
 
-            if (resolucionesUnicas.Add(opcion))
+            if (!tamañosUnicos.Contains(clave))
             {
-                opciones.Add(opcion);
-            }
+                tamañosUnicos.Add(clave);
+                resolucionesUnicas.Add(r);
+                opciones.Add($"{r.width} x {r.height}");
 
-            if (resoluciones[i].width == Screen.currentResolution.width &&
-                resoluciones[i].height == Screen.currentResolution.height &&
-                Mathf.RoundToInt((float)resoluciones[i].refreshRateRatio.value) ==
-                Mathf.RoundToInt((float)Screen.currentResolution.refreshRateRatio.value))
-            {
-                indexActual = opciones.Count - 1;
+                if (r.width == Screen.currentResolution.width &&
+                    r.height == Screen.currentResolution.height)
+                {
+                    indexActual = opciones.Count - 1;
+                }
             }
         }
 
-        if (dropdownResolucion != null)
-        {
-            dropdownResolucion.AddOptions(opciones);
-            dropdownResolucion.value = indexActual;
-            dropdownResolucion.RefreshShownValue();
-        }
+        resoluciones = resolucionesUnicas.ToArray(); // reemplazamos el array interno
+        dropdownResolucion.AddOptions(opciones);
+        dropdownResolucion.value = indexActual;
+        dropdownResolucion.RefreshShownValue();
     }
 
     private void AplicarResolucion(int index)
     {
-        Resolution resol = resoluciones[index];
-        Screen.SetResolution(resol.width, resol.height, Screen.fullScreen);
+        if (index < 0 || index >= resoluciones.Length) return;
+
+        Resolution baseRes = resoluciones[index];
+        RefreshRate refreshActual = Screen.currentResolution.refreshRateRatio;
+
+        FullScreenMode modo = Screen.fullScreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+
+        Screen.SetResolution(baseRes.width, baseRes.height, modo, refreshActual);
     }
 
     private void AplicarPantallaCompleta(bool fullscreen)
