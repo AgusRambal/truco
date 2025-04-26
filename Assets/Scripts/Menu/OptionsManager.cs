@@ -21,7 +21,7 @@ public class OptionsManager : MonoBehaviour
 
         // Leer configuración guardada
         int resolIndex = PlayerPrefs.GetInt("ResolucionIndex", -1);
-        int fullscreen = PlayerPrefs.GetInt("Fullscreen", Screen.fullScreen ? 1 : 0);
+        int fullscreen = PlayerPrefs.GetInt("Fullscreen", 1);
         int calidad = PlayerPrefs.GetInt("CalidadGrafica", QualitySettings.GetQualityLevel());
 
         bool pantallaCompletaSeleccionada = fullscreen == 1;
