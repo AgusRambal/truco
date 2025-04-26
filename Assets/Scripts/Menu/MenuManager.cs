@@ -21,6 +21,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float animationDuration = 0.4f;
     [SerializeField] private TMP_Text creditosTexto;
     [SerializeField] private GameObject textoAdvertenciaPrefab;
+    [SerializeField] private ScrollResetter[] miScrollRects;
 
     [Header("Botones principales")]
     [SerializeField] private List<Transform> botonesMenuPrincipal;
@@ -38,7 +39,6 @@ public class MenuManager : MonoBehaviour
     [Header("Zona de personalización")]
     [SerializeField] private Transform contenedorCartasCompradas; // zona donde se instancian
     [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
-
     
 
     private const string keyCartaSeleccionada = "CartaSeleccionada";
@@ -206,6 +206,14 @@ public class MenuManager : MonoBehaviour
     public void AbrirPopUp(RectTransform rectTransform)
     {
         popUpState = !popUpState;
+
+        foreach (ScrollResetter scroll in miScrollRects)
+        {
+            if (scroll.gameObject.activeInHierarchy)
+            {
+                scroll.ResetScroll();
+            }
+        }
 
         if (popUpState)
         {

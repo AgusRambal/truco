@@ -1086,6 +1086,7 @@ GameObject:
   - component: {fileID: 137706618}
   - component: {fileID: 137706617}
   - component: {fileID: 137706616}
+  - component: {fileID: 137706619}
   m_Layer: 5
   m_Name: Cartas Scroll View
   m_TagString: Untagged
@@ -1182,6 +1183,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 137706614}
   m_CullTransparentMesh: 1
+--- !u!114 &137706619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137706614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2b620db55cf254891fa903f2738d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 137706616}
 --- !u!1 &140653030
 GameObject:
   m_ObjectHideFlags: 0
@@ -3068,7 +3082,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 399.48, y: 1331.4849}
+  m_AnchoredPosition: {x: 399.48, y: 20437.771}
   m_SizeDelta: {x: 798.99, y: 1706.4299}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &414331176
@@ -6865,7 +6879,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 589.43, y: 642701.75}
+  m_AnchoredPosition: {x: 589.43, y: 741356.94}
   m_SizeDelta: {x: 1178.9, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &730598944
@@ -11536,6 +11550,10 @@ MonoBehaviour:
   animationDuration: 0.4
   creditosTexto: {fileID: 1757181971}
   textoAdvertenciaPrefab: {fileID: 1638414240421703480, guid: 798a25d6d18dcb84a9f513c83c113150, type: 3}
+  miScrollRects:
+  - {fileID: 2078543657}
+  - {fileID: 137706619}
+  - {fileID: 1892460973}
   botonesMenuPrincipal:
   - {fileID: 1101895247}
   - {fileID: 1376082159}
@@ -14792,7 +14810,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 589.43, y: 793749.3}
+  m_AnchoredPosition: {x: 589.43, y: 896660.75}
   m_SizeDelta: {x: 1178.9, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1455391386
@@ -18484,6 +18502,7 @@ GameObject:
   - component: {fileID: 1892460972}
   - component: {fileID: 1892460971}
   - component: {fileID: 1892460970}
+  - component: {fileID: 1892460973}
   m_Layer: 5
   m_Name: Reglas Scroll View
   m_TagString: Untagged
@@ -18580,6 +18599,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892460968}
   m_CullTransparentMesh: 1
+--- !u!114 &1892460973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892460968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2b620db55cf254891fa903f2738d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 1892460970}
 --- !u!1 &1903460447
 GameObject:
   m_ObjectHideFlags: 0
@@ -20180,6 +20212,7 @@ GameObject:
   - component: {fileID: 2078543656}
   - component: {fileID: 2078543655}
   - component: {fileID: 2078543654}
+  - component: {fileID: 2078543657}
   m_Layer: 5
   m_Name: Cartas Scroll View
   m_TagString: Untagged
@@ -20276,6 +20309,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2078543652}
   m_CullTransparentMesh: 1
+--- !u!114 &2078543657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078543652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2b620db55cf254891fa903f2738d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 2078543654}
 --- !u!1 &2090504225
 GameObject:
   m_ObjectHideFlags: 0
