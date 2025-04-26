@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4567462584692407142}
   - component: {fileID: 8574495265057760170}
   - component: {fileID: 4241194741877452115}
+  - component: {fileID: 4132085342489798713}
   m_Layer: 5
   m_Name: TextoMensaje
   m_TagString: Untagged
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NO TENES CREDITOS SUFICIENTESe
+  m_text: <color=#ECCB56FF>Sistema:</color> Machine Gun Kelly acepto el Truco
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 76c00110457ef204ba82c2d2d55f6d63, type: 2}
   m_sharedMaterial: {fileID: 4021852110082110658, guid: 76c00110457ef204ba82c2d2d55f6d63, type: 2}
@@ -100,7 +101,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 16
   m_HorizontalAlignment: 1
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -136,3 +137,17 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4132085342489798713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4451764263919436834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2

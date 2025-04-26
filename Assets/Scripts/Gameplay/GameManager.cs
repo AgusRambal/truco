@@ -322,9 +322,10 @@ public class GameManager : MonoBehaviour
                 SumarPuntos(false, true);
             else
             {
+                bool ganaJugador = turnoJugadorEmpieza;
                 ChatManager.Instance.AgregarMensaje($"Empate incluso en mano definitoria", TipoMensaje.Sistema);
-                ChatManager.Instance.AgregarMensaje($"Gana el jugador por ser mano", TipoMensaje.Sistema);
-                SumarPuntos(true, true);
+                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? playerName : oponentName)} por ser mano", TipoMensaje.Sistema);
+                SumarPuntos(ganaJugador, true);
             }
 
             return;
@@ -350,9 +351,10 @@ public class GameManager : MonoBehaviour
                 SumarPuntos(false, true);
             else
             {
+                bool ganaJugador = turnoJugadorEmpieza;
                 ChatManager.Instance.AgregarMensaje($"Empate triple", TipoMensaje.Sistema);
-                ChatManager.Instance.AgregarMensaje($"Gana el jugador por ganar la primer mano", TipoMensaje.Sistema);
-                SumarPuntos(true, true);
+                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? playerName : oponentName)} por ser mano", TipoMensaje.Sistema);
+                SumarPuntos(ganaJugador, true);
             }
         }
 
@@ -932,17 +934,6 @@ public class GameManager : MonoBehaviour
     public string NombreJugador(bool esJugador)
     {
         return esJugador ? playerName : oponentName;
-    }
-
-    public void DebugEstadoCantos()
-    {
-        Debug.Log("Estado de cantos por jugador:");
-
-        foreach (var kvp in cantosPorJugador)
-        {
-            string quien = kvp.Value ? "Jugador" : "IA";
-            Debug.Log($"→ {kvp.Key}: cantado por {quien}");
-        }
     }
 
     public bool JugadorYaCantoEsteTipo(TipoEnvido tipo)

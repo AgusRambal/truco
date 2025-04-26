@@ -646,8 +646,6 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        GameManager.Instance.DebugEstadoCantos();
-
         // Solo una subida permitida
         if (GameManager.Instance.EnvidoCantos.Count >= 2)
         {
