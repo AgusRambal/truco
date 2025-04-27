@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Utils;
 
 public enum EstadoRonda
 {
@@ -110,12 +109,14 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        cartas = ParametrosDePartida.cartasSeleccionadas != null && ParametrosDePartida.cartasSeleccionadas.Count == 40
-            ? new List<CartaSO>(ParametrosDePartida.cartasSeleccionadas)
+        cartas = Utils.ParametrosDePartida.cartasSeleccionadas != null && Utils.ParametrosDePartida.cartasSeleccionadas.Count == 40
+            ? new List<CartaSO>(Utils.ParametrosDePartida.cartasSeleccionadas)
             : CartaSaveManager.CargarCartas(cartasBackup); 
 
-        pointsToEnd = ParametrosDePartida.puntosParaGanar;
-        iaOponente.estilo = ParametrosDePartida.estiloSeleccionado;
+        pointsToEnd = Utils.ParametrosDePartida.puntosParaGanar;
+        iaOponente.estilo = Utils.ParametrosDePartida.estiloSeleccionado;
+
+        Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasJugadas);
     }
 
     private void Start()
@@ -380,13 +381,12 @@ public class GameManager : MonoBehaviour
 
             if (ganoJugador)
             {
-                ganancia = ParametrosDePartida.gananciaCalculada;
+                ganancia = Utils.ParametrosDePartida.gananciaCalculada;
                 int creditosActuales = PlayerPrefs.GetInt("Creditos", 0);
                 int total = creditosActuales + ganancia;
 
                 PlayerPrefs.SetInt("Creditos", total);
                 PlayerPrefs.Save();
-
                 ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} creditos", TipoMensaje.Sistema);
             }
 
@@ -511,18 +511,21 @@ public class GameManager : MonoBehaviour
         if (TrucoState == 0)
         { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Truco);
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosCantados);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
         else if (TrucoState == 1)
         {   
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Retruco);
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosCantados);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
         else if (TrucoState == 2)
         { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.ValeCuatro);
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroCantados);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
@@ -551,7 +554,22 @@ public class GameManager : MonoBehaviour
                 _ => "Truco"
             };
 
-            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreCanto}", TipoMensaje.Sistema); 
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreCanto}", TipoMensaje.Sistema);
+
+            if (nombreCanto == "Truco")
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosAceptados);
+            }
+
+            else if (nombreCanto == "Retruco")
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosAceptados);
+            }
+
+            else
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroAceptados);
+            }
 
             puntosEnJuego = TrucoState + 1;
             puntosEnJuego++;
@@ -620,6 +638,7 @@ public class GameManager : MonoBehaviour
         if (esJugador)
         {
             SumarPuntos(true, true);
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.VecesQueTeFuiste);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} se fue al mazo", TipoMensaje.Sistema);
         }
 
@@ -722,16 +741,19 @@ public class GameManager : MonoBehaviour
     public void CantarEnvidoNormal(bool jugador)
     {
         CantarEnvido(TipoEnvido.Envido, jugador);
+        Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosCantados);
     }
 
     public void CantarRealEnvido(bool jugador)
     {
         CantarEnvido(TipoEnvido.RealEnvido, jugador);
+        Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosCantados);
     }
 
     public void CantarFaltaEnvido(bool jugador)
     {
         CantarEnvido(TipoEnvido.FaltaEnvido, jugador);
+        Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosCantados);
     }
 
     public int CalcularPuntosEnvido(bool esJugador)
@@ -810,6 +832,21 @@ public class GameManager : MonoBehaviour
             };
 
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreEnvido}", TipoMensaje.Sistema);
+
+            if (nombreEnvido == "Envido")
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosAceptados);
+            }
+
+            else if (nombreEnvido == "Real Envido")
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosAceptados);
+            }
+
+            else
+            {
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosAceptados);
+            }
 
             int puntosAGanar = 0;
 

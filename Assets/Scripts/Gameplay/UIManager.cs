@@ -300,6 +300,7 @@ public class UIManager : MonoBehaviour
 
         if (ganoJugador)
         {
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasGanadas);
             AudioManager.Instance.PlaySFX(win);
             resultText.text = $"GANASTE!!";
             creditos.text = $"OBTUVISTE {ganancia} CREDITOS";
@@ -307,6 +308,7 @@ public class UIManager : MonoBehaviour
 
         else
         {
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasPerdidas);
             AudioManager.Instance.PlaySFX(lose);
             resultText.text = $"PERDISTE..";
             creditos.text = $"NO OBTUVISTE CREDITOS";

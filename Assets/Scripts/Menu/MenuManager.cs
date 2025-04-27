@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Utils;
 
 public class MenuManager : MonoBehaviour
 {
@@ -39,7 +38,24 @@ public class MenuManager : MonoBehaviour
     [Header("Zona de personalización")]
     [SerializeField] private Transform contenedorCartasCompradas; // zona donde se instancian
     [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
-    
+
+    [Header("Zona de Estadisticas")]
+    [SerializeField] private TMP_Text jugadasText;
+    [SerializeField] private TMP_Text victoriasText;
+    [SerializeField] private TMP_Text derrotasText;
+    [SerializeField] private TMP_Text vecesQueTeFuisteText;
+    [SerializeField] private TMP_Text trucosCantadosText;
+    [SerializeField] private TMP_Text trucosAceptadosText;
+    [SerializeField] private TMP_Text retrucosCantadosText;
+    [SerializeField] private TMP_Text retrucosAceptadosText;
+    [SerializeField] private TMP_Text valeCuatroCantadosText;
+    [SerializeField] private TMP_Text valeCuatroAceptadosText;
+    [SerializeField] private TMP_Text envidosCantadosText;
+    [SerializeField] private TMP_Text envidosAceptadosText;
+    [SerializeField] private TMP_Text realEnvidosCantadosText;
+    [SerializeField] private TMP_Text realEnvidosAceptadosText;
+    [SerializeField] private TMP_Text faltaEnvidosCantadosText;
+    [SerializeField] private TMP_Text faltaEnvidosAceptadosText;
 
     private const string keyCartaSeleccionada = "CartaSeleccionada";
 
@@ -66,6 +82,7 @@ public class MenuManager : MonoBehaviour
 
         int creditos = PlayerPrefs.GetInt("Creditos", 0);
         creditosTexto.text = $"{creditos}";
+        UpdateStats();
         SetIas();
         SpawnCartasCompradas();
     }
@@ -117,10 +134,10 @@ public class MenuManager : MonoBehaviour
 
     public void Jugar(int puntos)
     {
-        ParametrosDePartida.puntosParaGanar = puntos;
-        ParametrosDePartida.estiloSeleccionado = (EstiloIA)dropdownEstiloIA.value;
-        ParametrosDePartida.gananciaCalculada = CalcularGanancia((EstiloIA)dropdownEstiloIA.value, puntos);
-        ParametrosDePartida.cartasSeleccionadas = new List<CartaSO>(mazoPersonalizado);
+        Utils.ParametrosDePartida.puntosParaGanar = puntos;
+        Utils.ParametrosDePartida.estiloSeleccionado = (EstiloIA)dropdownEstiloIA.value;
+        Utils.ParametrosDePartida.gananciaCalculada = CalcularGanancia((EstiloIA)dropdownEstiloIA.value, puntos);
+        Utils.ParametrosDePartida.cartasSeleccionadas = new List<CartaSO>(mazoPersonalizado);
 
         DOTween.KillAll();
         SceneManager.LoadScene("Gameplay");
@@ -317,5 +334,27 @@ public class MenuManager : MonoBehaviour
     public void ShowLessCredits(string points)
     {
         MostrarAdvertencia(points, coinsPlace, offset, 62, Color.red);
+    }
+
+    private void UpdateStats()
+    {
+        jugadasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasJugadas).ToString();
+        victoriasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasGanadas).ToString();
+        derrotasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasPerdidas).ToString();
+        vecesQueTeFuisteText.text = "Veces que te fuiste: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.VecesQueTeFuiste).ToString();
+
+        trucosCantadosText.text = "Trucos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosCantados).ToString();
+        trucosAceptadosText.text = "Trucos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosAceptados).ToString();
+        retrucosCantadosText.text = "Retrucos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosCantados).ToString();
+        retrucosAceptadosText.text = "Retrucos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosAceptados).ToString();
+        valeCuatroCantadosText.text = "Vale cuatro cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroCantados).ToString();
+        valeCuatroAceptadosText.text = "Vale cuatro aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroAceptados).ToString();
+
+        envidosCantadosText.text = "Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosCantados).ToString();
+        envidosAceptadosText.text = "Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosAceptados).ToString();
+        realEnvidosCantadosText.text = "Real Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosCantados).ToString();
+        realEnvidosAceptadosText.text = "Real Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosAceptados).ToString();
+        faltaEnvidosCantadosText.text = "Falta Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosCantados).ToString();
+        faltaEnvidosAceptadosText.text = "Falta Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosAceptados).ToString();
     }
 }
