@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 52707
+  controlID: 57228
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -98,7 +98,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -197,7 +197,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 8a5afeffd46efeffd28bfeff72a4feff3ca7fefffaa8feff42b4feff4cb5feff08b9feffc6bafeff4a42ffff5042ffff5e42ffff6890ffffeca3ffffeca7ffffd8a9ffff42e6ffff46e6ffff5ae6ffff0cfbffffa2b20000d4b3000074b60000040a0200c22e020090390200
+      m_ExpandedIDs: 0c3dfeff7a4afeff8a5afeffd46efeffd28bfeff72a4feff3ca7fefffaa8feff42b4feff4cb5feff08b9feffc6bafeff4a42ffff5042ffff5e42ffff6890ffffeca3ffffeca7ffffd8a9ffff42e6ffff46e6ffff5ae6ffff0cfbffffa2b20000d4b3000074b60000040a0200c22e0200903902000e97020042ab0200e2be020068bf0200
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 52708
+  controlID: 57229
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -272,7 +272,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 52709
+  controlID: 57230
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -889,15 +889,15 @@ MonoBehaviour:
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
-  m_2DMode: 0
+  m_2DMode: 1
   m_isRotationLocked: 0
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 0.7850864, y: -0.4452822, z: -0.089195766}
+    m_Target: {x: 902.64923, y: 1439.1597, z: 9.271164}
     speed: 2
-    m_Value: {x: 0.7850864, y: -0.4452822, z: -0.089195766}
+    m_Value: {x: 906.18536, y: 1433.2661, z: 9.016007}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -943,17 +943,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.18749698, y: 0.027985781, z: 0.005343868, w: 0.9818531}
+    m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
-    m_Value: {x: -0.18602376, y: 0.027993733, z: 0.0053018765, w: 0.9821321}
+    m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1.532813
+    m_Target: 541.4971
     speed: 2
-    m_Value: 1.532813
+    m_Value: 567.01263
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_CameraSettings:
     m_Speed: 1
     m_SpeedNormalized: 0.5
@@ -967,7 +967,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.011689803, y: 0.008994483, z: 0.00010479594, w: 0.999892}
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_LastSceneViewOrtho: 0
   m_Viewpoint:
     m_SceneView: {fileID: 8}
@@ -1006,7 +1006,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 418
     y: 79
-    width: 777
+    width: 736
     height: 850
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -1049,10 +1049,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_ShowAlpha: 0
   m_MipLevel: 0
-  m_Zoom: -1
-  m_ScrollPosition: {x: 0, y: 0}
-  m_SelectedObject: {fileID: 2800000, guid: aad9de788bbcc664a8de88519047d030, type: 3}
-  m_SelectedSpriteRectGUID: 5e97eb03825dee720800000000000000
+  m_Zoom: 0.31185198
+  m_ScrollPosition: {x: 50.98089, y: -527.98615}
+  m_SelectedObject: {fileID: 0}
+  m_SelectedSpriteRectGUID: 00000000000000000000000000000000
   m_LastUsedModuleTypeName: UnityEditor.U2D.Sprites.SpriteFrameModule
 --- !u!114 &10
 MonoBehaviour:
@@ -1228,10 +1228,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Sprites/Cartas base/Basto
-    - Assets/Sprites/Cartas base/Copa
-    - Assets/Sprites/Cartas base/Espada
-    - Assets/Sprites/Cartas base/Oro
+    - Assets/Scenes
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1241,18 +1238,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Sprites/Cartas base/Basto
-  - Assets/Sprites/Cartas base/Copa
-  - Assets/Sprites/Cartas base/Espada
-  - Assets/Sprites/Cartas base/Oro
+  - Assets/Scenes
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\gohan\Documents\GitHub\truco
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 33}
-    m_SelectedIDs: 86db000088db00008adb00008cdb0000
-    m_LastClickedID: 56204
+    m_SelectedIDs: 26bc0000
+    m_LastClickedID: 48166
     m_ExpandedIDs: 0000000088bb00008abb00008cbb00008ebb000090bb000092bb000094bb000096bb000098bb000030bc00004ad000004cd000004ed000007cdb0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1311,7 +1305,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c62300007c9900000a551700f0850000d8c60000a6610200327300003c8b000032f70000f200010022ea0000fec8000000c900006c490600e48d030064bf1200526305001ab5000092b40000
+    m_ExpandedInstanceIDs: c62300007c9900000a551700f0850000d8c60000a6610200327300003c8b000032f70000f200010022ea0000fec8000000c900006c490600e48d030064bf1200526305001ab5000092b4000034c40200
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1414,7 +1408,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 129206
+  m_LastSelectedObjectID: -113566
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
