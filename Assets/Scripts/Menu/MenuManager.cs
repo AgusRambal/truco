@@ -42,7 +42,6 @@ public class MenuManager : MonoBehaviour
     
 
     private const string keyCartaSeleccionada = "CartaSeleccionada";
-    private bool popUpState = false;
 
     private void Awake()
     {
@@ -205,7 +204,11 @@ public class MenuManager : MonoBehaviour
 
     public void AbrirPopUp(RectTransform rectTransform)
     {
-        popUpState = !popUpState;
+        if (!rectTransform.gameObject.activeSelf)
+        {
+            rectTransform.gameObject.SetActive(true);
+            rectTransform.localScale = Vector3.zero;
+        }
 
         foreach (ScrollResetter scroll in miScrollRects)
         {
@@ -215,24 +218,18 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        if (popUpState)
-        {
-            rectTransform.gameObject.SetActive(true);
-            rectTransform.localScale = Vector3.zero;
+        rectTransform.DOScale(Vector3.one, animationDuration)
+            .SetEase(Ease.OutBack);
+    }
 
-            rectTransform.DOScale(Vector3.one, animationDuration)
-                .SetEase(Ease.OutBack);
-        }
-
-        else
-        {
-            rectTransform.DOScale(Vector3.zero, animationDuration - 0.2f)
-           .SetEase(Ease.InBack)
-           .OnComplete(() =>
-           {
-               rectTransform.gameObject.SetActive(false);
-           });
-        }
+    public void CerrarPopUp(RectTransform rectTransform)
+    {
+        rectTransform.DOScale(Vector3.zero, animationDuration - 0.2f)
+            .SetEase(Ease.InBack)
+            .OnComplete(() =>
+            {
+                rectTransform.gameObject.SetActive(false);
+            });
     }
 
     public void QuitGame()
