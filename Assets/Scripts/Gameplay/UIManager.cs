@@ -270,6 +270,12 @@ public class UIManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         DOTween.KillAll();
+
+        if (GameManager.Instance.estadoRonda != EstadoRonda.Finalizado)
+        {
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasPerdidas);
+        }
+
         SceneManager.LoadScene("Menu");
     }
 

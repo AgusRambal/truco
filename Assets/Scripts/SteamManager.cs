@@ -25,7 +25,7 @@ public class SteamManager : MonoBehaviour
                 return;
             }
         }
-        catch (System.DllNotFoundException e)
+        catch (System.DllNotFoundException)
         {
             Debug.LogError("Steamworks DLL not found. Steam must be running for the game to launch.");
             Application.Quit();
