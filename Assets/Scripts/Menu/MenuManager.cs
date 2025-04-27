@@ -40,6 +40,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
 
     [Header("Zona de Estadisticas")]
+    [SerializeField] private Color colorTextoEstadisticas;
     [SerializeField] private TMP_Text jugadasText;
     [SerializeField] private TMP_Text victoriasText;
     [SerializeField] private TMP_Text derrotasText;
@@ -56,6 +57,18 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text realEnvidosAceptadosText;
     [SerializeField] private TMP_Text faltaEnvidosCantadosText;
     [SerializeField] private TMP_Text faltaEnvidosAceptadosText;
+    [SerializeField] private TMP_Text trucosGanadosText;
+    [SerializeField] private TMP_Text RetrucosGanadosText;
+    [SerializeField] private TMP_Text ValeCuatroGanadosText;
+    [SerializeField] private TMP_Text trucosPerdidosText;
+    [SerializeField] private TMP_Text RetrucosPerdidosText;
+    [SerializeField] private TMP_Text ValeCuatroPerdidosText;
+    [SerializeField] private TMP_Text EnvidosGanadosText;
+    [SerializeField] private TMP_Text RealEnvidosGanadosText;
+    [SerializeField] private TMP_Text FaltaEnvidosGanadosText;
+    [SerializeField] private TMP_Text EnvidosPerdidosText;
+    [SerializeField] private TMP_Text RealEnvidosPerdidosText;
+    [SerializeField] private TMP_Text FaltaEnvidosPerdidosText;
 
     private const string keyCartaSeleccionada = "CartaSeleccionada";
 
@@ -338,23 +351,42 @@ public class MenuManager : MonoBehaviour
 
     private void UpdateStats()
     {
-        jugadasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasJugadas).ToString();
-        victoriasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasGanadas).ToString();
-        derrotasText.text = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasPerdidas).ToString();
-        vecesQueTeFuisteText.text = "Veces que te fuiste: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.VecesQueTeFuiste).ToString();
+        string colorHex = ColorUtility.ToHtmlStringRGB(colorTextoEstadisticas);
 
-        trucosCantadosText.text = "Trucos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosCantados).ToString();
-        trucosAceptadosText.text = "Trucos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosAceptados).ToString();
-        retrucosCantadosText.text = "Retrucos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosCantados).ToString();
-        retrucosAceptadosText.text = "Retrucos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosAceptados).ToString();
-        valeCuatroCantadosText.text = "Vale cuatro cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroCantados).ToString();
-        valeCuatroAceptadosText.text = "Vale cuatro aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroAceptados).ToString();
+        jugadasText.text = $"{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasJugadas)}";
+        victoriasText.text = $"{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasGanadas)}";
+        derrotasText.text = $"{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasPerdidas)}";
+        vecesQueTeFuisteText.text = $"<color=#{colorHex}>Veces que te fuiste: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.VecesQueTeFuiste)}";
 
-        envidosCantadosText.text = "Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosCantados).ToString();
-        envidosAceptadosText.text = "Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosAceptados).ToString();
-        realEnvidosCantadosText.text = "Real Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosCantados).ToString();
-        realEnvidosAceptadosText.text = "Real Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosAceptados).ToString();
-        faltaEnvidosCantadosText.text = "Falta Envidos cantados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosCantados).ToString();
-        faltaEnvidosAceptadosText.text = "Falta Envidos aceptados: " + Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosAceptados).ToString();
+        trucosCantadosText.text = $"<color=#{colorHex}>- Trucos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosCantados)}";
+        trucosAceptadosText.text = $"<color=#{colorHex}>- Trucos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosAceptados)}";
+        retrucosCantadosText.text = $"<color=#{colorHex}>- Retrucos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosCantados)}";
+        retrucosAceptadosText.text = $"<color=#{colorHex}>- Retrucos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosAceptados)}";
+        valeCuatroCantadosText.text = $"<color=#{colorHex}>- Vale Cuatro cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroCantados)}";
+        valeCuatroAceptadosText.text = $"<color=#{colorHex}>- Vale Cuatro aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroAceptados)}";
+
+        envidosCantadosText.text = $"<color=#{colorHex}>- Envidos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosCantados)}";
+        envidosAceptadosText.text = $"<color=#{colorHex}>- Envidos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosAceptados)}";
+        realEnvidosCantadosText.text = $"<color=#{colorHex}>- Real Envidos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosCantados)}";
+        realEnvidosAceptadosText.text = $"<color=#{colorHex}>- Real Envidos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosAceptados)}";
+        faltaEnvidosCantadosText.text = $"<color=#{colorHex}>- Falta Envidos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosCantados)}";
+        faltaEnvidosAceptadosText.text = $"<color=#{colorHex}>- Falta Envidos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosAceptados)}";
+
+        trucosGanadosText.text = $"<color=#{colorHex}>- Trucos ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosGanados)}";
+        RetrucosGanadosText.text = $"<color=#{colorHex}>- Retrucos ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosGanados)}";
+        ValeCuatroGanadosText.text = $"<color=#{colorHex}>- Vale Cuatro ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroGanados)}";
+
+        trucosPerdidosText.text = $"<color=#{colorHex}>- Trucos perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosPerdidos)}";
+        RetrucosPerdidosText.text = $"<color=#{colorHex}>- Retrucos perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RetrucosPerdidos)}";
+        ValeCuatroPerdidosText.text = $"<color=#{colorHex}>- Vale Cuatro perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.ValeCuatroPerdidos)}";
+
+        EnvidosGanadosText.text = $"<color=#{colorHex}>- Envidos ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosGanados)}";
+        RealEnvidosGanadosText.text = $"<color=#{colorHex}>- Real Envidos ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosGanados)}";
+        FaltaEnvidosGanadosText.text = $"<color=#{colorHex}>- Falta Envidos ganados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosGanados)}";
+
+        EnvidosPerdidosText.text = $"<color=#{colorHex}>- Envidos perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.EnvidosPerdidos)}";
+        RealEnvidosPerdidosText.text = $"<color=#{colorHex}>- Real Envidos perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RealEnvidosPerdidos)}";
+        FaltaEnvidosPerdidosText.text = $"<color=#{colorHex}>- Falta Envidos perdidos: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.FaltaEnvidosPerdidos)}";
     }
+
 }

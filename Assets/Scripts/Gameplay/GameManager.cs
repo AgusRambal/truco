@@ -613,6 +613,14 @@ public class GameManager : MonoBehaviour
 
         if (finish)
         {
+            if (TrucoState > 0)
+            {
+                if (isPlayer)
+                    ContarGanadoTruco();
+                else
+                    ContarPerdidoTruco();
+            }
+
             FinalizarRonda();
             FinalCheck();
         }
@@ -831,21 +839,52 @@ public class GameManager : MonoBehaviour
                 _ => "Envido"
             };
 
-            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreEnvido}", TipoMensaje.Sistema);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} aceptó el {nombreEnvido}", TipoMensaje.Sistema);
 
+            // Siempre sumamos los aceptados
             if (nombreEnvido == "Envido")
             {
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosAceptados);
             }
-
             else if (nombreEnvido == "Real Envido")
             {
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosAceptados);
             }
-
-            else
+            else if (nombreEnvido == "Falta Envido")
             {
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosAceptados);
+            }
+
+            // Ahora también contamos si ganamos o perdimos el envido
+            if (ganoJugador)
+            {
+                if (nombreEnvido == "Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosGanados);
+                }
+                else if (nombreEnvido == "Real Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosGanados);
+                }
+                else if (nombreEnvido == "Falta Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosGanados);
+                }
+            }
+            else
+            {
+                if (nombreEnvido == "Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosPerdidos);
+                }
+                else if (nombreEnvido == "Real Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosPerdidos);
+                }
+                else if (nombreEnvido == "Falta Envido")
+                {
+                    Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosPerdidos);
+                }
             }
 
             int puntosAGanar = 0;
@@ -884,18 +923,18 @@ public class GameManager : MonoBehaviour
             if (ganoJugador)
             {
                 SumarPuntos(true, puntosAGanar, false);
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} ganó el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
-
             else
             {
                 SumarPuntos(false, puntosAGanar, false);
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} ganó el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);
             uiManager.SetPointsInScreen(puntosJugador, puntosOponente);
         }
+
 
         else
         {
@@ -975,5 +1014,25 @@ public class GameManager : MonoBehaviour
     public bool JugadorYaCantoEsteTipo(TipoEnvido tipo)
     {
         return cantosPorJugador.TryGetValue(tipo, out bool fueDelJugador) && fueDelJugador == true;
+    }
+
+    private void ContarGanadoTruco()
+    {
+        if (TrucoState == 1)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosGanados);
+        else if (TrucoState == 2)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosGanados);
+        else if (TrucoState == 3)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroGanados);
+    }
+
+    private void ContarPerdidoTruco()
+    {
+        if (TrucoState == 1)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosPerdidos);
+        else if (TrucoState == 2)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosPerdidos);
+        else if (TrucoState == 3)
+            Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroPerdidos);
     }
 }

@@ -33,6 +33,22 @@ public static class Utils
             public const string RealEnvidosAceptados = "RealEnvidosAceptados";
             public const string FaltaEnvidosCantados = "FaltaEnvidosCantados";
             public const string FaltaEnvidosAceptados = "FaltaEnvidosAceptados";
+
+            public const string EnvidosGanados = "EnvidosGanados";
+            public const string RealEnvidosGanados = "RealEnvidosGanados";
+            public const string FaltaEnvidosGanados = "FaltaEnvidosGanados";
+
+            public const string EnvidosPerdidos = "EnvidosPerdidos";
+            public const string RealEnvidosPerdidos = "RealEnvidosPerdidos";
+            public const string FaltaEnvidosPerdidos = "FaltaEnvidosPerdidos";
+
+            public const string TrucosGanados = "TrucosGanados";
+            public const string RetrucosGanados = "RetrucosGanados";
+            public const string ValeCuatroGanados = "ValeCuatroGanados";
+
+            public const string TrucosPerdidos = "TrucosPerdidos";
+            public const string RetrucosPerdidos = "RetrucosPerdidos";
+            public const string ValeCuatroPerdidos = "ValeCuatroPerdidos";
         }
 
         public static void Sumar(string key)
@@ -47,7 +63,7 @@ public static class Utils
             return PlayerPrefs.GetInt(key, 0);
         }
 
-        public static void Resetear()
+        /*public static void Resetear()
         {
             PlayerPrefs.DeleteKey(Keys.PartidasJugadas);
             PlayerPrefs.DeleteKey(Keys.PartidasGanadas);
@@ -68,7 +84,24 @@ public static class Utils
             PlayerPrefs.DeleteKey(Keys.FaltaEnvidosCantados);
             PlayerPrefs.DeleteKey(Keys.FaltaEnvidosAceptados);
 
+            PlayerPrefs.DeleteKey(Keys.EnvidosGanados);
+            PlayerPrefs.DeleteKey(Keys.RealEnvidosGanados);
+            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosGanados);
+
+            PlayerPrefs.DeleteKey(Keys.EnvidosPerdidos);
+            PlayerPrefs.DeleteKey(Keys.RealEnvidosPerdidos);
+            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosPerdidos);
+
+            PlayerPrefs.DeleteKey(Keys.TrucosGanados);
+            PlayerPrefs.DeleteKey(Keys.RetrucosGanados);
+            PlayerPrefs.DeleteKey(Keys.ValeCuatroGanados);
+
+            PlayerPrefs.DeleteKey(Keys.TrucosPerdidos);
+            PlayerPrefs.DeleteKey(Keys.RetrucosPerdidos);
+            PlayerPrefs.DeleteKey(Keys.ValeCuatroPerdidos);
+
+
             PlayerPrefs.Save();
-        }
+        }*/
     }
 }
