@@ -1517,7 +1517,6 @@ MonoBehaviour:
   resultText: {fileID: 1528029670}
   creditos: {fileID: 1605065387}
   info: {fileID: 271603231}
-  playerImageSprite: {fileID: 133982719826790466, guid: d267bcc328e4535468972ad8fc51fd51, type: 3}
   oponentImageSprite: {fileID: -2833978854244032865, guid: 0be707fa4d5db8c4ca9c09b29dcb6b83, type: 3}
   playerImage: {fileID: 1245573247}
   oponentImage: {fileID: 1545557225}
@@ -4757,7 +4756,6 @@ MonoBehaviour:
   - {fileID: 766948905}
   target: {fileID: 2155665880179926562}
   spawnPosition: {fileID: 1671096869}
-  playerName: Malcorra
   oponentName: Machine Gun Kelly
   setTime: 0.25
   resetTime: 0.2
@@ -12909,7 +12907,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Malcorra
+  m_text: Marco ruben
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}
   m_sharedMaterial: {fileID: 8671075430454118965, guid: 69480956590041b4d8815c2b2aba07cb, type: 2}

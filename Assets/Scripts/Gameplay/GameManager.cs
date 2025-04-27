@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     public Transform spawnPosition;
 
     [Header("Parameters")]
-    [SerializeField] private string playerName;
     [SerializeField] private string oponentName;
     [SerializeField] private float setTime = 0.25f;
     [SerializeField] private float resetTime = 0.25f;
@@ -324,7 +323,7 @@ public class GameManager : MonoBehaviour
             {
                 bool ganaJugador = turnoJugadorEmpieza;
                 ChatManager.Instance.AgregarMensaje($"Empate incluso en mano definitoria", TipoMensaje.Sistema);
-                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? playerName : oponentName)} por ser mano", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? SteamUserManager.Instance.PlayerName : oponentName)} por ser mano", TipoMensaje.Sistema);
                 SumarPuntos(ganaJugador, true);
             }
 
@@ -353,7 +352,7 @@ public class GameManager : MonoBehaviour
             {
                 bool ganaJugador = turnoJugadorEmpieza;
                 ChatManager.Instance.AgregarMensaje($"Empate triple", TipoMensaje.Sistema);
-                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? playerName : oponentName)} por ser mano", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"Gana {(ganaJugador ? SteamUserManager.Instance.PlayerName : oponentName)} por ser mano", TipoMensaje.Sistema);
                 SumarPuntos(ganaJugador, true);
             }
         }
@@ -933,7 +932,7 @@ public class GameManager : MonoBehaviour
 
     public string NombreJugador(bool esJugador)
     {
-        return esJugador ? playerName : oponentName;
+        return esJugador ? SteamUserManager.Instance.PlayerName : oponentName;
     }
 
     public bool JugadorYaCantoEsteTipo(TipoEnvido tipo)

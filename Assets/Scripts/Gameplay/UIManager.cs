@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text info;
 
     [Header("Obejcts")]
-    [SerializeField] private Sprite playerImageSprite;
     [SerializeField] private Sprite oponentImageSprite;
     [SerializeField] private Image playerImage;
     [SerializeField] private Image oponentImage;
@@ -119,10 +118,19 @@ public class UIManager : MonoBehaviour
         noQuieroEnvidoOriginalPos = botonNoQuieroEnvido.transform.localPosition;
 
         MostrarInfo();
-        playerImage.sprite = playerImageSprite;
-        oponentImage.sprite = oponentImageSprite;
-        playerName.text = GameManager.Instance.NombreJugador(true);
+
+        if (SteamManager.Initialized)
+        {
+            playerName.text = GameManager.Instance.NombreJugador(true);
+            playerImage.sprite = SteamUserManager.Instance.PlayerAvatar;
+        }
+        else
+        {
+            playerName.text = "Jugador Desconectado";
+        }
+
         oponentName.text = GameManager.Instance.NombreJugador(false);
+        oponentImage.sprite = oponentImageSprite;
     }
 
     private void MostrarInfo()
