@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +9,9 @@ public class CartaVisual : MonoBehaviour
     [SerializeField] private Image marcoSeleccionado;
     [SerializeField] private AudioClip buttonSound;
 
-    private CartaSO cartaSO;
+    private CartaSO cartaSO;              // La carta personalizada (nueva)
+    private CartaSO cartaOriginalSO;       // La carta original (guardada antes de reemplazar)
+    private bool estaReemplazada = false;  // Estado actual
     private MenuManager menuManager;
 
     private void Awake()
@@ -27,19 +29,51 @@ public class CartaVisual : MonoBehaviour
         cartaSO = carta;
         imagenCarta.sprite = carta.imagen;
 
+        menuManager = FindFirstObjectByType<MenuManager>();
+
+        estaReemplazada = menuManager.EstaCartaEnUso(cartaSO);
+        cartaOriginalSO = menuManager.ObtenerCartaOriginal(cartaSO);
+
+        SetMarcoSeleccion(estaReemplazada);
+
         boton.onClick.AddListener(() =>
         {
-            FindFirstObjectByType<MenuManager>().ReemplazarCartaElegida(cartaSO);
-            SetMarcoSeleccion(true);
+            AlternarCarta();
         });
 
         AudioManager.Instance.PlaySFX(buttonSound);
     }
 
+    private void AlternarCarta()
+    {
+        if (menuManager == null) return;
+
+        if (estaReemplazada)
+        {
+            // Restaurar la original
+            if (cartaOriginalSO != null)
+            {
+                menuManager.ReemplazarCartaElegida(cartaOriginalSO);
+                estaReemplazada = false;
+                SetMarcoSeleccion(false);
+            }
+        }
+        else
+        {
+            // Guardar la carta que está ahora antes de reemplazar
+            cartaOriginalSO = menuManager.ObtenerCartaOriginal(cartaSO);
+            if (cartaOriginalSO != null)
+            {
+                menuManager.ReemplazarCartaElegida(cartaSO);
+                estaReemplazada = true;
+                SetMarcoSeleccion(true);
+            }
+        }
+    }
+
     public void SetMarcoSeleccion(bool activo)
     {
         if (marcoSeleccionado == null) return;
-
         marcoSeleccionado.DOFade(activo ? 1f : 0f, 0.25f).SetEase(Ease.OutQuad);
     }
 }

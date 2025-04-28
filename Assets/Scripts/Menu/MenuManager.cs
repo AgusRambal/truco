@@ -161,9 +161,18 @@ public class MenuManager : MonoBehaviour
     {
         CartaSaveManager.ReemplazarCarta(carta, mazoPersonalizado);
 
-        // Guardar qué carta fue seleccionada como personalizada
         SaveSystem.Datos.cartaSeleccionada = carta.id;
         SaveSystem.GuardarDatos();
+    }
+
+    public CartaSO ObtenerCartaOriginal(CartaSO cartaNueva)
+    {
+        return mazoDefault.FirstOrDefault(c => c.valor == cartaNueva.valor && c.palo == cartaNueva.palo);
+    }
+
+    public bool EstaCartaEnUso(CartaSO carta)
+    {
+        return mazoPersonalizado.Any(c => c.id == carta.id);
     }
 
     private int CalcularGanancia(EstiloIA estilo, int puntosFinales)
