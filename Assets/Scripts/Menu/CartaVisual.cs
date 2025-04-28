@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,11 @@ public class CartaVisual : MonoBehaviour
     [SerializeField] private Button boton;
     [SerializeField] private Image marcoSeleccionado;
     [SerializeField] private AudioClip buttonSound;
+    [SerializeField] private TMP_Text botonTexto; 
 
-    private CartaSO cartaSO;              // La carta personalizada (nueva)
-    private CartaSO cartaOriginalSO;       // La carta original (guardada antes de reemplazar)
-    private bool estaReemplazada = false;  // Estado actual
+    private CartaSO cartaSO;              
+    private CartaSO cartaOriginalSO;       
+    private bool estaReemplazada = false;  
     private MenuManager menuManager;
 
     private void Awake()
@@ -35,6 +37,7 @@ public class CartaVisual : MonoBehaviour
         cartaOriginalSO = menuManager.ObtenerCartaOriginal(cartaSO);
 
         SetMarcoSeleccion(estaReemplazada);
+        ActualizarTextoBoton();
 
         boton.onClick.AddListener(() =>
         {
@@ -50,25 +53,31 @@ public class CartaVisual : MonoBehaviour
 
         if (estaReemplazada)
         {
-            // Restaurar la original
             if (cartaOriginalSO != null)
             {
                 menuManager.ReemplazarCartaElegida(cartaOriginalSO);
                 estaReemplazada = false;
                 SetMarcoSeleccion(false);
+                ActualizarTextoBoton();
             }
         }
         else
         {
-            // Guardar la carta que está ahora antes de reemplazar
-            cartaOriginalSO = menuManager.ObtenerCartaOriginal(cartaSO);
             if (cartaOriginalSO != null)
             {
                 menuManager.ReemplazarCartaElegida(cartaSO);
                 estaReemplazada = true;
                 SetMarcoSeleccion(true);
+                ActualizarTextoBoton();
             }
         }
+    }
+
+    private void ActualizarTextoBoton()
+    {
+        if (botonTexto == null) return;
+
+        botonTexto.text = estaReemplazada ? "SACAR" : "USAR";
     }
 
     public void SetMarcoSeleccion(bool activo)
