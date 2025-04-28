@@ -50,7 +50,7 @@ public class CartaEnTienda : MonoBehaviour
 
         if (SaveSystem.Datos.monedas < precio)
         {
-            menuManager.MostrarAdvertencia("No tenés créditos suficientes", transform, advertenciaOffset, 20);
+            menuManager.MostrarAdvertencia("No tenes creditos suficientes", transform, advertenciaOffset, 20);
             return;
         }
 

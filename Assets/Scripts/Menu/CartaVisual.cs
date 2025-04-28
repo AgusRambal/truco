@@ -42,9 +42,8 @@ public class CartaVisual : MonoBehaviour
         boton.onClick.AddListener(() =>
         {
             AlternarCarta();
+            AudioManager.Instance.PlaySFX(buttonSound);
         });
-
-        AudioManager.Instance.PlaySFX(buttonSound);
     }
 
     private void AlternarCarta()
