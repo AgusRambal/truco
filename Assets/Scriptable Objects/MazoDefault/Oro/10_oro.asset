@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
   m_Name: 10_oro
   m_EditorClassIdentifier: 
-  imagen: {fileID: 21300000, guid: 8d2090dcf8d77cb48aa930eafdc31386, type: 3}
+  imagen: {fileID: -1457781791765082543, guid: 51e0d5a4360e0644b9301efad8cf1823, type: 3}
   palo: 2
   valor: 10
   id: 10_oro

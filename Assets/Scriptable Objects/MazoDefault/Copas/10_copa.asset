@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
   m_Name: 10_copa
   m_EditorClassIdentifier: 
-  imagen: {fileID: 21300000, guid: 7e4f432a32bb80c42981352ccc0d0220, type: 3}
+  imagen: {fileID: -1457781791765082543, guid: 1e2d5a64b1324a64d84e2b98f2901f52, type: 3}
   palo: 3
   valor: 10
   id: 10_copa
