@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bca16ad793874bf4dae931d3c648042b
+guid: 2f140565376377040a42e729b4ff3c36
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 490916322924022446
-    second: basto1_0
+      213: -8656392911017887773
+    second: 2-01_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 410
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: basto1_0
+      name: 1_basto_fuego
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 519
-        height: 821
+        x: 1078
+        y: 435
+        width: 2165
+        height: 3422
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eaac3527bc510d600800000000000000
-      internalID: 490916322924022446
+      spriteID: 3e7b19ec2805ed780800000000000000
+      internalID: -8656392911017887773
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 6e587801de6f94841a4cef01497c16b6
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      basto1_0: 490916322924022446
+      1_basto_fuego: -8656392911017887773
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

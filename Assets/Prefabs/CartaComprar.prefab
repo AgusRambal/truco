@@ -281,7 +281,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bca16ad793874bf4dae931d3c648042b, type: 3}
+  m_Sprite: {fileID: -8656392911017887773, guid: 2f140565376377040a42e729b4ff3c36, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -309,7 +309,6 @@ MonoBehaviour:
   marcoComprado: {fileID: 4904708641616342722}
   textoPrecio: {fileID: 257246470695962461}
   buy: {fileID: 8300000, guid: 3b05fb6e50b6c6f42bb3a7cfff5ca01c, type: 3}
-  textoAdvertenciaPrefab: {fileID: 1638414240421703480, guid: 798a25d6d18dcb84a9f513c83c113150, type: 3}
   advertenciaOffset: {x: 5, y: -268}
 --- !u!1 &3620515910281155305
 GameObject:
