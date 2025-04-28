@@ -274,7 +274,6 @@ public class MenuManager : MonoBehaviour
         creditosTexto.text = $"{SaveSystem.Datos.monedas}";
     }
 
-
     [ContextMenu("Resetear Créditos")]
     public void ResetearCreditosDesdeEditor()
     {
@@ -293,6 +292,7 @@ public class MenuManager : MonoBehaviour
         ActualizarCreditosUI();
     }
 
+
     [ContextMenu("Borrar Cartas Compradas")]
     public void BorrarCartasCompradas()
     {
@@ -308,7 +308,6 @@ public class MenuManager : MonoBehaviour
         SaveSystem.GuardarDatos();
         Debug.Log("Mazo personalizado borrado. Se usará el mazo default la próxima vez.");
     }
-
 
     [ContextMenu("Borrar Todo")]
     public void DeleteSave()

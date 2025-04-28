@@ -5,11 +5,20 @@ using UnityEngine;
 [Serializable]
 public class SaveData
 {
-    public int monedas;
+    public int monedas = 0;
     public EstadisticasJugador estadisticas = new EstadisticasJugador();
     public List<string> cartasCompradas = new List<string>();
+    public string cartaSeleccionada = "";
     public List<string> mazoPersonalizado = new List<string>();
-    public string cartaSeleccionada;
+
+    public SaveData()
+    {
+        monedas = 0;
+        estadisticas = new EstadisticasJugador();
+        cartasCompradas = new List<string>();
+        cartaSeleccionada = "";
+        mazoPersonalizado = new List<string>();
+    }
 }
 
 [Serializable]

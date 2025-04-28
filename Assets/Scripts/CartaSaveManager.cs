@@ -8,8 +8,6 @@ public static class CartaSaveManager
     {
         SaveSystem.Datos.mazoPersonalizado = cartas.Select(c => c.id).ToList();
         SaveSystem.GuardarDatos();
-
-        Debug.Log($"CartaSaveManager: Mazo personalizado guardado ({cartas.Count} cartas).");
     }
 
     public static List<CartaSO> CargarCartas(List<CartaSO> todasLasCartas)
@@ -18,7 +16,6 @@ public static class CartaSaveManager
 
         if (SaveSystem.Datos.mazoPersonalizado == null || SaveSystem.Datos.mazoPersonalizado.Count != 40)
         {
-            Debug.LogWarning("CartaSaveManager: No hay mazo personalizado válido. Usando mazo default.");
             return todasLasCartas; // fallback al mazo original si no hay datos válidos
         }
 
