@@ -382,12 +382,9 @@ public class GameManager : MonoBehaviour
             if (ganoJugador)
             {
                 ganancia = Utils.ParametrosDePartida.gananciaCalculada;
-                int creditosActuales = PlayerPrefs.GetInt("Creditos", 0);
-                int total = creditosActuales + ganancia;
-
-                PlayerPrefs.SetInt("Creditos", total);
-                PlayerPrefs.Save();
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} creditos", TipoMensaje.Sistema);
+                SaveSystem.Datos.monedas += ganancia;
+                SaveSystem.GuardarDatos();
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} créditos", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarResultadoFinal(ganoJugador, ganancia);

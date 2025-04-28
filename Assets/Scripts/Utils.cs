@@ -53,55 +53,96 @@ public static class Utils
 
         public static void Sumar(string key)
         {
-            int valor = PlayerPrefs.GetInt(key, 0);
-            PlayerPrefs.SetInt(key, valor + 1);
-            PlayerPrefs.Save();
+            var stats = SaveSystem.Datos.estadisticas;
+
+            switch (key)
+            {
+                case Keys.PartidasJugadas: stats.partidasJugadas++; break;
+                case Keys.PartidasGanadas: stats.partidasGanadas++; break;
+                case Keys.PartidasPerdidas: stats.partidasPerdidas++; break;
+                case Keys.VecesQueTeFuiste: stats.vecesQueTeFuiste++; break;
+
+                case Keys.TrucosCantados: stats.trucosCantados++; break;
+                case Keys.TrucosAceptados: stats.trucosAceptados++; break;
+                case Keys.RetrucosCantados: stats.retrucosCantados++; break;
+                case Keys.RetrucosAceptados: stats.retrucosAceptados++; break;
+                case Keys.ValeCuatroCantados: stats.valeCuatroCantados++; break;
+                case Keys.ValeCuatroAceptados: stats.valeCuatroAceptados++; break;
+
+                case Keys.EnvidosCantados: stats.envidosCantados++; break;
+                case Keys.EnvidosAceptados: stats.envidosAceptados++; break;
+                case Keys.RealEnvidosCantados: stats.realEnvidosCantados++; break;
+                case Keys.RealEnvidosAceptados: stats.realEnvidosAceptados++; break;
+                case Keys.FaltaEnvidosCantados: stats.faltaEnvidosCantados++; break;
+                case Keys.FaltaEnvidosAceptados: stats.faltaEnvidosAceptados++; break;
+
+                case Keys.EnvidosGanados: stats.envidosGanados++; break;
+                case Keys.RealEnvidosGanados: stats.realEnvidosGanados++; break;
+                case Keys.FaltaEnvidosGanados: stats.faltaEnvidosGanados++; break;
+
+                case Keys.EnvidosPerdidos: stats.envidosPerdidos++; break;
+                case Keys.RealEnvidosPerdidos: stats.realEnvidosPerdidos++; break;
+                case Keys.FaltaEnvidosPerdidos: stats.faltaEnvidosPerdidos++; break;
+
+                case Keys.TrucosGanados: stats.trucosGanados++; break;
+                case Keys.RetrucosGanados: stats.retrucosGanados++; break;
+                case Keys.ValeCuatroGanados: stats.valeCuatroGanados++; break;
+
+                case Keys.TrucosPerdidos: stats.trucosPerdidos++; break;
+                case Keys.RetrucosPerdidos: stats.retrucosPerdidos++; break;
+                case Keys.ValeCuatroPerdidos: stats.valeCuatroPerdidos++; break;
+
+                default:
+                    Debug.LogWarning($"Estadísticas: Key desconocida '{key}'");
+                    return;
+            }
+
+            SaveSystem.GuardarDatos();
         }
 
         public static int Obtener(string key)
         {
-            return PlayerPrefs.GetInt(key, 0);
+            var stats = SaveSystem.Datos.estadisticas;
+
+            return key switch
+            {
+                Keys.PartidasJugadas => stats.partidasJugadas,
+                Keys.PartidasGanadas => stats.partidasGanadas,
+                Keys.PartidasPerdidas => stats.partidasPerdidas,
+                Keys.VecesQueTeFuiste => stats.vecesQueTeFuiste,
+
+                Keys.TrucosCantados => stats.trucosCantados,
+                Keys.TrucosAceptados => stats.trucosAceptados,
+                Keys.RetrucosCantados => stats.retrucosCantados,
+                Keys.RetrucosAceptados => stats.retrucosAceptados,
+                Keys.ValeCuatroCantados => stats.valeCuatroCantados,
+                Keys.ValeCuatroAceptados => stats.valeCuatroAceptados,
+
+                Keys.EnvidosCantados => stats.envidosCantados,
+                Keys.EnvidosAceptados => stats.envidosAceptados,
+                Keys.RealEnvidosCantados => stats.realEnvidosCantados,
+                Keys.RealEnvidosAceptados => stats.realEnvidosAceptados,
+                Keys.FaltaEnvidosCantados => stats.faltaEnvidosCantados,
+                Keys.FaltaEnvidosAceptados => stats.faltaEnvidosAceptados,
+
+                Keys.EnvidosGanados => stats.envidosGanados,
+                Keys.RealEnvidosGanados => stats.realEnvidosGanados,
+                Keys.FaltaEnvidosGanados => stats.faltaEnvidosGanados,
+
+                Keys.EnvidosPerdidos => stats.envidosPerdidos,
+                Keys.RealEnvidosPerdidos => stats.realEnvidosPerdidos,
+                Keys.FaltaEnvidosPerdidos => stats.faltaEnvidosPerdidos,
+
+                Keys.TrucosGanados => stats.trucosGanados,
+                Keys.RetrucosGanados => stats.retrucosGanados,
+                Keys.ValeCuatroGanados => stats.valeCuatroGanados,
+
+                Keys.TrucosPerdidos => stats.trucosPerdidos,
+                Keys.RetrucosPerdidos => stats.retrucosPerdidos,
+                Keys.ValeCuatroPerdidos => stats.valeCuatroPerdidos,
+
+                _ => 0
+            };
         }
-
-        /*public static void Resetear()
-        {
-            PlayerPrefs.DeleteKey(Keys.PartidasJugadas);
-            PlayerPrefs.DeleteKey(Keys.PartidasGanadas);
-            PlayerPrefs.DeleteKey(Keys.PartidasPerdidas);
-            PlayerPrefs.DeleteKey(Keys.VecesQueTeFuiste);
-
-            PlayerPrefs.DeleteKey(Keys.TrucosCantados);
-            PlayerPrefs.DeleteKey(Keys.TrucosAceptados);
-            PlayerPrefs.DeleteKey(Keys.RetrucosCantados);
-            PlayerPrefs.DeleteKey(Keys.RetrucosAceptados);
-            PlayerPrefs.DeleteKey(Keys.ValeCuatroCantados);
-            PlayerPrefs.DeleteKey(Keys.ValeCuatroAceptados);
-
-            PlayerPrefs.DeleteKey(Keys.EnvidosCantados);
-            PlayerPrefs.DeleteKey(Keys.EnvidosAceptados);
-            PlayerPrefs.DeleteKey(Keys.RealEnvidosCantados);
-            PlayerPrefs.DeleteKey(Keys.RealEnvidosAceptados);
-            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosCantados);
-            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosAceptados);
-
-            PlayerPrefs.DeleteKey(Keys.EnvidosGanados);
-            PlayerPrefs.DeleteKey(Keys.RealEnvidosGanados);
-            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosGanados);
-
-            PlayerPrefs.DeleteKey(Keys.EnvidosPerdidos);
-            PlayerPrefs.DeleteKey(Keys.RealEnvidosPerdidos);
-            PlayerPrefs.DeleteKey(Keys.FaltaEnvidosPerdidos);
-
-            PlayerPrefs.DeleteKey(Keys.TrucosGanados);
-            PlayerPrefs.DeleteKey(Keys.RetrucosGanados);
-            PlayerPrefs.DeleteKey(Keys.ValeCuatroGanados);
-
-            PlayerPrefs.DeleteKey(Keys.TrucosPerdidos);
-            PlayerPrefs.DeleteKey(Keys.RetrucosPerdidos);
-            PlayerPrefs.DeleteKey(Keys.ValeCuatroPerdidos);
-
-
-            PlayerPrefs.Save();
-        }*/
     }
 }

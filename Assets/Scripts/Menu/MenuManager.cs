@@ -74,6 +74,8 @@ public class MenuManager : MonoBehaviour
 
     private void Awake()
     {
+        SaveSystem.CargarDatos();
+
         Time.timeScale = 1f;
 
         mazoPersonalizado = CartaSaveManager.CargarCartas(todasLasCartas);
@@ -93,8 +95,7 @@ public class MenuManager : MonoBehaviour
     {
         AudioManager.Instance.PlayRandomMenuTrack();
 
-        int creditos = PlayerPrefs.GetInt("Creditos", 0);
-        creditosTexto.text = $"{creditos}";
+        creditosTexto.text = $"{SaveSystem.Datos.monedas}";
         UpdateStats();
         SetIas();
         SpawnCartasCompradas();
@@ -156,15 +157,13 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
     }
 
-    //PARA REEMPLAZAR UNA CARTA
     public void ReemplazarCartaElegida(CartaSO carta)
     {
         CartaSaveManager.ReemplazarCarta(carta, mazoPersonalizado);
-        CartaSaveManager.GuardarCartas(mazoPersonalizado);
 
         // Guardar qué carta fue seleccionada como personalizada
-        PlayerPrefs.SetString(keyCartaSeleccionada, carta.id);
-        PlayerPrefs.Save();
+        SaveSystem.Datos.cartaSeleccionada = carta.id;
+        SaveSystem.GuardarDatos();
     }
 
     private int CalcularGanancia(EstiloIA estilo, int puntosFinales)
@@ -272,25 +271,24 @@ public class MenuManager : MonoBehaviour
 
     public void ActualizarCreditosUI()
     {
-        int creditos = PlayerPrefs.GetInt("Creditos", 0);
-        creditosTexto.text = $"{creditos}";
+        creditosTexto.text = $"{SaveSystem.Datos.monedas}";
     }
+
 
     [ContextMenu("Resetear Créditos")]
     public void ResetearCreditosDesdeEditor()
     {
-        PlayerPrefs.SetInt("Creditos", 0);
-        PlayerPrefs.Save();
+        SaveSystem.Datos.monedas = 0;
+        SaveSystem.GuardarDatos();
         Debug.Log("Créditos reseteados desde el editor.");
+        ActualizarCreditosUI();
     }
 
     [ContextMenu("Sumar 100 Créditos")]
     public void SumarCreditos()
     {
-        int creditos = PlayerPrefs.GetInt("Creditos", 0);
-        creditos += 100;
-        PlayerPrefs.SetInt("Creditos", creditos);
-        PlayerPrefs.Save();
+        SaveSystem.Datos.monedas += 100;
+        SaveSystem.GuardarDatos();
         Debug.Log("Se sumaron 100 créditos.");
         ActualizarCreditosUI();
     }
@@ -298,24 +296,25 @@ public class MenuManager : MonoBehaviour
     [ContextMenu("Borrar Cartas Compradas")]
     public void BorrarCartasCompradas()
     {
-        PlayerPrefs.DeleteKey("CartasCompradas");
-        PlayerPrefs.Save();
+        SaveSystem.Datos.cartasCompradas.Clear();
+        SaveSystem.GuardarDatos();
         Debug.Log("Cartas compradas borradas.");
     }
 
     [ContextMenu("Borrar Mazo Personalizado (usar default)")]
     public void BorrarMazoPersonalizado()
     {
-        PlayerPrefs.DeleteKey("CartasPersonalizadas");
-        PlayerPrefs.Save();
+        SaveSystem.Datos.mazoPersonalizado.Clear();
+        SaveSystem.GuardarDatos();
         Debug.Log("Mazo personalizado borrado. Se usará el mazo default la próxima vez.");
     }
 
+
     [ContextMenu("Borrar Todo")]
-    public void DeletePlayerPrefs()
+    public void DeleteSave()
     {
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
+        SaveManager.BorrarSave();
+        Debug.Log("Archivo de guardado eliminado.");
     }
 
     public void MostrarAdvertencia(string mensaje, Transform puntoReferencia, Vector2? offset = null, float? tamañoTexto = null, Color? colorTexto = null)

@@ -4,36 +4,31 @@ using UnityEngine;
 
 public static class CartaSaveManager
 {
-    private const string keyCartas = "CartasPersonalizadas";
-
     public static void GuardarCartas(List<CartaSO> cartas)
     {
-        var ids = cartas.Select(c => c.id).ToArray();
-        var wrapper = new CartaIDWrapper { ids = ids };
-        string json = JsonUtility.ToJson(wrapper);
+        SaveSystem.Datos.mazoPersonalizado = cartas.Select(c => c.id).ToList();
+        SaveSystem.GuardarDatos();
 
-        PlayerPrefs.SetString(keyCartas, json);
-        PlayerPrefs.Save();
-
-        Debug.Log($"Cartas guardadas ({cartas.Count})");
+        Debug.Log($"CartaSaveManager: Mazo personalizado guardado ({cartas.Count} cartas).");
     }
 
     public static List<CartaSO> CargarCartas(List<CartaSO> todasLasCartas)
     {
-        if (!PlayerPrefs.HasKey(keyCartas)) return todasLasCartas;
-
-        string json = PlayerPrefs.GetString(keyCartas);
-        var wrapper = JsonUtility.FromJson<CartaIDWrapper>(json);
-
         var result = new List<CartaSO>();
 
-        foreach (string id in wrapper.ids)
+        if (SaveSystem.Datos.mazoPersonalizado == null || SaveSystem.Datos.mazoPersonalizado.Count != 40)
+        {
+            Debug.LogWarning("CartaSaveManager: No hay mazo personalizado válido. Usando mazo default.");
+            return todasLasCartas; // fallback al mazo original si no hay datos válidos
+        }
+
+        foreach (string id in SaveSystem.Datos.mazoPersonalizado)
         {
             var carta = todasLasCartas.FirstOrDefault(c => c.id == id);
             if (carta != null) result.Add(carta);
         }
 
-        return result.Count == 40 ? result : todasLasCartas; // fallback
+        return result.Count == 40 ? result : todasLasCartas;
     }
 
     public static void ReemplazarCarta(CartaSO nueva, List<CartaSO> lista)
@@ -44,10 +39,13 @@ public static class CartaSaveManager
             {
                 lista[i] = nueva;
                 Debug.Log($"Reemplazada: {nueva.valor} de {nueva.palo} → {nueva.id}");
+
+                // Actualizar el mazo guardado también
+                GuardarCartas(lista);
                 return;
             }
         }
 
-        Debug.LogWarning("No se encontró la carta a reemplazar");
+        Debug.LogWarning("CartaSaveManager: No se encontró la carta a reemplazar.");
     }
 }
