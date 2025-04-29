@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
     public List<AudioClip> menuTracks = new List<AudioClip>();
     public AudioClip hoverSound;
 
+    private int indiceAnterior = -1;
+
     private void Awake()
     {
         if (Instance != null) Destroy(gameObject);
@@ -40,15 +42,20 @@ public class AudioManager : MonoBehaviour
         if (menuTracks == null || menuTracks.Count == 0)
             return;
 
-        int index = Random.Range(0, menuTracks.Count);
+        int index;
+        do
+        {
+            index = Random.Range(0, menuTracks.Count);
+        } while (index == indiceAnterior && menuTracks.Count > 1);
+
+        indiceAnterior = index;
         PlayMusic(menuTracks[index]);
     }
 
     public void PlayMusic(AudioClip clip)
     {
-        if (musicSource.clip == clip) return;
+        if (musicSource.isPlaying && musicSource.clip == clip) return;
 
-        StopAllCoroutines(); // por las dudas evitamos duplicadas
         musicSource.clip = clip;
         musicSource.loop = false;
         musicSource.Play();
@@ -58,12 +65,12 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator EsperarFinDeMusica()
     {
-        // Espera hasta que termine el clip
-        yield return new WaitUntil(() => !musicSource.isPlaying);
-        yield return new WaitForSeconds(0.1f); // pequeña pausa de seguridad
+        float duracion = musicSource.clip.length;
+        yield return new WaitForSeconds(duracion + 0.5f);
 
-        PlayRandomMenuTrack(); // sigue con otra
+        PlayRandomMenuTrack();
     }
+
 
     public void PlaySFX(AudioClip clip)
     {
