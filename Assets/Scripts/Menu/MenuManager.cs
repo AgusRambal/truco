@@ -322,6 +322,7 @@ public class MenuManager : MonoBehaviour
     public void DeleteSave()
     {
         SaveManager.BorrarSave();
+        PlayerPrefs.DeleteAll();
         Debug.Log("Archivo de guardado eliminado.");
     }
 

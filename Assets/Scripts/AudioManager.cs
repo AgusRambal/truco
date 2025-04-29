@@ -48,21 +48,21 @@ public class AudioManager : MonoBehaviour
     {
         if (musicSource.clip == clip) return;
 
+        StopAllCoroutines(); // por las dudas evitamos duplicadas
         musicSource.clip = clip;
-        musicSource.loop = false; 
+        musicSource.loop = false;
         musicSource.Play();
 
-        StartCoroutine(EsperarFinDeMusica(clip.length));
+        StartCoroutine(EsperarFinDeMusica());
     }
 
-    private IEnumerator EsperarFinDeMusica(float duracion)
+    private IEnumerator EsperarFinDeMusica()
     {
-        yield return new WaitForSeconds(duracion + 0.1f); 
+        // Espera hasta que termine el clip
+        yield return new WaitUntil(() => !musicSource.isPlaying);
+        yield return new WaitForSeconds(0.1f); // pequeña pausa de seguridad
 
-        if (!musicSource.isPlaying)
-        {
-            PlayRandomMenuTrack();
-        }
+        PlayRandomMenuTrack(); // sigue con otra
     }
 
     public void PlaySFX(AudioClip clip)
