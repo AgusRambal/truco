@@ -4137,6 +4137,7 @@ MonoBehaviour:
   chanceCantarRetruco: 0.5
   chanceCantarValeCuatro: 0.5
   chanceResponderTruco: 0.5
+  chanceResponderEnvidoTrasTruco: 0.5
   usarEstiloParaChancesIrse: 1
   chanceDeIrse: 0.1
 --- !u!4 &596016131

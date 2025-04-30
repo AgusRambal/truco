@@ -662,8 +662,16 @@ public class GameManager : MonoBehaviour
 
     public void CantarEnvido(TipoEnvido tipo, bool esJugador)
     {
-        if (EnvidoRespondido || TrucoState > 0 || estadoRonda != EstadoRonda.Jugando)
+        bool puedeInterrumpirTruco = estadoRonda == EstadoRonda.EsperandoRespuesta && TrucoState > 0 && !SeJugoCartaDesdeUltimoCanto;
+
+        if (EnvidoRespondido || (!puedeInterrumpirTruco && estadoRonda != EstadoRonda.Jugando))
             return;
+
+        if (puedeInterrumpirTruco)
+            estadoRonda = EstadoRonda.Jugando; // Volvemos a estado neutral para el Envido
+
+        if (esJugador)
+            uiManager.OcultarOpcionesTruco();
 
         // Bloqueo global: ese tipo ya fue cantado por alguien
         if (EnvidoCantos.Contains(tipo))
@@ -685,6 +693,8 @@ public class GameManager : MonoBehaviour
             EnvidoCantos.Add(tipo);
             TipoDeEnvidoActual = tipo;
             EnvidoFueDelJugador = esJugador;
+
+            EnvidoRespondido = false;
 
             // Registrar solo si aún no fue cantado ese tipo
             if (!cantosPorJugador.ContainsKey(tipo))
@@ -982,9 +992,26 @@ public class GameManager : MonoBehaviour
         }
 
         EnvidoCantado = false;
+        EnvidoRespondido = true;
 
         if (estadoRonda != EstadoRonda.Finalizado)
         {
+            if (TrucoState > 0 && PuedeResponderTruco && !SeJugoCartaDesdeUltimoCanto)
+            {
+                estadoRonda = EstadoRonda.EsperandoRespuesta;
+
+                if (!UltimoCantoFueDelJugador)
+                {
+                    uiManager.MostrarOpcionesTruco(); // vos debés responder
+                }
+                else
+                {
+                    iaOponente.ResponderTruco(); // la IA debe responder
+                }
+
+                return;
+            }
+
             estadoRonda = EstadoRonda.Jugando;
             uiManager.ActualizarBotonesSegunEstado();
 
@@ -993,6 +1020,7 @@ public class GameManager : MonoBehaviour
                 iaOponente.JugarCarta();
             }
         }
+
     }
 
     private AudioClip GetRandomDrop(List<AudioClip> list)

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
@@ -37,6 +36,7 @@ public class IAOponente : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float chanceCantarRetruco = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceCantarValeCuatro = 0.5f;
     [SerializeField, Range(0f, 1f)] private float chanceResponderTruco = 0.5f;
+    [SerializeField, Range(0f, 1f)] private float chanceResponderEnvidoTrasTruco = 0.4f;
 
     [Header("Probabilidades de Irse")]
     [SerializeField] private bool usarEstiloParaChancesIrse = true;
@@ -83,22 +83,22 @@ public class IAOponente : MonoBehaviour
         switch (estilo)
         {
             case EstiloIA.Canchero:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.6f, 0.4f, 0.8f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.6f, 0.4f, 0.8f, 0.4f);
                 break;
             case EstiloIA.Conservador:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.3f, 0.2f, 0.4f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.3f, 0.2f, 0.4f, 0.15f);
                 break;
             case EstiloIA.Caotico:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.9f, 0.6f, 1f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.9f, 0.6f, 1f, 0.6f);
                 break;
             case EstiloIA.Agresivo:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.7f, 0.5f, 0.9f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.7f, 0.5f, 0.9f, 0.5f);
                 break;
             case EstiloIA.Calculador:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.4f, 0.6f, 0.3f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.4f, 0.6f, 0.3f, 0.3f);
                 break;
             case EstiloIA.Mentiroso:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida) = (0.5f, 0.2f, 0.7f);
+                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.5f, 0.2f, 0.7f, 0.4f);
                 break;
         }
     }
@@ -386,6 +386,35 @@ public class IAOponente : MonoBehaviour
         float delay = Random.Range(minTrucoResponseTime, maxTrucoResponseTime);
         yield return new WaitForSeconds(delay);
 
+        if (!GameManager.Instance.SeJugoCartaDesdeUltimoCanto &&
+            !GameManager.Instance.EnvidoCantado &&
+            GameManager.Instance.EnvidoCantos.Count == 0 &&
+            GameManager.Instance.estadoRonda == EstadoRonda.EsperandoRespuesta)
+        {
+            var ctx2 = AnalizarContexto();
+
+            float chanceFinal = chanceResponderEnvidoTrasTruco;
+
+            // Podés modificar la probabilidad con el contexto si querés:
+            if (estilo == EstiloIA.Canchero && ctx2.EsMano)
+                chanceFinal *= 1.1f;
+
+            if (ctx2.TieneCartasFuertes)
+                chanceFinal *= 1.2f;
+
+            chanceFinal = Mathf.Clamp01(chanceFinal);
+
+            if (Random.value < chanceFinal)
+            {
+                GameManager.TipoEnvido tipoACantar = Random.value < chanceDeQueSeaReal
+                    ? GameManager.TipoEnvido.RealEnvido
+                    : GameManager.TipoEnvido.Envido;
+
+                GameManager.Instance.CantarEnvido(tipoACantar, false);
+                yield break;
+            }
+        }
+
         var ctx = AnalizarContexto();
 
         int estadoActual = GameManager.Instance.TrucoState;
@@ -422,8 +451,20 @@ public class IAOponente : MonoBehaviour
             yield break;
         }
 
-        // Decidir si acepta el Truco
-        bool acepta = ctx.TieneCartasFuertes || (ctx.TieneCartasMedias && ctx.PuntosOponente < 27);
+        bool acepta;
+
+        if (ctx.TieneCartasFuertes)
+        {
+            acepta = true;
+        }
+        else if (ctx.TieneCartasMedias && ctx.PuntosOponente < 27)
+        {
+            acepta = Random.value < chanceResponderTruco;
+        }
+        else
+        {
+            acepta = Random.value < (chanceResponderTruco * 0.5f); // más conservador si tiene cartas malas
+        }
 
         if (acepta)
         {
@@ -610,6 +651,20 @@ public class IAOponente : MonoBehaviour
 
         if (GameManager.Instance.estadoRonda != EstadoRonda.Finalizado)
         {
+            if (GameManager.Instance.TrucoState > 0 &&
+                GameManager.Instance.PuedeResponderTruco &&
+                !GameManager.Instance.SeJugoCartaDesdeUltimoCanto)
+            {
+                GameManager.Instance.estadoRonda = EstadoRonda.EsperandoRespuesta;
+
+                if (GameManager.Instance.UltimoCantoFueDelJugador)
+                    ResponderTruco();
+                else
+                    GameManager.Instance.uiManager.MostrarOpcionesTruco();
+
+                yield break;
+            }
+
             GameManager.Instance.estadoRonda = EstadoRonda.Jugando;
             GameManager.Instance.uiManager.ActualizarBotonesSegunEstado();
 
@@ -619,6 +674,7 @@ public class IAOponente : MonoBehaviour
                 JugarCarta();
             }
         }
+
     }
 
     public IEnumerator ResponderEnvidoExtendido()
