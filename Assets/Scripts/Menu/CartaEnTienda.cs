@@ -10,6 +10,8 @@ public class CartaEnTienda : MonoBehaviour
     [SerializeField] private Button botonComprar;
     [SerializeField] private GameObject marcoComprado;
     [SerializeField] private TMP_Text textoPrecio;
+    [SerializeField] private TMP_Text nombre;
+    [SerializeField] private Image imagen;
     [SerializeField] private AudioClip buy;
     [SerializeField] private Vector2 advertenciaOffset = new Vector2(0f, 100f);
 
@@ -23,6 +25,8 @@ public class CartaEnTienda : MonoBehaviour
     private void Start()
     {
         botonComprar.onClick.AddListener(Comprar);
+        nombre.text = carta.ObtenerNombreCompleto();
+        imagen.sprite = carta.imagen;
         ActualizarVista();
     }
 

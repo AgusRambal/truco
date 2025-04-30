@@ -58,7 +58,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private AudioClip win;
     [SerializeField] private AudioClip lose;
 
-
     public enum TrucoMensajeTipo
     {
         Truco,
@@ -420,7 +419,7 @@ public class UIManager : MonoBehaviour
 
         // Solo una subida por ronda permitida
         bool puedeSubir = !envidoRespondido && cantos.Count < 3 && !(yoCanteEnvido && yoCanteReal);
-
+            
         // ENVIDO
         if (yaCantaronReal || yaCantaronFalta || yoCanteEnvido || !puedeSubir)
             envido.interactable = false;

@@ -10,6 +10,7 @@ public class CartaVisual : MonoBehaviour
     [SerializeField] private Image marcoSeleccionado;
     [SerializeField] private AudioClip buttonSound;
     [SerializeField] private TMP_Text botonTexto; 
+    [SerializeField] private TMP_Text nombre; 
 
     private CartaSO cartaSO;              
     private CartaSO cartaOriginalSO;       
@@ -30,6 +31,7 @@ public class CartaVisual : MonoBehaviour
     {
         cartaSO = carta;
         imagenCarta.sprite = carta.imagen;
+        nombre.text = carta.ObtenerNombreCompleto();
 
         menuManager = FindFirstObjectByType<MenuManager>();
 

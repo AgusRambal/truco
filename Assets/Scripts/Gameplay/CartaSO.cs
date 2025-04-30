@@ -31,6 +31,12 @@ public class CartaSO : ScriptableObject
 #endif
         Debug.Log($"ID generado: {id}");
     }
+
+    public string ObtenerNombreCompleto()
+    {
+        return $"{valor} DE {palo.ToString().ToUpper()}";
+    }
+
 }
 
 
