@@ -640,6 +640,9 @@ public class GameManager : MonoBehaviour
 
     public void MeVoy(bool esJugador)
     {
+        if (estadoRonda != EstadoRonda.Jugando)
+            return;
+
         if (esJugador)
         {
             SumarPuntos(true, true);
