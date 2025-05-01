@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
-  m_Name: 1_basto_fuego
+  m_Name: 1_basto_original
   m_EditorClassIdentifier: 
   imagen: {fileID: -8656392911017887773, guid: 2f140565376377040a42e729b4ff3c36, type: 3}
   palo: 1
