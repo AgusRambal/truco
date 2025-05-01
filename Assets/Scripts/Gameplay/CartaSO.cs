@@ -20,6 +20,7 @@ public class CartaSO : ScriptableObject
     public int valor;
     public string id; 
     public int jerarquiaTruco;
+    public int precio => jerarquiaTruco * 200 + 200;
 
     [ContextMenu("Generar ID automáticamente")]
     public void GenerarID()

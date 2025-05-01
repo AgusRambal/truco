@@ -27,6 +27,7 @@ public class CartaEnTienda : MonoBehaviour
         botonComprar.onClick.AddListener(Comprar);
         nombre.text = carta.ObtenerNombreCompleto();
         imagen.sprite = carta.imagen;
+        precio = carta.precio;
         ActualizarVista();
     }
 

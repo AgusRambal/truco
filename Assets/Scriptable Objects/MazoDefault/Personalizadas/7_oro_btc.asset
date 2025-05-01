@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
-  m_Name: 1_basto_original
+  m_Name: 7_oro_btc
   m_EditorClassIdentifier: 
-  imagen: {fileID: 3475824268794682994, guid: 7560a2d348c4e504585c5acfdff71eda, type: 3}
-  palo: 1
-  valor: 1
-  id: 1_basto_original
-  jerarquiaTruco: 13
+  imagen: {fileID: -2968296896155041015, guid: 2382d30fa7d88144a95210c9118f96a1, type: 3}
+  palo: 2
+  valor: 7
+  id: 7_oro_btc
+  jerarquiaTruco: 11

@@ -307,7 +307,7 @@ public class UIManager : MonoBehaviour
         {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasGanadas);
             AudioManager.Instance.PlaySFX(win);
-            resultText.text = $"GANASTE!!";
+            resultText.text = $"GANASTE!";
             creditos.text = $"OBTUVISTE {ganancia} CREDITOS";
         }
 
@@ -316,7 +316,7 @@ public class UIManager : MonoBehaviour
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasPerdidas);
             AudioManager.Instance.PlaySFX(lose);
             resultText.text = $"PERDISTE..";
-            creditos.text = $"NO OBTUVISTE CREDITOS";
+            creditos.text = $"OBTUVISTE {ganancia} CREDITOS";
         }
     }
 

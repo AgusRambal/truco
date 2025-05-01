@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
-  m_Name: 1_basto_original
+  m_Name: 1_copa_libertadores
   m_EditorClassIdentifier: 
-  imagen: {fileID: 3475824268794682994, guid: 7560a2d348c4e504585c5acfdff71eda, type: 3}
-  palo: 1
+  imagen: {fileID: 6232994552093949580, guid: e1dcd5cbeb6dd664298dccb40d98290a, type: 3}
+  palo: 3
   valor: 1
-  id: 1_basto_original
-  jerarquiaTruco: 13
+  id: 1_copa_libertadores
+  jerarquiaTruco: 8

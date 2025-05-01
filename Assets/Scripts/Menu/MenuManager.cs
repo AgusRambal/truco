@@ -70,11 +70,10 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text RealEnvidosPerdidosText;
     [SerializeField] private TMP_Text FaltaEnvidosPerdidosText;
 
-    private const string keyCartaSeleccionada = "CartaSeleccionada";
-
     private void Awake()
     {
         SaveSystem.CargarDatos();
+        ActualizarCreditosUI();
 
         Time.timeScale = 1f;
 
@@ -94,8 +93,6 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         AudioManager.Instance.PlayRandomMenuTrack();
-
-        creditosTexto.text = $"{SaveSystem.Datos.monedas}";
         UpdateStats();
         SetIas();
         SpawnCartasCompradas();
@@ -179,20 +176,21 @@ public class MenuManager : MonoBehaviour
     {
         int baseGanancia = estilo switch
         {
-            EstiloIA.Conservador => Random.Range(50, 101),
-            EstiloIA.Canchero => Random.Range(120, 181),
-            EstiloIA.Calculador => Random.Range(130, 200),
-            EstiloIA.Agresivo => Random.Range(200, 280),
-            EstiloIA.Mentiroso => Random.Range(220, 300),
-            EstiloIA.Caotico => Random.Range(250, 350),
-            _ => 100
+            EstiloIA.Conservador => Random.Range(20, 31),   // Muy fácil
+            EstiloIA.Canchero => Random.Range(30, 41),   // Normal
+            EstiloIA.Calculador => Random.Range(35, 50),   // Estratega medio
+            EstiloIA.Agresivo => Random.Range(45, 60),   // Difícil
+            EstiloIA.Mentiroso => Random.Range(50, 70),   // Complicado
+            EstiloIA.Caotico => Random.Range(60, 80),   // Muy difícil
+            _ => 30
         };
 
         if (puntosFinales == 30)
-            baseGanancia = Mathf.RoundToInt(baseGanancia * 1.5f);
+            baseGanancia = Mathf.RoundToInt(baseGanancia * 1.5f); // Bonus por victoria de partida a 30 puntos
 
         return baseGanancia;
     }
+
 
     public void MostrarMenuJuego()
     {

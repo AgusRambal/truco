@@ -62,6 +62,9 @@ public static class SaveManager
         {
             Debug.LogWarning("SaveManager: No existe archivo de guardado. Se crea uno nuevo.");
             SaveData nuevo = new SaveData();
+
+            nuevo.monedas = 1500;
+
             Guardar(nuevo);
             return nuevo;
         }

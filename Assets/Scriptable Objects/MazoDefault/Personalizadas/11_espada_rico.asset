@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ae4df793157ad840a7c890c1045e85b, type: 3}
-  m_Name: 1_basto_original
+  m_Name: 11_espada_rico
   m_EditorClassIdentifier: 
-  imagen: {fileID: 3475824268794682994, guid: 7560a2d348c4e504585c5acfdff71eda, type: 3}
-  palo: 1
-  valor: 1
-  id: 1_basto_original
-  jerarquiaTruco: 13
+  imagen: {fileID: 8605422206500604806, guid: 31b637373133db646985bca47f193ded, type: 3}
+  palo: 0
+  valor: 11
+  id: 11_espada_rico
+  jerarquiaTruco: 6

@@ -376,20 +376,30 @@ public class GameManager : MonoBehaviour
             estadoRonda = EstadoRonda.Finalizado;
             StopAllCoroutines();
             DevolverCartas();
+
             bool ganoJugador = puntosJugador >= pointsToEnd;
-            int ganancia = 0;
+            int ganancia;
 
             if (ganoJugador)
             {
                 ganancia = Utils.ParametrosDePartida.gananciaCalculada;
-                SaveSystem.Datos.monedas += ganancia;
-                SaveSystem.GuardarDatos();
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} créditos", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gana {ganancia} creditos", TipoMensaje.Sistema);
             }
 
+            else
+            {
+                int gananciaTeorica = Utils.ParametrosDePartida.gananciaCalculada;
+                float factor = Random.Range(0.6f, 0.81f);
+                ganancia = Mathf.RoundToInt(gananciaTeorica * factor);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} pierde, pero gana {ganancia} creditos por jugar", TipoMensaje.Sistema);
+            }
+
+            SaveSystem.Datos.monedas += ganancia;
+            SaveSystem.GuardarDatos();
             uiManager.MostrarResultadoFinal(ganoJugador, ganancia);
         }
     }
+
 
     public void FinalizarRonda()
     {
