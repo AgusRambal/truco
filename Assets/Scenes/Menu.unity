@@ -4840,7 +4840,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 399.48, y: 1879916.4}
+  m_AnchoredPosition: {x: 399.48, y: 1909572.6}
   m_SizeDelta: {x: 798.99, y: 1706.4299}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &414331176
@@ -9678,7 +9678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 561.63, y: 859023.6}
+  m_AnchoredPosition: {x: 561.63, y: 896615.5}
   m_SizeDelta: {x: 1123.3, y: 213.8547}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &705069932
@@ -10008,7 +10008,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 589.43, y: 89091.61}
+  m_AnchoredPosition: {x: 589.43, y: 119662.875}
   m_SizeDelta: {x: 1178.9, y: 857.2753}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &730598944
@@ -15815,6 +15815,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 10dfb8306fdf1ae4e9c5164a3fca9b4c, type: 2}
   - {fileID: 11400000, guid: 3778e7bfe4f650942a3af3bfa5dfdca3, type: 2}
   - {fileID: 11400000, guid: 47633498b3572c04c9c1a774dacba0cf, type: 2}
+  - {fileID: 11400000, guid: 4b439e30c4668c64cb2e8adc20513f8f, type: 2}
+  - {fileID: 11400000, guid: 99fd30ddc17fb904691fbbfc63e92420, type: 2}
+  - {fileID: 11400000, guid: 4c93f21ff25e2d64996b6d4ddf183c1e, type: 2}
+  - {fileID: 11400000, guid: e9e143cd66c3a75418e002178c5e126f, type: 2}
+  - {fileID: 11400000, guid: ad382a7f9c9100b499a567a66040d447, type: 2}
+  - {fileID: 11400000, guid: 39edc8971ed6b114783deaabd79e8c5c, type: 2}
+  - {fileID: 11400000, guid: 6b98c765c63c50e4b905fd7c3eeb0de4, type: 2}
+  - {fileID: 11400000, guid: 58b41fa858bbeb7438a7eebba27068d1, type: 2}
+  - {fileID: 11400000, guid: ec6e0652dffa17d489aa6afd89b2eda2, type: 2}
+  - {fileID: 11400000, guid: 510ef74a0e158884fbed2029d4ed73a7, type: 2}
+  - {fileID: 11400000, guid: 865ef254aa0508e45ab418d8bf196e7f, type: 2}
+  - {fileID: 11400000, guid: 6bd50323911644f4cbc6c2c41e94be80, type: 2}
+  - {fileID: 11400000, guid: 6334110c0a1b3524a9505b80e34905f3, type: 2}
+  - {fileID: 11400000, guid: 33f824e0f8fcde347b5e61438457d3a8, type: 2}
   mazoDefault:
   - {fileID: 11400000, guid: c0d0189b6207cfc4398d8197458c63cd, type: 2}
   - {fileID: 11400000, guid: 9f6bf66a14ea6ff49bd740d6c40b2222, type: 2}
@@ -19930,7 +19944,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 589.43, y: 345160.6}
+  m_AnchoredPosition: {x: 589.43, y: 376347.78}
   m_SizeDelta: {x: 1178.9, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1455391386

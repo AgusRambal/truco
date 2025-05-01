@@ -14,6 +14,8 @@ public static class SaveManager
     private static string BackupPath2 => Path.Combine(Application.persistentDataPath, backupFileName2);
     private static string BackupPath3 => Path.Combine(Application.persistentDataPath, backupFileName3);
 
+    private const int monedasAlArrancar = 5500;
+
     public static void Guardar(SaveData data)
     {
         if (data == null)
@@ -53,17 +55,17 @@ public static class SaveManager
         // Finalmente, escribir el nuevo save
         File.WriteAllText(SavePath, encryptedJson);
 
-        Debug.Log($"SaveManager: Datos guardados correctamente en {SavePath}");
+        //Debug.Log($"SaveManager: Datos guardados correctamente en {SavePath}");
     }
 
     public static SaveData Cargar()
     {
         if (!ExisteSave())
         {
-            Debug.LogWarning("SaveManager: No existe archivo de guardado. Se crea uno nuevo.");
+            //Debug.LogWarning("SaveManager: No existe archivo de guardado. Se crea uno nuevo.");
             SaveData nuevo = new SaveData();
 
-            nuevo.monedas = 1500;
+            nuevo.monedas = monedasAlArrancar;
 
             Guardar(nuevo);
             return nuevo;
@@ -79,7 +81,7 @@ public static class SaveManager
             string decryptedJson = AESHelper.Decrypt(encryptedJson);
 
             SaveData data = JsonUtility.FromJson<SaveData>(decryptedJson);
-            Debug.Log($"SaveManager: Datos cargados de {SavePath} (desencriptado)");
+            //Debug.Log($"SaveManager: Datos cargados de {SavePath} (desencriptado)");
             return data;
         }
         catch (System.Exception e)
@@ -173,19 +175,16 @@ public static class SaveManager
         if (File.Exists(BackupPath1))
         {
             File.Delete(BackupPath1);
-            Debug.Log("SaveManager: Backup1 eliminado.");
         }
 
         if (File.Exists(BackupPath2))
         {
             File.Delete(BackupPath2);
-            Debug.Log("SaveManager: Backup2 eliminado.");
         }
 
         if (File.Exists(BackupPath3))
         {
             File.Delete(BackupPath3);
-            Debug.Log("SaveManager: Backup3 eliminado.");
         }
     }
 }

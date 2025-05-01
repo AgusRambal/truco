@@ -16,6 +16,7 @@ public class CartaVisual : MonoBehaviour
     private CartaSO cartaOriginalSO;       
     private bool estaReemplazada = false;  
     private MenuManager menuManager;
+    public string CartaId => cartaSO?.id;
 
     private void Awake()
     {
@@ -85,5 +86,17 @@ public class CartaVisual : MonoBehaviour
     {
         if (marcoSeleccionado == null) return;
         marcoSeleccionado.DOFade(activo ? 1f : 0f, 0.25f).SetEase(Ease.OutQuad);
+    }
+
+    public bool EsMismaCarta(CartaSO otra)
+    {
+        return cartaSO.valor == otra.valor && cartaSO.palo == otra.palo;
+    }
+
+    public void ForzarDesmarcar()
+    {
+        estaReemplazada = false;
+        SetMarcoSeleccion(false);
+        ActualizarTextoBoton();
     }
 }

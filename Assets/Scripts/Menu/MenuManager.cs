@@ -14,7 +14,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private List<CartaSO> todasLasCartas;   // TODAS (originales + personalizadas)
     [SerializeField] private List<CartaSO> mazoDefault;      // 40 originales
     [SerializeField] private List<CartaSO> mazoPersonalizado;
-    public List<CartaSO> cartasCompradas = new(); // visible en el inspector si querés debug
+    public List<CartaSO> cartasCompradas = new();
 
     [Header("Referencias")]
     [SerializeField] private float animationDuration = 0.4f;
@@ -36,8 +36,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private float duracionAnimacion = 0.25f;
 
     [Header("Zona de personalización")]
-    [SerializeField] private Transform contenedorCartasCompradas; // zona donde se instancian
-    [SerializeField] private GameObject prefabCartaVisual;        // un prefab simple con imagen, nombre, etc.
+    [SerializeField] private Transform contenedorCartasCompradas; 
+    [SerializeField] private GameObject prefabCartaVisual;
 
     [Header("Zona de Estadisticas")]
     [SerializeField] private Color colorTextoEstadisticas;
@@ -156,9 +156,27 @@ public class MenuManager : MonoBehaviour
 
     public void ReemplazarCartaElegida(CartaSO carta)
     {
-        CartaSaveManager.ReemplazarCarta(carta, mazoPersonalizado);
+        //Sacar otras cartas que sean del mismo valor y palo
+        for (int i = 0; i < mazoPersonalizado.Count; i++)
+        {
+            if (mazoPersonalizado[i].valor == carta.valor && mazoPersonalizado[i].palo == carta.palo)
+            {
+                mazoPersonalizado[i] = carta;
+                break;
+            }
+        }
+
+        //Forzar que las otras cartas visuales desactiven su marco
+        foreach (var visual in contenedorCartasCompradas.GetComponentsInChildren<CartaVisual>())
+        {
+            if (visual.EsMismaCarta(carta) && visual.CartaId != carta.id)
+            {
+                visual.ForzarDesmarcar();
+            }
+        }
 
         SaveSystem.Datos.cartaSeleccionada = carta.id;
+        CartaSaveManager.GuardarCartas(mazoPersonalizado);
         SaveSystem.GuardarDatos();
     }
 
