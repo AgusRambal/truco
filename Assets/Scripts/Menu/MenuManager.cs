@@ -37,6 +37,7 @@ public class MenuManager : MonoBehaviour
 
     [Header("Zona de personalización")]
     [SerializeField] private Transform contenedorCartasCompradas; 
+    [SerializeField] private TMP_Text texto; 
     [SerializeField] private GameObject prefabCartaVisual;
 
     [Header("Zona de Estadisticas")]
@@ -96,6 +97,11 @@ public class MenuManager : MonoBehaviour
         UpdateStats();
         SetIas();
         SpawnCartasCompradas();
+
+        if (cartasCompradas.Count > 0)
+        {
+            texto.gameObject.SetActive(false);
+        }
     }
 
     private void SpawnCartasCompradas()
@@ -123,6 +129,8 @@ public class MenuManager : MonoBehaviour
 
         cartasCompradas.Add(carta);
 
+        texto.gameObject.SetActive(false);
+        
         GameObject go = Instantiate(prefabCartaVisual, contenedorCartasCompradas);
         var visual = go.GetComponent<CartaVisual>();
 
