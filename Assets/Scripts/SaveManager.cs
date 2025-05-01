@@ -14,7 +14,7 @@ public static class SaveManager
     private static string BackupPath2 => Path.Combine(Application.persistentDataPath, backupFileName2);
     private static string BackupPath3 => Path.Combine(Application.persistentDataPath, backupFileName3);
 
-    private const int monedasAlArrancar = 5500;
+    private const int monedasAlArrancar = 5500; //1500 default
 
     public static void Guardar(SaveData data)
     {

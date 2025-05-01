@@ -506,8 +506,8 @@ public class IAOponente : MonoBehaviour
                 _ => "Truco"
             };
 
-            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} acepto el {nombreCanto}", TipoMensaje.Sistema); 
-            GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState + 1;    
+            ChatManager.Instance.AgregarMensaje($"{GameManager.Instance.NombreJugador(false)} no acepto el {nombreCanto}", TipoMensaje.Sistema);
+            GameManager.Instance.puntosEnJuego = GameManager.Instance.TrucoState;
             GameManager.Instance.SumarPuntos(true, true);
         }
     }

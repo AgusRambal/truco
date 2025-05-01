@@ -578,7 +578,7 @@ public class GameManager : MonoBehaviour
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroAceptados);
             }
 
-            puntosEnJuego = TrucoState + 1;
+            puntosEnJuego = TrucoState;
             puntosEnJuego++;
             estadoRonda = EstadoRonda.Jugando;
             PuedeResponderTruco = false;
