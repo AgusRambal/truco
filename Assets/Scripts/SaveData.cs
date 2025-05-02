@@ -29,6 +29,8 @@ public class EstadisticasJugador
     public int partidasGanadas;
     public int partidasPerdidas;
     public int vecesQueTeFuiste;
+    public int rachaVictoriasActual;
+    public int rachaVictoriasMaxima;
 
     // Truco
     public int trucosCantados;

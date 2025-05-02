@@ -19,6 +19,8 @@ public static class Utils
             public const string PartidasGanadas = "PartidasGanadas";
             public const string PartidasPerdidas = "PartidasPerdidas";
             public const string VecesQueTeFuiste = "VecesQueTeFuiste";
+            public const string RachaVictoriasActual = "RachaVictoriasActual";
+            public const string RachaVictoriasMaxima = "RachaVictoriasMaxima";
 
             public const string TrucosCantados = "TrucosCantados";
             public const string TrucosAceptados = "TrucosAceptados";
@@ -58,9 +60,19 @@ public static class Utils
             switch (key)
             {
                 case Keys.PartidasJugadas: stats.partidasJugadas++; break;
-                case Keys.PartidasGanadas: stats.partidasGanadas++; break;
-                case Keys.PartidasPerdidas: stats.partidasPerdidas++; break;
                 case Keys.VecesQueTeFuiste: stats.vecesQueTeFuiste++; break;
+
+                case Keys.PartidasGanadas:
+                    stats.partidasGanadas++;
+                    stats.rachaVictoriasActual++;
+                    if (stats.rachaVictoriasActual > stats.rachaVictoriasMaxima)
+                        stats.rachaVictoriasMaxima = stats.rachaVictoriasActual;
+                    break;
+
+                case Keys.PartidasPerdidas:
+                    stats.partidasPerdidas++;
+                    stats.rachaVictoriasActual = 0;
+                    break;
 
                 case Keys.TrucosCantados: stats.trucosCantados++; break;
                 case Keys.TrucosAceptados: stats.trucosAceptados++; break;
@@ -110,6 +122,8 @@ public static class Utils
                 Keys.PartidasGanadas => stats.partidasGanadas,
                 Keys.PartidasPerdidas => stats.partidasPerdidas,
                 Keys.VecesQueTeFuiste => stats.vecesQueTeFuiste,
+                Keys.RachaVictoriasActual => stats.rachaVictoriasActual,
+                Keys.RachaVictoriasMaxima => stats.rachaVictoriasMaxima,
 
                 Keys.TrucosCantados => stats.trucosCantados,
                 Keys.TrucosAceptados => stats.trucosAceptados,

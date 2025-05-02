@@ -70,6 +70,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text EnvidosPerdidosText;
     [SerializeField] private TMP_Text RealEnvidosPerdidosText;
     [SerializeField] private TMP_Text FaltaEnvidosPerdidosText;
+    [SerializeField] private TMP_Text rachaActualText;
+    [SerializeField] private TMP_Text rachaMaximaText;
 
     private void Awake()
     {
@@ -203,16 +205,21 @@ public class MenuManager : MonoBehaviour
         int baseGanancia = estilo switch
         {
             EstiloIA.Conservador => Random.Range(20, 31),   // Muy fácil
-            EstiloIA.Canchero => Random.Range(30, 41),   // Normal
-            EstiloIA.Calculador => Random.Range(35, 50),   // Estratega medio
-            EstiloIA.Agresivo => Random.Range(45, 60),   // Difícil
-            EstiloIA.Mentiroso => Random.Range(50, 70),   // Complicado
-            EstiloIA.Caotico => Random.Range(60, 80),   // Muy difícil
+            EstiloIA.Canchero => Random.Range(30, 41),      // Normal
+            EstiloIA.Calculador => Random.Range(35, 50),    // Estratega medio
+            EstiloIA.Agresivo => Random.Range(45, 60),      // Difícil
+            EstiloIA.Mentiroso => Random.Range(50, 70),     // Complicado
+            EstiloIA.Caotico => Random.Range(60, 80),       // Muy difícil
             _ => 30
         };
 
         if (puntosFinales == 30)
             baseGanancia = Mathf.RoundToInt(baseGanancia * 1.5f); // Bonus por victoria de partida a 30 puntos
+
+        //Bonus por racha
+        int racha = Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RachaVictoriasActual);
+        int bonusRacha = racha * 10;
+        baseGanancia += bonusRacha;
 
         return baseGanancia;
     }
@@ -389,6 +396,8 @@ public class MenuManager : MonoBehaviour
         victoriasText.text = $"{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasGanadas)}";
         derrotasText.text = $"{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.PartidasPerdidas)}";
         vecesQueTeFuisteText.text = $"<color=#{colorHex}>Veces que te fuiste: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.VecesQueTeFuiste)}";
+        rachaActualText.text = $"<color=#{colorHex}>Racha actual: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RachaVictoriasActual)}";
+        rachaMaximaText.text = $"<color=#{colorHex}>Racha maxima: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.RachaVictoriasMaxima)}";
 
         trucosCantadosText.text = $"<color=#{colorHex}>- Trucos cantados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosCantados)}";
         trucosAceptadosText.text = $"<color=#{colorHex}>- Trucos aceptados: </color>{Utils.Estadisticas.Obtener(Utils.Estadisticas.Keys.TrucosAceptados)}";
