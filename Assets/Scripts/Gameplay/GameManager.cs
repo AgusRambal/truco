@@ -655,14 +655,14 @@ public class GameManager : MonoBehaviour
 
         if (esJugador)
         {
-            SumarPuntos(true, true);
+            SumarPuntos(false, true);
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.VecesQueTeFuiste);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} se fue al mazo", TipoMensaje.Sistema);
         }
 
         else 
         {
-            SumarPuntos(false, true);
+            SumarPuntos(true, true);
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} se fue al mazo", TipoMensaje.Sistema);
         }
 
