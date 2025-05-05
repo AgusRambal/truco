@@ -122,7 +122,7 @@ public class MenuManager : MonoBehaviour
 #if UNITY_STANDALONE_OSX
         foreach (var item in miScrollRects)
         {
-            item.GetComponent<ScrollRect>().scrollSensitivity = 1f;
+            item.GetComponent<ScrollRect>().scrollSensitivity = .1f;
         }
 #else
 
@@ -149,7 +149,7 @@ public class MenuManager : MonoBehaviour
 
         if (dropdownScroll != null)
         {
-            dropdownScroll.scrollSensitivity = Application.platform == RuntimePlatform.OSXPlayer ? 1f : 4f;
+            dropdownScroll.scrollSensitivity = Application.platform == RuntimePlatform.OSXPlayer ? .1f : 4f;
         }
     }
 
