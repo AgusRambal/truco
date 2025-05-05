@@ -17,7 +17,7 @@ public class PopUpEscalador : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         popUp.SetActive(true);
-        popUpRect.DOKill(); // cancelamos animaciones anteriores
+        popUpRect.DOKill(); //cancelamos animaciones anteriores
         popUpRect.DOScale(Vector3.one, duracionAnimacion).SetEase(Ease.OutBack);
     }
 
