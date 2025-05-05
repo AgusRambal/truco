@@ -91,6 +91,8 @@ public class GameManager : MonoBehaviour
     public int PointsToEnd => pointsToEnd;
     public int ManosGanadasJugador => manosGanadasJugador;
     public int ManosGanadasOponente => manosGanadasOponente;
+    public bool usarAprendizajeIA { get; private set; }
+    public ConfiguracionIA configIASeleccionada { get; private set; }
 
     public enum TipoEnvido
     {
@@ -114,7 +116,16 @@ public class GameManager : MonoBehaviour
             : CartaSaveManager.CargarCartas(cartasBackup); 
 
         pointsToEnd = Utils.ParametrosDePartida.puntosParaGanar;
-        iaOponente.estilo = Utils.ParametrosDePartida.estiloSeleccionado;
+
+        usarAprendizajeIA = Utils.ParametrosDePartida.usarAprendizaje;
+
+        EstiloIA estilo = Utils.ParametrosDePartida.estiloSeleccionado;
+
+        configIASeleccionada = usarAprendizajeIA
+            ? SaveSystem.Datos.personalidadesAdaptadas.Find(p => p.estilo == estilo)
+            : SaveSystem.Datos.personalidadesDefault.Find(p => p.estilo == estilo);
+
+        iaOponente.CargarConfiguracionIA(configIASeleccionada);
 
         Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.PartidasJugadas);
     }

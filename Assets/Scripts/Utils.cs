@@ -9,6 +9,7 @@ public static class Utils
         public static int gananciaCalculada = 10;
         public static EstiloIA estiloSeleccionado = EstiloIA.Canchero;
         public static List<CartaSO> cartasSeleccionadas = new();
+        public static bool usarAprendizaje = false;
     }
 
     public static class Estadisticas

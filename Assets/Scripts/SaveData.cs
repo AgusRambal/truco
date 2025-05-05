@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
 
@@ -10,6 +10,9 @@ public class SaveData
     public List<string> cartasCompradas = new List<string>();
     public string cartaSeleccionada = "";
     public List<string> mazoPersonalizado = new List<string>();
+    public bool usarAprendizaje = false;
+    public List<ConfiguracionIA> personalidadesDefault = new();
+    public List<ConfiguracionIA> personalidadesAdaptadas = new();
 
     public SaveData()
     {

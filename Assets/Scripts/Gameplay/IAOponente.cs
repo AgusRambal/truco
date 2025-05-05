@@ -10,7 +10,8 @@ public enum EstiloIA
     Caotico,
     Agresivo,
     Calculador,
-    Mentiroso
+    Mentiroso,
+    Adaptativo
 }
 
 public class IAOponente : MonoBehaviour
@@ -61,96 +62,22 @@ public class IAOponente : MonoBehaviour
         public int PuntosOponente;
     }
 
-    private void Awake()
+    public void CargarConfiguracionIA(ConfiguracionIA config)
     {
-        SelectIAChance();     
-    }
+        estilo = config.estilo;
 
-    private void SelectIAChance()
-    {
-        if (usarEstiloParaChancesEnvido)
-            SetChancesEnvido(estilo);
+        // Cargar valores a las variables del inspector para debugging/edición
+        chanceCantarEnvido = config.chanceCantarEnvido;
+        chanceDeQueSeaReal = config.chanceDeQueSeaReal;
+        chanceResponderConSubida = config.chanceResponderConSubida;
+        chanceResponderEnvidoTrasTruco = config.chanceResponderEnvidoTrasTruco;
 
-        if (usarEstiloParaChancesTruco)
-            SetChancesTruco(estilo);
+        chanceCantarTruco = config.chanceCantarTruco;
+        chanceCantarRetruco = config.chanceCantarRetruco;
+        chanceCantarValeCuatro = config.chanceCantarValeCuatro;
+        chanceResponderTruco = config.chanceResponderTruco;
 
-        if (usarEstiloParaChancesIrse)
-            SetChancesIrse(estilo);
-    }
-
-    private void SetChancesEnvido(EstiloIA estilo)
-    {
-        switch (estilo)
-        {
-            case EstiloIA.Canchero:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.6f, 0.4f, 0.8f, 0.4f);
-                break;
-            case EstiloIA.Conservador:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.3f, 0.2f, 0.4f, 0.15f);
-                break;
-            case EstiloIA.Caotico:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.9f, 0.6f, 1f, 0.6f);
-                break;
-            case EstiloIA.Agresivo:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.7f, 0.5f, 0.9f, 0.5f);
-                break;
-            case EstiloIA.Calculador:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.4f, 0.6f, 0.3f, 0.3f);
-                break;
-            case EstiloIA.Mentiroso:
-                (chanceCantarEnvido, chanceDeQueSeaReal, chanceResponderConSubida, chanceResponderEnvidoTrasTruco) = (0.5f, 0.2f, 0.7f, 0.4f);
-                break;
-        }
-    }
-
-    private void SetChancesTruco(EstiloIA estilo)
-    {
-        switch (estilo)
-        {
-            case EstiloIA.Canchero:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.5f, 0.5f, 0.3f, 0.9f);
-                break;
-            case EstiloIA.Conservador:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.3f, 0.1f, 0.05f, 0.6f);
-                break;
-            case EstiloIA.Caotico:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.9f, 0.7f, 0.7f, 1f);
-                break;
-            case EstiloIA.Agresivo:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.8f, 0.6f, 0.4f, 1f);
-                break;
-            case EstiloIA.Calculador:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.4f, 0.3f, 0.2f, 0.8f);
-                break;
-            case EstiloIA.Mentiroso:
-                (chanceCantarTruco, chanceCantarRetruco, chanceCantarValeCuatro, chanceResponderTruco) = (0.6f, 0.5f, 0.1f, 0.7f);
-                break;
-        }
-    }
-
-    private void SetChancesIrse(EstiloIA estilo)
-    {
-        switch (estilo)
-        {
-            case EstiloIA.Canchero:
-                chanceDeIrse = 0.1f;
-                break;
-            case EstiloIA.Conservador:
-                chanceDeIrse = 0.4f;
-                break;
-            case EstiloIA.Caotico:
-                chanceDeIrse = 0.05f;
-                break;
-            case EstiloIA.Agresivo:
-                chanceDeIrse = 0.05f;
-                break;
-            case EstiloIA.Calculador:
-                chanceDeIrse = 0.2f;
-                break;
-            case EstiloIA.Mentiroso:
-                chanceDeIrse = 0.15f;
-                break;
-        }
+        chanceDeIrse = config.chanceDeIrse;
     }
 
     public void JugarCarta()

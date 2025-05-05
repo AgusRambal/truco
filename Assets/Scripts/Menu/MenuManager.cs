@@ -75,8 +75,6 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text rachaActualText;
     [SerializeField] private TMP_Text rachaMaximaText;
     
-    private EstiloIA estiloSeleccionadoPrevio = EstiloIA.Canchero; // Por defecto
-
     private void Awake()
     {
         SaveSystem.CargarDatos();
@@ -104,9 +102,10 @@ public class MenuManager : MonoBehaviour
         SetIas();
         SpawnCartasCompradas();
 
-        toggleMachineLearning.isOn = false;
+        toggleMachineLearning.onValueChanged.RemoveListener(OnToggleMachineLearning);
+        toggleMachineLearning.isOn = SaveSystem.Datos.usarAprendizaje;
         toggleMachineLearning.onValueChanged.AddListener(OnToggleMachineLearning);
-        
+
         if (cartasCompradas.Count > 0)
         {
             texto.gameObject.SetActive(false);
@@ -115,26 +114,10 @@ public class MenuManager : MonoBehaviour
 
     private void OnToggleMachineLearning(bool isOn)
     {
-        if (isOn)
-        {
-            // Guardar el valor actual antes de bloquear
-            estiloSeleccionadoPrevio = (EstiloIA)dropdownEstiloIA.value;
-
-            // Cambiar a Canchero y desactivar el dropdown
-            dropdownEstiloIA.value = (int)EstiloIA.Canchero;
-            dropdownEstiloIA.interactable = false;
-        }
-        else
-        {
-            // Restaurar el valor anterior y reactivar
-            dropdownEstiloIA.value = (int)estiloSeleccionadoPrevio;
-            dropdownEstiloIA.interactable = true;
-        }
-
-        dropdownEstiloIA.RefreshShownValue();
+        SaveSystem.Datos.usarAprendizaje = isOn;
+        SaveSystem.GuardarDatos();
     }
 
-    
     private void SpawnCartasCompradas()
     {
         foreach (var carta in cartasCompradas)
@@ -188,6 +171,8 @@ public class MenuManager : MonoBehaviour
         Utils.ParametrosDePartida.estiloSeleccionado = (EstiloIA)dropdownEstiloIA.value;
         Utils.ParametrosDePartida.gananciaCalculada = CalcularGanancia((EstiloIA)dropdownEstiloIA.value, puntos);
         Utils.ParametrosDePartida.cartasSeleccionadas = new List<CartaSO>(mazoPersonalizado);
+        Utils.ParametrosDePartida.usarAprendizaje = SaveSystem.Datos.usarAprendizaje;
+
 
         DOTween.KillAll();
         SceneManager.LoadScene("Gameplay");
