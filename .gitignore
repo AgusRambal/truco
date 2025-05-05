@@ -24,6 +24,12 @@ Assets/AssetStoreTools*
 *.mdb
 *.opendb
 
+# DoTween debug metadata
+*.dll.mdb.meta
+
+# Layouts de editor personal (Unity)
+UserSettings/
+
 # ========== OS-SPECIFIC ==========
 # macOS
 .DS_Store
