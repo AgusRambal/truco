@@ -299,8 +299,19 @@ public class IAOponente : MonoBehaviour
         //  Elegir carta con intención
         CardSelector elegida = null;
 
+        // Si se empató la subronda anterior
         if (GameManager.Instance.UltimaManoFueEmpate)
         {
+            // Si ya ganamos la primera → no se debe jugar más (IA no debería estar jugando)
+            if (GameManager.Instance.ManosGanadasOponente == 1 &&
+                GameManager.Instance.ManosGanadasJugador == 0 &&
+                GameManager.Instance.CantidadCartasOponenteJugadas == 2)
+            {
+                Debug.LogWarning("IA: Se intentó jugar carta cuando ya había ganado por empate en segunda mano. Ignorando jugada.");
+                yield break;
+            }
+
+            // Si el empate fue en la primera, y hay que definir → tirar la más fuerte
             elegida = disponibles.OrderByDescending(c => c.GetComponent<Carta>().jerarquiaTruco).First();
         }
         else

@@ -331,6 +331,23 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // NUEVO: Gano primera y empatamos la segunda → gana automáticamente
+        if (cartasJugadorJugadas.Count == 2 && cartasOponenteJugadas.Count == 2)
+        {
+            if (manosGanadasJugador == 1 && manosGanadasOponente == 0 && ultimaManoFueEmpate)
+            {
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} ganó por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
+                SumarPuntos(true, true);
+                return;
+            }
+            else if (manosGanadasOponente == 1 && manosGanadasJugador == 0 && ultimaManoFueEmpate)
+            {
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} ganó por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
+                SumarPuntos(false, true);
+                return;
+            }
+        }
+
         if (manosGanadasJugador == 2)
         {
             SumarPuntos(true, true);
