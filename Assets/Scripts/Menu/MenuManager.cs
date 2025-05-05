@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
@@ -101,6 +102,7 @@ public class MenuManager : MonoBehaviour
         UpdateStats();
         SetIas();
         SpawnCartasCompradas();
+        SetScrolls();
 
         SaveSystem.Datos.usarAprendizaje = false;
         SaveSystem.GuardarDatos();
@@ -115,10 +117,40 @@ public class MenuManager : MonoBehaviour
         }
     }
 
+    private void SetScrolls()
+    {
+#if UNITY_STANDALONE_OSX
+        foreach (var item in miScrollRects)
+        {
+            item.GetComponent<ScrollRect>().scrollSensitivity = 1f;
+        }
+#else
+
+        foreach (var item in miScrollRects)
+        {
+            item.GetComponent<ScrollRect>().scrollSensitivity = 4f;
+        }
+#endif
+    }
+
     private void OnToggleMachineLearning(bool isOn)
     {
         SaveSystem.Datos.usarAprendizaje = isOn;
         SaveSystem.GuardarDatos();
+    }
+
+    IEnumerator AjustarScrollDropdown()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        ScrollRect dropdownScroll = dropdownEstiloIA.transform.root
+            .GetComponentsInChildren<ScrollRect>(true)
+            .FirstOrDefault(sr => sr.gameObject.name.Contains("Dropdown List"));
+
+        if (dropdownScroll != null)
+        {
+            dropdownScroll.scrollSensitivity = Application.platform == RuntimePlatform.OSXPlayer ? 1f : 4f;
+        }
     }
 
     private void SpawnCartasCompradas()
@@ -166,6 +198,7 @@ public class MenuManager : MonoBehaviour
         dropdownEstiloIA.ClearOptions();
         List<string> nombresEstilos = System.Enum.GetNames(typeof(EstiloIA)).ToList();
         dropdownEstiloIA.AddOptions(nombresEstilos);
+        StartCoroutine(AjustarScrollDropdown());
     }
 
     public void Jugar(int puntos)
