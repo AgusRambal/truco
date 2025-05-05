@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text creditosTexto;
     [SerializeField] private GameObject textoAdvertenciaPrefab;
     [SerializeField] private ScrollResetter[] miScrollRects;
+    [SerializeField] private Toggle toggleMachineLearning;
 
     [Header("Botones principales")]
     [SerializeField] private List<Transform> botonesMenuPrincipal;
@@ -72,6 +74,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TMP_Text FaltaEnvidosPerdidosText;
     [SerializeField] private TMP_Text rachaActualText;
     [SerializeField] private TMP_Text rachaMaximaText;
+    
+    private EstiloIA estiloSeleccionadoPrevio = EstiloIA.Canchero; // Por defecto
 
     private void Awake()
     {
@@ -100,12 +104,37 @@ public class MenuManager : MonoBehaviour
         SetIas();
         SpawnCartasCompradas();
 
+        toggleMachineLearning.isOn = false;
+        toggleMachineLearning.onValueChanged.AddListener(OnToggleMachineLearning);
+        
         if (cartasCompradas.Count > 0)
         {
             texto.gameObject.SetActive(false);
         }
     }
 
+    private void OnToggleMachineLearning(bool isOn)
+    {
+        if (isOn)
+        {
+            // Guardar el valor actual antes de bloquear
+            estiloSeleccionadoPrevio = (EstiloIA)dropdownEstiloIA.value;
+
+            // Cambiar a Canchero y desactivar el dropdown
+            dropdownEstiloIA.value = (int)EstiloIA.Canchero;
+            dropdownEstiloIA.interactable = false;
+        }
+        else
+        {
+            // Restaurar el valor anterior y reactivar
+            dropdownEstiloIA.value = (int)estiloSeleccionadoPrevio;
+            dropdownEstiloIA.interactable = true;
+        }
+
+        dropdownEstiloIA.RefreshShownValue();
+    }
+
+    
     private void SpawnCartasCompradas()
     {
         foreach (var carta in cartasCompradas)
