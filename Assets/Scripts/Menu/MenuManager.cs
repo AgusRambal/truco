@@ -102,8 +102,11 @@ public class MenuManager : MonoBehaviour
         SetIas();
         SpawnCartasCompradas();
 
+        SaveSystem.Datos.usarAprendizaje = false;
+        SaveSystem.GuardarDatos();
+
         toggleMachineLearning.onValueChanged.RemoveListener(OnToggleMachineLearning);
-        toggleMachineLearning.isOn = SaveSystem.Datos.usarAprendizaje;
+        toggleMachineLearning.isOn = false;
         toggleMachineLearning.onValueChanged.AddListener(OnToggleMachineLearning);
 
         if (cartasCompradas.Count > 0)
