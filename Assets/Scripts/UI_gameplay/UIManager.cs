@@ -134,7 +134,8 @@ public class UIManager : MonoBehaviour
 
     private void MostrarInfo()
     {
-        info.text = $"- PARTIDA A {GameManager.Instance.PointsToEnd} RONDAS\n - SIN FLOR\n - IA ESTILO {GameManager.Instance.iaOponente.estilo}";
+        string estado = Utils.ParametrosDePartida.usarAprendizaje ? "CON" : "SIN";
+        info.text = $" - PARTIDA A {GameManager.Instance.PointsToEnd} RONDAS\n - SIN FLOR\n - IA ESTILO {GameManager.Instance.iaOponente.estilo} {estado} ADAPTACION AL JUGADOR";
     }
 
     public void ActualizarBotonesSegunEstado()
