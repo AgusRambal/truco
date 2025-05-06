@@ -134,6 +134,7 @@ public class MenuManager : MonoBehaviour
     private void OnToggleMachineLearning(bool isOn)
     {
         SaveSystem.Datos.usarAprendizaje = isOn;
+        Utils.ParametrosDePartida.usarAprendizaje = isOn;
         SaveSystem.GuardarDatos();
     }
     
@@ -152,6 +153,18 @@ public class MenuManager : MonoBehaviour
                 bool estaEnUso = mazoPersonalizado.Any(c => c.id == carta.id);
                 visual.SetMarcoSeleccion(estaEnUso);
             }
+        }
+    }
+
+    public void OnDropdownEstiloCambiado(int index)
+    {
+        toggleMachineLearning.interactable = true;
+
+        if (index == dropdownEstiloIA.value && !toggleMachineLearning.isOn)
+        {
+            toggleMachineLearning.isOn = true;
+            OnToggleMachineLearning(true);
+            toggleMachineLearning.interactable = false;
         }
     }
 
