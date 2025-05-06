@@ -5,7 +5,7 @@ using System.Collections;
 public class ScrollResetter : MonoBehaviour
 {
     [SerializeField] private ScrollRect scrollRect;
-
+    
     public void ResetScroll()
     {
         StartCoroutine(ResetScrollNextFrame());

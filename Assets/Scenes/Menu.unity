@@ -1515,6 +1515,7 @@ GameObject:
   - component: {fileID: 110914221}
   - component: {fileID: 110914220}
   - component: {fileID: 110914219}
+  - component: {fileID: 110914222}
   m_Layer: 5
   m_Name: Template
   m_TagString: Untagged
@@ -1611,6 +1612,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110914217}
   m_CullTransparentMesh: 1
+--- !u!114 &110914222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110914217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e2b620db55cf254891fa903f2738d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 110914219}
+  dontUse: 0
 --- !u!1 &133050315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,7 +1818,7 @@ MonoBehaviour:
   m_Content: {fileID: 1455391385}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -1869,6 +1884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 137706616}
+  dontUse: 0
 --- !u!1 &140653030
 GameObject:
   m_ObjectHideFlags: 0
@@ -5192,7 +5208,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 399.48, y: 2641338}
+  m_AnchoredPosition: {x: 399.48, y: 3051021.5}
   m_SizeDelta: {x: 798.99, y: 1706.4299}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &414331176
@@ -10204,7 +10220,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 561.63, y: 530572.44}
+  m_AnchoredPosition: {x: 561.63, y: 1062154}
   m_SizeDelta: {x: 1123.3, y: 213.8547}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &705069932
@@ -10534,7 +10550,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 648, y: 485251.7}
+  m_AnchoredPosition: {x: 648, y: 909188.2}
   m_SizeDelta: {x: 1178.9, y: 857.2753}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &730598944
@@ -14214,7 +14230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000038146973}
+  m_AnchoredPosition: {x: 0, y: -330.088}
   m_SizeDelta: {x: 0, y: 72.755}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1001 &1021523968
@@ -16764,6 +16780,7 @@ MonoBehaviour:
   - {fileID: 137706619}
   - {fileID: 1892460973}
   - {fileID: 1477261456}
+  - {fileID: 110914222}
   toggleMachineLearning: {fileID: 616285634}
   botonesMenuPrincipal:
   - {fileID: 1101895247}
@@ -21019,7 +21036,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 589.43, y: 599752.3}
+  m_AnchoredPosition: {x: 589.43, y: 1026495.75}
   m_SizeDelta: {x: 1178.9, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1455391386
@@ -21093,7 +21110,7 @@ RectTransform:
   m_Father: {fileID: 1879896537}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0.8771901}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -21781,6 +21798,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 1477261457}
+  dontUse: 0
 --- !u!114 &1477261457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21796,7 +21814,7 @@ MonoBehaviour:
   m_Content: {fileID: 705069931}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -25768,8 +25786,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1460917987}
   m_HandleRect: {fileID: 1460917986}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.8771901
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -27043,7 +27061,7 @@ MonoBehaviour:
   m_Content: {fileID: 414331175}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -27109,6 +27127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 1892460970}
+  dontUse: 0
 --- !u!1 &1903460447
 GameObject:
   m_ObjectHideFlags: 0
@@ -27199,7 +27218,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -29650,7 +29669,7 @@ MonoBehaviour:
   m_Content: {fileID: 730598943}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -29716,6 +29735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 2078543654}
+  dontUse: 0
 --- !u!1 &2090504225
 GameObject:
   m_ObjectHideFlags: 0

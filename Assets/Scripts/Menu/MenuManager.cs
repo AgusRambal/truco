@@ -125,7 +125,6 @@ public class MenuManager : MonoBehaviour
             item.GetComponent<ScrollRect>().scrollSensitivity = .1f;
         }
 #else
-
         foreach (var item in miScrollRects)
         {
             item.GetComponent<ScrollRect>().scrollSensitivity = 4f;
@@ -138,21 +137,7 @@ public class MenuManager : MonoBehaviour
         SaveSystem.Datos.usarAprendizaje = isOn;
         SaveSystem.GuardarDatos();
     }
-
-    IEnumerator AjustarScrollDropdown()
-    {
-        yield return new WaitForSeconds(0.05f);
-
-        ScrollRect dropdownScroll = dropdownEstiloIA.transform.root
-            .GetComponentsInChildren<ScrollRect>(true)
-            .FirstOrDefault(sr => sr.gameObject.name.Contains("Dropdown List"));
-
-        if (dropdownScroll != null)
-        {
-            dropdownScroll.scrollSensitivity = Application.platform == RuntimePlatform.OSXPlayer ? .1f : 4f;
-        }
-    }
-
+    
     private void SpawnCartasCompradas()
     {
         foreach (var carta in cartasCompradas)
@@ -198,9 +183,8 @@ public class MenuManager : MonoBehaviour
         dropdownEstiloIA.ClearOptions();
         List<string> nombresEstilos = System.Enum.GetNames(typeof(EstiloIA)).ToList();
         dropdownEstiloIA.AddOptions(nombresEstilos);
-        StartCoroutine(AjustarScrollDropdown());
     }
-
+    
     public void Jugar(int puntos)
     {
         Utils.ParametrosDePartida.puntosParaGanar = puntos;
