@@ -547,6 +547,7 @@ public class GameManager : MonoBehaviour
         { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Truco);
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosCantados);
+
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
@@ -554,6 +555,7 @@ public class GameManager : MonoBehaviour
         {   
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Retruco);
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosCantados);
+
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
@@ -561,6 +563,7 @@ public class GameManager : MonoBehaviour
         { 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.ValeCuatro);
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroCantados);
+
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} canta {nombreCanto}", TipoMensaje.Sistema);
         }
 
@@ -685,6 +688,7 @@ public class GameManager : MonoBehaviour
         {
             SumarPuntos(false, true);
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.VecesQueTeFuiste);
+
             ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} se fue al mazo", TipoMensaje.Sistema);
         }
 
@@ -798,18 +802,21 @@ public class GameManager : MonoBehaviour
     {
         CantarEnvido(TipoEnvido.Envido, jugador);
         Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosCantados);
+
     }
 
     public void CantarRealEnvido(bool jugador)
     {
         CantarEnvido(TipoEnvido.RealEnvido, jugador);
         Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosCantados);
+
     }
 
     public void CantarFaltaEnvido(bool jugador)
     {
         CantarEnvido(TipoEnvido.FaltaEnvido, jugador);
         Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosCantados);
+
     }
 
     public int CalcularPuntosEnvido(bool esJugador)
@@ -894,10 +901,12 @@ public class GameManager : MonoBehaviour
             {
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosAceptados);
             }
+
             else if (nombreEnvido == "Real Envido")
             {
-                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosAceptados);
+                Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosAceptados);           
             }
+
             else if (nombreEnvido == "Falta Envido")
             {
                 Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosAceptados);
@@ -910,10 +919,12 @@ public class GameManager : MonoBehaviour
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosGanados);
                 }
+
                 else if (nombreEnvido == "Real Envido")
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosGanados);
                 }
+
                 else if (nombreEnvido == "Falta Envido")
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosGanados);
@@ -925,10 +936,12 @@ public class GameManager : MonoBehaviour
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.EnvidosPerdidos);
                 }
+
                 else if (nombreEnvido == "Real Envido")
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RealEnvidosPerdidos);
                 }
+
                 else if (nombreEnvido == "Falta Envido")
                 {
                     Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.FaltaEnvidosPerdidos);
@@ -941,22 +954,27 @@ public class GameManager : MonoBehaviour
             {
                 puntosAGanar = PointsToEnd - Mathf.Max(puntosJugador, puntosOponente);
             }
+
             else
             {
                 if (EnvidoCantos.Count == 1)
                 {
                     if (EnvidoCantos[0] == TipoEnvido.Envido)
                         puntosAGanar = 2;
+
                     else if (EnvidoCantos[0] == TipoEnvido.RealEnvido)
                         puntosAGanar = 3;
                 }
+
                 else if (EnvidoCantos.Count == 2)
                 {
                     if (EnvidoCantos.Contains(TipoEnvido.Envido) && EnvidoCantos.Contains(TipoEnvido.RealEnvido))
                         puntosAGanar = 5; // Envido + Real Envido
+
                     else if (EnvidoCantos[0] == TipoEnvido.Envido && EnvidoCantos[1] == TipoEnvido.Envido)
                         puntosAGanar = 4; // Envido + Envido
                 }
+
                 else if (EnvidoCantos.Count == 3)
                 {
                     if (EnvidoCantos[0] == TipoEnvido.Envido &&
@@ -1085,20 +1103,69 @@ public class GameManager : MonoBehaviour
     private void ContarGanadoTruco()
     {
         if (TrucoState == 1)
+        {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosGanados);
+        }
+
         else if (TrucoState == 2)
+        {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosGanados);
+        }
+
         else if (TrucoState == 3)
+        { 
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroGanados);
+        }
     }
 
     private void ContarPerdidoTruco()
     {
         if (TrucoState == 1)
+        {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.TrucosPerdidos);
+        }
+
         else if (TrucoState == 2)
+        {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.RetrucosPerdidos);
+        }
+
         else if (TrucoState == 3)
+        {
             Utils.Estadisticas.Sumar(Utils.Estadisticas.Keys.ValeCuatroPerdidos);
+        }
+    }
+
+    public void EvaluarAprendizajePorEstadistica(string key)
+    {
+        if (!usarAprendizajeIA || configIASeleccionada == null) return;
+
+        var estilo = configIASeleccionada.estilo;
+
+        switch (key)
+        {
+            case Utils.Estadisticas.Keys.VecesQueTeFuiste:
+                IAAdaptador.ModificarChanceTruco(ref configIASeleccionada.chanceCantarTruco, +0.02f, estilo);
+                break;
+
+            case Utils.Estadisticas.Keys.TrucosPerdidos:
+                IAAdaptador.ModificarChanceResponderTruco(ref configIASeleccionada.chanceResponderTruco, -0.02f, estilo);
+                IAAdaptador.ModificarChanceIrse(ref configIASeleccionada.chanceDeIrse, +0.01f, estilo);
+                break;
+
+            case Utils.Estadisticas.Keys.TrucosGanados:
+                IAAdaptador.ModificarChanceResponderTruco(ref configIASeleccionada.chanceResponderTruco, +0.02f, estilo);
+                break;
+
+            case Utils.Estadisticas.Keys.EnvidosPerdidos:
+                IAAdaptador.ModificarChanceResponderEnvido(ref configIASeleccionada.chanceResponderEnvidoTrasTruco, -0.03f, estilo);
+                break;
+
+            case Utils.Estadisticas.Keys.EnvidosGanados:
+                IAAdaptador.ModificarChanceResponderEnvido(ref configIASeleccionada.chanceResponderEnvidoTrasTruco, +0.02f, estilo);
+                break;
+        }
+
+        SaveSystem.GuardarDatos();
     }
 }

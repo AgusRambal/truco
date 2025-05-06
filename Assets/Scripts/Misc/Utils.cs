@@ -110,6 +110,7 @@ public static class Utils
                     return;
             }
 
+            GameManager.Instance.EvaluarAprendizajePorEstadistica(key);
             SaveSystem.GuardarDatos();
         }
 

@@ -100,7 +100,6 @@ public class MenuManager : MonoBehaviour
     {
         AudioManager.Instance.PlayRandomMenuTrack();
         UpdateStats();
-        SetIas();
         SpawnCartasCompradas();
         SetScrolls();
 
@@ -178,13 +177,6 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    private void SetIas()
-    {
-        dropdownEstiloIA.ClearOptions();
-        List<string> nombresEstilos = System.Enum.GetNames(typeof(EstiloIA)).ToList();
-        dropdownEstiloIA.AddOptions(nombresEstilos);
-    }
-    
     public void Jugar(int puntos)
     {
         Utils.ParametrosDePartida.puntosParaGanar = puntos;
