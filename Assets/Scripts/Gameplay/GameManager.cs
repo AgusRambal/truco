@@ -145,6 +145,11 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCards()
     {
+        EnvidoCantado = false;
+        EnvidoRespondido = false;
+        EnvidoCantos.Clear();
+        cantosPorJugador.Clear();
+
         uiManager.ResetSubRondas();
         uiManager.ActualizarBotonesSegunEstado();
         estadoRonda = EstadoRonda.Repartiendo;
@@ -153,6 +158,7 @@ public class GameManager : MonoBehaviour
 
         bool isPlayer = (turnoActual == TurnoActual.Jugador);
         ChatManager.Instance.AgregarMensaje($"{NombreJugador(isPlayer)} es mano", TipoMensaje.Sistema);
+        uiManager.ActualizarBotonesEnvido();
     }
 
     private IEnumerator SpawnCardsSequence()
