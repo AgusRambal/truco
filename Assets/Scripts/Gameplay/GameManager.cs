@@ -230,6 +230,8 @@ public class GameManager : MonoBehaviour
 
         turnoActual = turnoJugadorEmpieza ? TurnoActual.Jugador : TurnoActual.Oponente;
 
+        uiManager.FadePlayerTurn(turnoActual);
+
         if (turnoActual == TurnoActual.Oponente)
         {
             iaOponente.JugarCarta();

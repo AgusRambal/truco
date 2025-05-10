@@ -19,7 +19,7 @@ public class SteamManager : MonoBehaviour
 
         try
         {
-            if (SteamAPI.RestartAppIfNecessary((AppId_t)480))
+            if (SteamAPI.RestartAppIfNecessary((AppId_t)3734820))
             {
                 Application.Quit();
                 return;
