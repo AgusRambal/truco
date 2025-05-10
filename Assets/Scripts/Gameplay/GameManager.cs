@@ -355,13 +355,13 @@ public class GameManager : MonoBehaviour
         {
             if (manosGanadasJugador == 1 && manosGanadasOponente == 0 && ultimaManoFueEmpate)
             {
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} ganó por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gano por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
                 SumarPuntos(true, true);
                 return;
             }
             else if (manosGanadasOponente == 1 && manosGanadasJugador == 0 && ultimaManoFueEmpate)
             {
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} ganó por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} gano por haber ganado la primera y empatar la segunda", TipoMensaje.Sistema);
                 SumarPuntos(false, true);
                 return;
             }
@@ -902,7 +902,7 @@ public class GameManager : MonoBehaviour
                 _ => "Envido"
             };
 
-            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} aceptó el {nombreEnvido}", TipoMensaje.Sistema);
+            ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} acepto el {nombreEnvido}", TipoMensaje.Sistema);
 
             // Siempre sumamos los aceptados
             if (nombreEnvido == "Envido")
@@ -997,12 +997,12 @@ public class GameManager : MonoBehaviour
             if (ganoJugador)
             {
                 SumarPuntos(true, puntosAGanar, false);
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} ganó el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(true)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
             else
             {
                 SumarPuntos(false, puntosAGanar, false);
-                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} ganó el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
+                ChatManager.Instance.AgregarMensaje($"{NombreJugador(false)} gano el {nombreEnvido} (+{puntosAGanar})", TipoMensaje.Sistema);
             }
 
             uiManager.MostrarTrucoMensaje(true, UIManager.TrucoMensajeTipo.Quiero);

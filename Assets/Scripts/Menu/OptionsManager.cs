@@ -21,12 +21,11 @@ public class OptionsManager : MonoBehaviour
 
         // Leer configuración guardada
         int resolIndex = PlayerPrefs.GetInt("ResolucionIndex", -1);
-        int fullscreen = PlayerPrefs.GetInt("Fullscreen", 1);
+        int ventana = PlayerPrefs.GetInt("Ventana", 0); // 0 = maximizada (default), 1 = ventana común
         int calidad = PlayerPrefs.GetInt("CalidadGrafica", QualitySettings.GetQualityLevel());
 
-        bool pantallaCompletaSeleccionada = fullscreen == 1;
-        togglePantallaCompleta.isOn = pantallaCompletaSeleccionada;
-        Screen.fullScreen = pantallaCompletaSeleccionada;
+        bool ponerEnVentana = ventana == 1;
+        togglePantallaCompleta.isOn = ponerEnVentana;
 
         if (dropdownGraficos != null)
         {
@@ -45,7 +44,7 @@ public class OptionsManager : MonoBehaviour
             }
         }
 
-        // Obtener valores guardados de volumen
+        // Volumen
         float musicVol = PlayerPrefs.GetFloat("MusicVolume", 1f);
         float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
@@ -55,6 +54,7 @@ public class OptionsManager : MonoBehaviour
         AudioManager.Instance.SetMusicVolume(musicVol);
         AudioManager.Instance.SetSFXVolume(sfxVol);
 
+        // Listeners
         if (dropdownResolucion != null)
         {
             dropdownResolucion.onValueChanged.AddListener((i) =>
@@ -67,9 +67,9 @@ public class OptionsManager : MonoBehaviour
 
         togglePantallaCompleta.onValueChanged.AddListener((b) =>
         {
-            PlayerPrefs.SetInt("Fullscreen", b ? 1 : 0);
+            PlayerPrefs.SetInt("Ventana", b ? 1 : 0); // true = ventana común, false = maximizada
             PlayerPrefs.Save();
-            AplicarPantallaCompleta(b);
+            AplicarResolucion(dropdownResolucion.value);
         });
 
         if (dropdownGraficos != null)
@@ -133,10 +133,13 @@ public class OptionsManager : MonoBehaviour
         Resolution baseRes = resoluciones[index];
         RefreshRate refreshActual = Screen.currentResolution.refreshRateRatio;
 
-        FullScreenMode modo = Screen.fullScreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+        FullScreenMode modo = PlayerPrefs.GetInt("Ventana", 0) == 1
+        ? FullScreenMode.Windowed
+        : FullScreenMode.FullScreenWindow;
 
         Screen.SetResolution(baseRes.width, baseRes.height, modo, refreshActual);
     }
+
 
     private void AplicarPantallaCompleta(bool fullscreen)
     {
